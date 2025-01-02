@@ -7,7 +7,7 @@ export default defineConfig({
   description: '星闪悦动',
   logo: '/logo.svg',
   lang: 'zh-CN',
-  base: '/KeyboardDocs/',
+  base: '/keyboard-docs/',
   lastUpdated: true,
   themeConfig: {
     socialLinks: [{ icon: 'github', link: 'https://github.com/sparklinkplayjoy/KeyboardDocs' }],
