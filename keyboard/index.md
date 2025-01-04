@@ -1,96 +1,41 @@
 # 键盘SDK文档
 
-## 授权
+由于浏览器安全机制问题在调用sdk时候需要走的是hid协议，所以在最开始需要进行浏览器授权，授权成功后才能调用sdk。
 
-## 初始化
+## 开始
 
-### 初始化SDK设备
+### 引入
 
-## 灯光API
-
-### 灯光模型
-
-```ts
-
-// custom 模型
-type LightMode = {
-  open: boolean; // 是否开启灯光
-  direction: boolean; // 方向 true 正向 false 反向
-  superResponse: boolean; // 超强响应
-  speed: number; // 灯光速度
-  colors: string[]; // 颜色组
-  mode: number; // 0 关闭, 1-20表示效果，21 自定义
-  luminance: number; // 亮度
-  sleepDelay: number; // 灯光休眠时间
-  staticColor: number; // 静态灯光颜色模式
-  type?: LightModeType;
-  // LightModeType = 'static' | 'custom' | 'dynamic';   
-  // type的类型：custom 自定义模式，static 静态模式，dynamic 动态模式
-};
-
-// custom 模型
-type CustomLightMode = {
-    
-}
-
+```bash
+npm install @sparklinkplayjoy/sdk-keyboard 
+# 或
+yarn add @sparklinkplayjoy/sdk-keyboard
+# 或
+pnpm add @sparklinkplayjoy/sdk-keyboard
 ```
 
-### getLighting
+## 搭建项目
 
-#### 说明
+### 项目引用
 
-获取灯光的配置信息
+1. 引入
 
-#### 参数
-
-无
-
-#### 返回值
-
-默认返回一个 promise 对象，返回的结构如下：
-
- ```ts
-const result = getLighting() // 返回整个灯光模型 LightMode 结构如下:
-// result =  {
-//   open: boolean; // 是否开启灯光
-//   direction: boolean; // 方向 true 正向 false 反向
-//   superResponse: boolean; // 超强响应
-//   speed: number; // 灯光速度
-//   colors: string[]; // 颜色组
-//   mode: number; // 0 关闭, 1-20表示效果，21 自定义
-//   luminance: number; // 亮度
-//   sleepDelay: number; // 灯光休眠时间
-//   staticColor: number; // 静态灯光颜色模式
-//   type?: string;
-// }
- ```
-
-### setLighting
-
-#### 说明
-
- 设置灯光配置信息
-
-#### 参数
-
-```ts
-setLighting(lightMode: LightMode) // LightMode 灯光模型
-
+```js
+import Keyboard from '@sparklinkplayjoy/sdk-keyboard'
+const ServiceKeyboard = new Keyboard();
 ```
 
-#### 返回值
+2. 获取授权
 
-### customSetLighting
-
-#### 说明
-
- 设置自定义灯光配置信息，
-
-#### 参数
-
-```ts
-setLighting(lightMode: LightMode) // LightMode 灯光模型
-
+```js
+// 得到当前的设置列表
+const devices = await ServiceKeyboard.getDevices()
 ```
 
-#### 返回值
+3. 初始化设备
+
+```js
+// 从当前设备列表中获取其中一个设备
+const { id } = devices[0]
+const result = await ServiceKeyboard.init(id)
+```
