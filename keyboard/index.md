@@ -7,11 +7,9 @@
 ### 引入
 
 ```bash
-npm install @sparklinkplayjoy/sdk-keyboard 
-# 或
-yarn add @sparklinkplayjoy/sdk-keyboard
-# 或
-pnpm add @sparklinkplayjoy/sdk-keyboard
+
+pnpm add  @sparklinkplayjoy/sdk-keyboard@1.0.2-beta.0
+
 ```
 
 ## 搭建项目
