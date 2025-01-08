@@ -12,17 +12,69 @@ const devices = await ServiceKeyboard.getDevices()
 const result = await ServiceKeyboard.init(id)
 ```
 
+## 获取设备的基础信息
+
+```js
+const result = await ServiceKeyboard.getBaseInfo()
+// result 返回值
+// {
+//  BoardID: 0,
+//  KeyboardLayout: 0, 键盘布局
+//  KeyType: 0, // 轴体
+//  CustomerID: 0,
+//  ProductionId: 0,
+//  KeyboardRunMode: 0, // 键盘运行模式
+//  KeyboardSN: '', // 获取键盘SN
+//  firewareSpaceSize: 0,
+//  appVersion: '', // 获取固件版本
+//  appBuildDate: '', //  获取固件编译日期
+//  versionString: '', // 版本信息
+// }
+```
+
+## 获取设备信息
+
+```js
+const result = await ServiceKeyboard.getDeviceInfo(type)
+```
+
+:::tip type 类型查询
+
+[查看getDeviceInfo的type类型](/keyboard/type#getDeviceInfo)
+
+:::
+
+## 设置设备信息
+
+```js
+const result = await ServiceKeyboard.setDeviceInfo(type, value)
+```
+
+:::tip type 类型查询
+
+[查看setDeviceInfo的type类型](/keyboard/type#setDeviceInfo)
+
+:::
+
+## 获取设备基础信息
+
+```js
+const result = await ServiceKeyboard.getBaseInfo()
+```
+
+:::tip type 类型查询
+
+[查看getBaseInfo的type类型](/keyboard/type#getBaseInfo)
+
+:::
+
+const result = await ServiceKeyboard.getBaseInfo()
+
 ## 获取设备信息APi
 
 ```js
 const result = await ServiceKeyboard.getApi(type)
 ```
-
-:::tip type 类型查询
-
-[查看getApi的type类型](/keyboard/type#getApi)
-
-:::
 
 :::tip type 类型查询
 
