@@ -44,8 +44,7 @@ type IDefKeyInfo = {
 
 ```ts
 
-// custom 模型
-
+// 灯光模型
 type LightMode = {
   open: boolean; // 是否开启灯光
   direction: boolean; // 方向 true 正向 false 反向
@@ -60,6 +59,9 @@ type LightMode = {
   // LightModeType = 'static' | 'custom' | 'dynamic';   
   // type的类型：custom 自定义模式，static 静态模式，dynamic 动态模式
 };
+
+// 灯光Type
+type LightModeType = 'custom' | 'static' | 'dynamic';
 
 ```
 
