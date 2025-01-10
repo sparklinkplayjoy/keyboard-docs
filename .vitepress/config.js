@@ -10,7 +10,7 @@ export default defineConfig({
   base: '/keyboard-docs/',
   lastUpdated: true,
   themeConfig: {
-    socialLinks: [{ icon: 'github', link: 'https://github.com/sparklinkplayjoy/KeyboardDocs' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/sparklinkplayjoy/keyboard-docs' }],
     nav,
     sidebar,
     search: {
