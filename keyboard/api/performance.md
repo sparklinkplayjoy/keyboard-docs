@@ -46,12 +46,20 @@ const result = await ServiceKeyboard.getPerformanceMode(key)
 
 **参数：**
 
-**key**: 这里的key 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值
+| 名称 |  类型 | 说明 | 备注 |
+| ---- | ---- | ---- | ---- |
+| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  |
+| mode | string | 只能传入 single单击，rt模式，global全局 三种参数 |  |
+| advancedKeyMode | number | 高级键的模式 |  |  |
 
-**value**: 性能模式，single 单击，rt模式，global 全局
 
 ```js
-const result = await ServiceKeyboard.setPerformanceMode({key, value})
+const result = await ServiceKeyboard.setPerformanceMode({key, mode,advancedKeyMode})
+// result 返回值
+// {
+//     "touchMode": "single", // 性能模式，single 单击，rt模式，global 全局
+//     "advancedKeyMode": 0 // 高级键的模式
+// }
 ```
 
 ## 获取首次触发行程 / 单键触发行程
