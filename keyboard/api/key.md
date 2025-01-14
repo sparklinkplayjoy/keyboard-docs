@@ -52,7 +52,7 @@ const result = await ServiceKeyboard.getLayoutKeyInfo({ key, layout })
 3. **value**: 需要改的键值
 
 ```js
-const result = await ServiceKeyboard.updateKey({{ key, layout, value }})
+const result = await ServiceKeyboard.setKey({{ key, layout, value }})
 // result 返回值
 // {
 //     key: number; // 键值
