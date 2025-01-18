@@ -86,3 +86,9 @@ const result = await ServiceKeyboard.getApi(type)
 [查看getApi的type类型](/keyboard/type#getApi)
 
 :::
+
+## 重连设备reconnection
+
+```js
+const result = await ServiceKeyboard.reconnection(device, this.device.id);
+```

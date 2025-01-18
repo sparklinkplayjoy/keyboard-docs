@@ -52,7 +52,6 @@ const result = await ServiceKeyboard.getPerformanceMode(key)
 | mode | string | 只能传入 single单击，rt模式，global全局 三种参数 |  |
 | advancedKeyMode | number | 高级键的模式 |  |  |
 
-
 ```js
 const result = await ServiceKeyboard.setPerformanceMode({key, mode,advancedKeyMode})
 // result 返回值
@@ -204,4 +203,26 @@ const result = await ServiceKeyboard.getAxis(key)
 // 
 const result = await ServiceKeyboard.setAxis(key,value)
 // result 返回值{ axis: axis }
+```
+
+## 行程测试
+
+```js
+const result = await ServiceKeyboard.getRm6X21Travel(key,value)
+
+// result 返回值{ status: [] ,travels:[]}
+// status数组表示当前触发的状态，什么按键触发状态，一版02表示按下状态
+// travels数组表示按键触发的行程值
+
+```
+
+## 键盘校准
+
+```js
+const result = await ServiceKeyboard.getRm6X21Calibration(key,value)
+
+// result 返回值{ calibrations: [] ,travels:[]}
+// calibrations数组表示校准的随机值
+// travels数组表示按键触发的行程值
+
 ```
