@@ -92,3 +92,22 @@ const result = await ServiceKeyboard.getApi(type)
 ```js
 const result = await ServiceKeyboard.reconnection(device, this.device.id);
 ```
+
+## 回报率设置
+
+```js
+// vlaue：0[8KHz], 1[4KHz], 2[2KHz], 3[1KHz], 4[500Hz], 5[250Hz]，6[125Hz]
+const result = await ServiceKeyboard.setRateOfReturn(value)
+```
+
+## 开始校准
+
+```js
+const result = await ServiceKeyboard.calibrationStart()
+```
+
+## 结束校准
+
+```js
+const result = await ServiceKeyboard.calibrationEnd()
+```
