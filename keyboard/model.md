@@ -71,7 +71,8 @@ type LightModeType = 'custom' | 'static' | 'dynamic';
 
 ## 宏
 
-```js
-// DB命令查询是获取到 全局触发的信息
-// DB0 单键触发 RT按下 RT抬起 死区的按下/抬起  单键释放 单键轴体
+```ts
+
+type MacroType = { keyCode: number; timeDifference: number; status: number };
+
 ```

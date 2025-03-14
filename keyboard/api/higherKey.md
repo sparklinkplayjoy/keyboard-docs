@@ -82,6 +82,19 @@ const result = await ServiceKeyboard.setDKS({
 
 ```
 
+## 获取MPT
+
+**参数：**
+
+| 名称 |  类型 | 说明 | 数组最大长度 | 备注 |
+| ---- | ---- | ---- | ---- | ---- |
+| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  | 必填 |
+
+```js
+const result = await ServiceKeyboard.getMpt(key:number)
+
+```
+
 ## 设置MPT
 
 **参数：**
@@ -99,6 +112,19 @@ const result = await ServiceKeyboard.setMPT({
   trps: number[];
   dbs: number[];
 })
+
+```
+
+## 获取MT
+
+**参数：**
+
+| 名称 |  类型 | 说明 | 数组最大长度 | 备注 |
+| ---- | ---- | ---- | ---- | ---- |
+| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  | 必填 |
+
+```js
+const result = await ServiceKeyboard.getMT(key: number;)
 
 ```
 
@@ -121,6 +147,23 @@ const result = await ServiceKeyboard.setMT({
 
 ```
 
+## 获取TGL
+
+**参数：**
+
+| 名称 |  类型 | 说明 |  备注 |
+| ---- | ---- | ---- | ---- |
+| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  必填 |
+
+```js
+const result = await ServiceKeyboard.getTGL({
+  key: number;
+  dks: number;
+  delay: number;
+})
+
+```
+
 ## 设置TGL
 
 **参数：**
@@ -137,6 +180,19 @@ const result = await ServiceKeyboard.setTGL({
   dks: number;
   delay: number;
 })
+
+```
+
+## 获取END
+
+**参数：**
+
+| 名称 |  类型 | 说明 |  备注 |
+| ---- | ---- | ---- | ---- |
+| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  必填 |
+
+```js
+const result = await ServiceKeyboard.getEND(key: number)
 
 ```
 
@@ -199,18 +255,14 @@ const result = await ServiceKeyboard.setSocd({
 })
 ```
 
-## 设置RS
+## 删除高级键
 
 **参数：**
 
 | 名称 |  类型 | 说明 |   备注 |
 | ---- | ---- | ---- | ---- |
 | key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  必填 |
-| dks | number | 是覆盖的键值 |   必填 |
 
 ```js
-const result = await ServiceKeyboard.setRS({
-  key: number;
-  dks: number;
-})
+const result = await ServiceKeyboard.deleteKey(  key: number)
 ```

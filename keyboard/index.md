@@ -8,7 +8,7 @@
 
 ```bash
 
-pnpm add  @sparklinkplayjoy/sdk-keyboard@1.0.2-beta.5
+pnpm add  @sparklinkplayjoy/sdk-keyboard@1.0.1-beta.9
 
 ```
 

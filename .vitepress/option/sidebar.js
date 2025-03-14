@@ -13,6 +13,7 @@ export default [
           { text: '灯光', link: '/keyboard/api/lighting' },
           { text: '性能', link: '/keyboard/api/performance' },
           { text: '高级键', link: '/keyboard/api/higherKey' },
+          { text: '宏', link: '/keyboard/api/macro' },
         ],
       },
       { text: '模型', link: '/keyboard/model' },
