@@ -6,7 +6,7 @@ export default [
       { text: '开始', link: '/keyboard/' },
       {
         text: 'API',
-        link: '/keyboard/api/system',
+        link: '/keyboard/api/info',
         items: [
           { text: '基础的设备信息', link: '/keyboard/api/info' },
           { text: '布局/改键', link: '/keyboard/api/key' },
