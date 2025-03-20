@@ -3,8 +3,33 @@
 ## 设备
 
 ```ts
+interface HIDCollectionInfo {
+  usagePage: number;
+  usage: number;
+  inputReports: ReadonlyArray<HIDReportInfo>;
+  outputReports: ReadonlyArray<HIDReportInfo>;
+  featureReports: ReadonlyArray<HIDReportInfo>;
+  children: ReadonlyArray<HIDCollectionInfo>;
+}
+
+interface HIDDevice extends EventTarget {
+  id: string;
+  collections: ReadonlyArray<HIDCollectionInfo>;
+  readonly opened: boolean;
+  readonly vendorId: number;
+  readonly productId: number;
+  readonly productName: string;
+  oninputreport: (event: Event) => void | null;
+  open(): Promise<void>;
+  close(): Promise<void>;
+  forget(): Promise<void>;
+  sendReport(reportId: number, data: BufferSource): Promise<void>;
+  sendFeatureReport(reportId: number, data: BufferSource): Promise<void>;
+  receiveFeatureReport(reportId: number): Promise<DataView>;
+}
+
 type Device = {
-   data: device, // 设备信息
+   data: HIDDevice, // 设备信息
    id: string, // 设备id
    usage: number, // usage
    usagePage: number, // usagePage
@@ -12,6 +37,36 @@ type Device = {
    productId: number, // productId
    productName: string, // productName
 }
+
+interface BaseInfo {
+  BoardID: number;
+  KeyboardLayout: number;
+  KeyType: number;
+  CustomerID: number;
+  ProductionId: number;
+  KeyboardRunMode: number;
+  KeyboardSN: string;
+  firewareSpaceSize: number;
+  appVersion: string;
+  appBuildDate: string;
+  versionString: string;
+}
+
+enum RateOfReturn {
+  '8KHz' = 0,
+  '4KHz' = 1,
+  '2KHz' = 2,
+  '1KHz' = 3,
+  '500Hz' = 4,
+  '250Hz' = 5,
+  '125Hz' = 6,
+}
+
+interface Calibration {
+  calibrations: number[][], // 包含所有按键的最大行程值
+  travels: number[][], // 包含所有按键按下的行程值
+}
+
 ```
 
 ## 布局模型
@@ -65,14 +120,60 @@ type LightModeType = 'custom' | 'static' | 'dynamic';
 
 ```
 
-## 布局
-
 ## 高级键
+
+```ts
+type TrpsLayoutType = 'Layout_TRPS1' | 'Layout_TRPS2' | 'Layout_TRPS3' | 'Layout_TRPS4';
+interface IDKSMode {
+  key: number;
+  dks: number[];
+  trps: number[];
+  dbs: number[];
+}
+interface ISOCDMode {
+  key?: number;
+  dks1?: number;
+  mode1?: number;
+  mode2?: number;
+}
+interface ISOCDModeV2 {
+  pos1: number;
+  pos2: number;
+  key1: number;
+  key2: number;
+  type: number;
+  mode: number;
+}
+interface ISOCDModeV3 {
+  pos1: number; // 原键值
+  pos2: number; // 原键值
+  key1: number; // 发送键值
+  key2: number; // 发送键值
+  type: number; // 发送键值类型 0=按pos发送键值，1=按Key发送键值，默认:0
+  mode: number; // 发送键值模式 mode表示键值的发送模式，共有四种模式：0=后覆盖，1=a优先，2=b优先，3=中性,默认:0
+  delay: number; // 发送键值延迟
+}
+interface IEndMode {
+  key: number;
+  dks?: number;
+  delay?: number;
+}
+```
 
 ## 宏
 
 ```ts
 
+interface IMacroMode {
+  key: number;
+  index: number;
+  len: number;
+  mode: number;
+  num: number;
+  delay: number;
+}
+
 type MacroType = { keyCode: number; timeDifference: number; status: number };
+
 
 ```

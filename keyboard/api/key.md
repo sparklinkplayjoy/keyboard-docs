@@ -2,9 +2,18 @@
 
 ## 初始化布局
 
+ServiceKeyboard.defKey()
+
+- 返回值  
+```ts
+() => Promise<IDefKeyInfo[][]>
+```
+
+- 用法
+
 获取当前键盘的布局会得到一个布局样式的二维数组的初始化布局模型
   
-```js
+```ts
 const result = await ServiceKeyboard.defKey()
 // result 返回值
 // [
@@ -25,7 +34,16 @@ const result = await ServiceKeyboard.defKey()
 
 ## 获取布局
 
-1. **key**: 这里的key 需要注意这里指defKey返回IDefKeyInfo中keyValue的值
+- 参数  
+```ts
+{
+  key: number
+  layout: number
+}
+```
+:::tip 注意
+
+1. **key**: 这里 key 指的是defKey返回IDefKeyInfo中keyValue的值
 
 2. **layout**: 指的是Fn的布局 目前支持的布局有只有四种分别为
    - Fn1的布局值为0
@@ -33,7 +51,13 @@ const result = await ServiceKeyboard.defKey()
    - Fn3的布局值为2
    - Fn4的布局值为3
 
-```js
+:::
+- 返回值  
+```ts
+() => Promise<IDefKeyInfo[][]>
+```
+- 用法
+```ts
 const result = await ServiceKeyboard.getLayoutKeyInfo({ key, layout })
 ```
 
@@ -41,7 +65,17 @@ const result = await ServiceKeyboard.getLayoutKeyInfo({ key, layout })
 
 **参数：**
 
-1. **key**: 这里的key 需要注意这里指defKey返回IDefKeyInfo中keyValue的值
+- 参数
+```ts
+{
+  key: number；
+  layout: number；
+  value: number；
+}
+```
+:::tip 注意
+
+1. **key**: 这里 key 指的是defKey返回IDefKeyInfo中keyValue的值
 
 2. **layout**: 指的是Fn的布局 目前支持的布局有只有四种分别为
    - Fn1的布局值为0
@@ -51,8 +85,14 @@ const result = await ServiceKeyboard.getLayoutKeyInfo({ key, layout })
 
 3. **value**: 需要改的键值
 
-```js
-const result = await ServiceKeyboard.setKey({{ key, layout, value }})
+:::
+- 返回值  
+```ts
+() => Promise<IDefKeyInfo[][]>
+```
+- 用法
+```ts
+const result = await ServiceKeyboard.setKey({ key, layout, value })
 // result 返回值
 // {
 //     key: number; // 键值

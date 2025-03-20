@@ -1,21 +1,43 @@
 # 宏  
 
 ## 获取宏
+ServiceKeyboard.getMacro()
+- 参数  
+```ts
+key: number
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里 key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-**key**: 这里的key 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值
+:::
 
-```js
-const result = await ServiceKeyboard.getMacro(key: number)
+- 返回值
+```ts
+() => Promise<IMacroMode>
+```
+[查看IMacroMode的模型](/keyboard/model#宏)
+- 用法
+```ts
+const result = await ServiceKeyboard.getMacro(key)
 ```
 
 ## 设置宏
 
-**参数：**
+ServiceKeyboard.setMacro()
 
-**key**: 这里的key 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值
-
-```js
-const result = await ServiceKeyboard.setMacro(param: IMacroMode, macros: MacroType[], touchMode: 'quick' | 'single')
+- 参数
+```ts
+param: IMacroMode, 
+macros: MacroType[], 
+touchMode: 'quick' | 'single'
+```
+[查看MacroType的模型](/keyboard/model#宏)
+- 返回值
+```ts
+() => Promise<void>
+```
+- 用法
+```ts
+const result = await ServiceKeyboard.setMacro(param, macros, touchMode)
 ```

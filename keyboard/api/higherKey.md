@@ -1,38 +1,84 @@
 # 高级键
 
 ## 获取dks
+ServiceKeyboard.getDks()
+- 参数
+```ts
+key: number
+DksType: DksType
+```
+:::tip 注意
 
-**参数：**
-
-**key**: 这里的key 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值
+**key**: 这里 key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
 **DksType**: Layout_DKS1/Layout_DKS2/Layout_DKS3/Layout_DKS4
 
-```js
-const result = await ServiceKeyboard.getDks(key,DksType)
-// result 返回值{ dks: value }
+:::
+
+- 返回值  
+```ts
+() => Promise<{ dks: number }>
+```
+
+- 用法
+```ts
+const result = await ServiceKeyboard.getDks(key, DksType)
 
 ```
 
 ## 获取dks全部
+ServiceKeyboard.getDksAll()
 
-**参数：**
+- 参数
+```ts
+key: number
+```
+:::tip 注意
 
-**key**: 这里的key 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-```js
+:::
+
+- 返回值  
+```ts
+() => Promise<{
+  dks1: number,
+  dks2: number,
+  dks3: number,
+  dks4: number
+}>
+```
+
+- 用法
+```ts
 const result = await ServiceKeyboard.getDksAll(key)
-// result 返回值{ dks: value }
 
 ```
 
 ## 获取dks触发点的参数
 
-**参数：**
+ServiceKeyboard.getTrps()
 
-**key**: 这里的key 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值
+- 参数
+```ts
+key: number
+type: TrpsLayoutType
+```
+[查看TrpsLayoutType的模型](/keyboard/model#高级键)
 
-```js
+:::tip 注意
+
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
+
+:::
+
+- 返回值  
+```ts
+() => Promise<{ trps: number }>
+```
+
+- 用法
+```ts
 const result = await ServiceKeyboard.getTrps(key)
 // result 返回值{ trps: value }
 
@@ -40,229 +86,427 @@ const result = await ServiceKeyboard.getTrps(key)
 
 ## 获取dks触发点的全部参数
 
-**参数：**
+ServiceKeyboard.getTrpsAll()
 
-**key**: 这里的key 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值
+- 参数
+```ts
+key: number
+```
+:::tip 注意
 
-```js
+  **key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
+
+:::
+
+- 返回值  
+```ts
+() => Promise<{ 
+  trps1: number,
+  trps2: number,
+  trps3: number,
+  trps4: number
+}>
+```
+
+- 用法
+```ts
 const result = await ServiceKeyboard.getTrpsAll(key)
-// result 返回值{ trps: value }
 
 ```
 
 ## 获取延时
+ServiceKeyboard.getMtorTgl()
+- 参数
+```ts
+key: number
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-**key**: 这里的key 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值
+:::
 
-```js
+- 返回值  
+```ts
+() => Promise<number>
+```
+
+- 用法    
+```ts
 const result = await ServiceKeyboard.getMtorTgl(key)
-// result 返回值{ trps: value }
 ```
 
 ## 设置DKS的数据
-
-**参数：**
-
-| 名称 |  类型 | 说明 | 数组最大长度 | 备注 |
-| ---- | ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  | 必填 |
-| dks | number[] | 需要注意这里的dks 指的是getDksAll返回的数据 | 4 | 必填 |
-| trps | number[] | 需要注意这里的trps 指的是getTrpsAll返回的数据 | 4 | 必填 |
-| dbs | number[] | 需要注意这里的dbs 指的是getMtorTgl返回的数据 | 2 | 必填 |
-
-```js
-const result = await ServiceKeyboard.setDKS({
+ServiceKeyboard.setDKS()    
+- 参数
+```ts
+{
   key: number;
-  dks: number[];
-  trps: number[];
-  dbs: number[];
+  dks: number[]; // 数组最大长度4
+  trps: number[]; // 数组最大长度4
+  dbs: number[]; // 数组最大长度2
+}
+```
+:::tip 注意
+
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
+
+**dks**: 这里的dks 指的是getDksAll返回的数据
+
+**trps**: 这里的trps 指的是getTrpsAll返回的数据
+
+**dbs**: 这里的dbs 指的是getMtorTgl返回的数据
+
+:::
+- 返回值  
+```ts
+() => Promise<{ dks: number }>
+```
+
+- 用法
+```ts
+const result = await ServiceKeyboard.setDKS({
+  key,
+  dks,
+  trps,
+  dbs,
 })
 
 ```
 
 ## 获取MPT
+ServiceKeyboard.getMpt()
+- 参数
+```ts
+key: number
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-| 名称 |  类型 | 说明 | 数组最大长度 | 备注 |
-| ---- | ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  | 必填 |
+:::
 
-```js
-const result = await ServiceKeyboard.getMpt(key:number)
+- 返回值  
+```ts
+() => Promise<{ 
+  dks: [number, number, number], // [dks1, dks2, dks3]
+  dbs: [number, number, number], // [dbs1, dbs2, dbs3]
+}>
+```
+
+- 用法
+```ts
+const result = await ServiceKeyboard.getMpt(key)
 
 ```
 
 ## 设置MPT
+ServiceKeyboard.setMpt()
+- 参数
+```ts
+{
+  key: number,
+  dks?: number[], // 数组最大长度3
+  dbs?: number[], // 数组最大长度3
+}
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-| 名称 |  类型 | 说明 | 数组最大长度 | 备注 |
-| ---- | ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  | 必填 |
-| dks | number[] | 需要注意这里的dks 指的是getDksAll返回的数据 | 3 | 必填 |
-| dbs | number[] | 需要注意这里的dbs 指的是getMtorTgl返回的数据 | 3 | 必填 |
+**dks**: 这里的dks 指的是getDksAll返回的数据
 
-```js
-const result = await ServiceKeyboard.setMPT({
-  key: number;
-  dks: number[];
-  trps: number[];
-  dbs: number[];
+**dbs**: 这里的dbs 指的是getMtorTgl返回的数据
+
+:::
+
+- 返回值  
+```ts
+() => Promise<{ 
+  dks: [number, number, number], // [dks1, dks2, dks3]
+  dbs: [number, number, number], // [dbs1, dbs2, dbs3]
+}>
+```
+
+- 用法
+```ts
+const result = await ServiceKeyboard.setMpt({
+  key,
+  dks,
+  dbs,
 })
 
 ```
 
 ## 获取MT
+ServiceKeyboard.getMT()
+- 参数
+```ts
+key: number
+```
+:::tip 注意 
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-| 名称 |  类型 | 说明 | 数组最大长度 | 备注 |
-| ---- | ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  | 必填 |
+:::
 
-```js
-const result = await ServiceKeyboard.getMT(key: number;)
+- 返回值  
+```ts
+() => Promise<{ 
+ [key: number]: {
+  type: string, // 'mt'
+  mt: {
+    delay: number, // 单位 10ms
+    dks：[number, number]， // [dks1, dks2]
+  } 
+  keyValue: number,
+ }
+}>
+```
+
+- 用法
+```ts
+const result = await ServiceKeyboard.getMT(key)
 
 ```
 
 ## 设置MT
+ServiceKeyboard.setMT()
+- 参数
+```ts
+{
+  key: number
+  dks: number[] // 数组最大长度2
+  delay: number // 单位 10ms
+}
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-| 名称 |  类型 | 说明 | 数组最大长度 | 备注 |
-| ---- | ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  | 必填 |
-| dks | number[] | 需要注意这里的dks 指的是getDksAll返回的数据 | 2 | 必填 |
-| delay | number[] |  |  | 必填 |
+**dks**: 这里的dks 指的是getDksAll返回的数
 
-```js
-const result = await ServiceKeyboard.setMT({
-  key: number;
-  dks: number[];
-  delay:number;
+:::
+
+- 用法
+```ts
+await ServiceKeyboard.setMT({
+  key,
+  dks,
+  delay, // 单位 10ms
 })
 
 ```
 
 ## 获取TGL
-
+ServiceKeyboard.getTGL()
 **参数：**
 
-| 名称 |  类型 | 说明 |  备注 |
-| ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  必填 |
+-  参数
+```ts
+key: number
+```
+:::tip 注意
 
-```js
-const result = await ServiceKeyboard.getTGL({
-  key: number;
-  dks: number;
-  delay: number;
-})
+**key**: 这里的 key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
+
+:::
+
+- 返回值  
+```ts
+() => Promise<{ 
+  key: number,
+  delay: number, // 单位 10ms
+}>
+```
+
+- 用法
+```ts
+const result = await ServiceKeyboard.getTGL(key)
 
 ```
 
 ## 设置TGL
+ServiceKeyboard.setTGL()
+- 参数
+```ts
+{
+  key: number
+  dks?: number // 数组最大长度2
+  delay?: number // 单位 10ms
+}
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-| 名称 |  类型 | 说明 |  备注 |
-| ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  必填 |
-| dks | number | 需要注意这里的dks 指的是getDksAll返回的数据 |  必填 |
-| delay | number | getMtorTgl返回的数据 | 必填 |
+**dks**: 这里的dks 指的是getDksAll返回的数据
 
-```js
+:::
+
+- 返回值  
+```ts
+() => Promise<{ 
+  key: number,
+  delay: number, // 单位 10ms
+}>
+```
+
+- 用法
+```ts
 const result = await ServiceKeyboard.setTGL({
-  key: number;
-  dks: number;
-  delay: number;
+  key,
+  dks
 })
 
 ```
 
 ## 获取END
+ServiceKeyboard.getEND()
+- 参数
+```ts
+key: number
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-| 名称 |  类型 | 说明 |  备注 |
-| ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  必填 |
+:::
 
-```js
-const result = await ServiceKeyboard.getEND(key: number)
+- 返回值  
+```ts
+() => Promise<{ 
+  dks: number,
+  delay: number,
+}>
+```
+
+- 用法
+```ts
+const result = await ServiceKeyboard.getEND(key)
 
 ```
 
 ## 设置END
+ServiceKeyboard.setEND()
+- 参数
+```ts
+{
+  key: number
+  dks: number // 数组最大长度2
+},
+version: string // 固件版本
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-| 名称 |  类型 | 说明 |  备注 |
-| ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  必填 |
-| dks | number | 需要注意这里的dks 指的是getDksAll返回的数据 |  必填 |
+**dks**: 这里的dks 指的是getDksAll返回的数据
 
-```js
-const result = await ServiceKeyboard.setEND({key: number;dks: number;})
+**version**: 固件版本
+:::
+
+- 返回值  
+```ts
+() => Promise<{
+  dks: number,
+  delay: number,
+}>
+```
+
+- 用法
+```ts
+const result = await ServiceKeyboard.setEND({ key, dks }, version)
 
 ```
 
 ## 获取Socd
+ServiceKeyboard.getSocd()
+- 参数
+```ts
+key: number,
+version: string
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-| 名称 |  类型 | 说明 |  备注 |
-| ---- | ---- | ---- |  ---- |
-| key | number | 原键值 |   必填 |
+**version**: 固件版本
+:::
 
-```js
-const result = await ServiceKeyboard.getSocd({ key })
-// {
-//     pos1: number;
-//     pos2: number;
-//     key1: number;
-//     key2: number;
-//     type: number;
-//     mode: number;
-// }
+- 返回值  
+```ts
+version: 1.0.7
+() => Promise<{
+  pos1: number,
+  pos2: number,
+  key1: number,
+  key2: number,
+  type: number,
+  mode: number,
+  delay: number,
+}>
+verison: other
+() => Promise<{
+  pos: number,
+  key: number,
+  type: number,
+  mode: number,
+}>
+```
 
+- 用法
+```ts
+const result = await ServiceKeyboard.getSocd(key, version)
 ```
 
 ## 设置Socd
+ServiceKeyboard.setSocd()
+- 参数
+```ts
+params: ISOCDMode | ISOCDModeV2 | ISOCDModeV3,
+version: string
+```
+[查看ISOCDMode、ISOCDModeV2、ISOCDModeV3的模型](/keyboard/model#高级键)
 
-**参数：**
+:::tip 注意
 
-| 名称 |  类型 | 说明 |  备注 |
-| ---- | ---- | ---- |  ---- |
-| pos1 | number | 原键值 |   必填 |
-| pos2 | number | 原键值 |   必填 |
-| key1 | number | 发送键值 |   必填 |
-| key2 | number | 发送键值 |   必填 |
-| type | number | 发送键值类型； |  0=按pos发送键值，1=按Key发送键值，默认:0 |
-| mode | number | 表示键值的发送模式， | mode表示键值的发送模式，共有四种模式：0=后覆盖，1=a优先，2=b优先，3=中性,默认:0 |
+**version**: 固件版本
 
-```js
-const result = await ServiceKeyboard.setSocd({
+:::
+
+```ts
+const result = await ServiceKeyboard.setSocd(
+{
   pos1,
   pos2,
   key1,
   key2,
   type,
   mode,
-})
+}, 
+version
+)
 ```
 
 ## 删除高级键
+ServiceKeyboard.deleteKey()
+- 参数
+```ts
+key: number
+```
+:::tip 注意
 
-**参数：**
+**key**: 这里的key 指的是**defKey**返回的**IDefKeyInfo**中的keyValue的值
 
-| 名称 |  类型 | 说明 |   备注 |
-| ---- | ---- | ---- | ---- |
-| key | number | 需要注意这里指的**defKey**返回的**IDefKeyInfo**中的keyValue的值 |  必填 |
+::: 
 
-```js
-const result = await ServiceKeyboard.deleteKey(  key: number)
+- 返回值
+```ts
+() => Promise<void>
+```
+
+- 用法
+```ts
+await ServiceKeyboard.deleteKey(key)
 ```

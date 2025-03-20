@@ -1,27 +1,44 @@
 
 # 基础的设备信息
 
-:::tip 注意
-
-建议使用最新的1.0.2-beta.4版本，因为1.0.2-beta.3设置DB的接口一直是0
-
-:::
-
 ## 获取设备列表
-
-```js
+ServiceKeyboard.getDevices()
+- 返回值
+```ts
+() => Promise<Device[]>
+```
+[查看Device的类型](/keyboard/model#设备)
+- 用法
+```ts
 const devices = await ServiceKeyboard.getDevices()
 ```
 
 ## 初始化设备
+ServiceKeyboard.init()
 
-```js
-const result = await ServiceKeyboard.init(id)
+- 参数
+```ts
+id: string
+```
+- 返回值
+```ts
+() => Promise<Device | null>
+```
+[查看Device的类型](/keyboard/model#设备)
+- 用法
+```ts
+const device = ServiceKeyboard.init(id)
 ```
 
 ## 获取设备的基础信息
 
-```js
+- 返回值
+```ts
+() => Promise<BaseInfo>
+```
+[查看BaseInfo的类型](/keyboard/model#基础信息)
+- 用法
+```ts
 const result = await ServiceKeyboard.getBaseInfo()
 // result 返回值
 // {
@@ -39,45 +56,23 @@ const result = await ServiceKeyboard.getBaseInfo()
 // }
 ```
 
-## 获取设备信息
-
-```js
-const result = await ServiceKeyboard.getDeviceInfo(type)
-```
-
-:::tip type 类型查询
-
-[查看getDeviceInfo的type类型](/keyboard/type#getDeviceInfo)
-
-:::
-
-## 设置设备信息
-
-```js
-const result = await ServiceKeyboard.setDeviceInfo(type, value)
-```
-
-:::tip type 类型查询
-
-[查看setDeviceInfo的type类型](/keyboard/type#setDeviceInfo)
-
-:::
-
-## 获取设备基础信息
-
-```js
-const result = await ServiceKeyboard.getBaseInfo()
-```
-
-:::tip type 类型查询
-
-[查看getBaseInfo的type类型](/keyboard/type#getBaseInfo)
-
-:::
 
 ## 获取设备信息APi
-
-```js
+- 参数
+```ts
+{
+  type: number;
+  hArgs?: number[];
+  is8bit?: boolean;
+}
+```
+- 返回值
+```ts
+() => Promise<Api>
+```
+[查看Api的类型](/keyboard/model#设备)
+- 用法
+```ts
 const result = await ServiceKeyboard.getApi(type)
 ```
 
@@ -87,27 +82,107 @@ const result = await ServiceKeyboard.getApi(type)
 
 :::
 
-## 重连设备reconnection
+## 重连设备
 
-```js
-const result = await ServiceKeyboard.reconnection(device, this.device.id);
+ServiceKeyboard.reconnection()
+
+- 参数  
+```ts
+device: Device
+deviceId: string
 ```
-
+- 返回值
+```ts
+() => Promise<void>
+```
+- 用法
+```ts
+const result = await ServiceKeyboard.reconnection(device, deviceId);
+```
+[查看回报率类型](/keyboard/type#getApi)
 ## 回报率设置
 
-```js
-// vlaue：0[8KHz], 1[4KHz], 2[2KHz], 3[1KHz], 4[500Hz], 5[250Hz]，6[125Hz]
-const result = await ServiceKeyboard.setRateOfReturn(value)
+ServiceKeyboard.setRateOfReturn()
+
+- 参数  
+```ts
+value: number
 ```
 
+- 返回值
+```ts
+() => Promise<void>
+```
+- 用法
+```ts
+const result = await ServiceKeyboard.setRateOfReturn(value)
+```
 ## 开始校准
 
-```js
+ServiceKeyboard.calibrationStart()
+
+- 返回值  
+```ts
+() => Promise<Calibration>
+```
+- 用法
+```ts
 const result = await ServiceKeyboard.calibrationStart()
 ```
 
+[查看Calibration的类型](/keyboard/model#设备)
+
 ## 结束校准
 
-```js
+ServiceKeyboard.calibrationEnd()
+
+- 返回值  
+```ts
+() => Promise<Calibration>
+```
+- 用法
+```ts
 const result = await ServiceKeyboard.calibrationEnd()
 ```
+
+[查看Calibration的类型](/keyboard/model#设备)
+
+## 擦除固件
+
+ServiceKeyboard.toBoot()
+
+- 用法
+```ts
+await ServiceKeyboard.toBoot();
+```
+:::tip 注意
+
+擦除后，需要重新连接设备
+
+:::
+
+## 更新固件
+
+ServiceKeyboard.updateBin(buffer, callback)   
+更新固件，需要先擦除固件
+- 参数
+```ts
+buffer: ArrayBuffer
+callback: (data: {current: number, total: number}) => void
+```
+- 返回值
+```ts
+Promise<{ success: boolean }>
+```
+- 用法
+```ts
+const { success } = await ServiceKeyboard.updateBin(buffer, ({current, total}) => {
+  ...
+})
+```
+:::tip 注意
+
+更新后，需要重新连接设备
+
+:::
+
