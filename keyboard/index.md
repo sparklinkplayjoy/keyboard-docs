@@ -7,7 +7,6 @@
 ### 引入
 
 ```bash
-
 pnpm add  @sparklinkplayjoy/sdk-keyboard
 
 ```
@@ -19,24 +18,19 @@ pnpm add  @sparklinkplayjoy/sdk-keyboard
 1. 引入
 
 ```js
-
 import Keyboard from '@sparklinkplayjoy/sdk-keyboard'
-const ServiceKeyboard = new Keyboard();
-
+const ServiceKeyboard = new Keyboard({
+  configs: [{ vendorId: 7331, productId: 2049, usagePage: 65440, usage: 1 }],
+  usage: 1,
+  usagePage: 65440,
+});
 ```
 
 2. 获取授权
 
 ```js
 // 得到当前的设置列表
-const devices = await ServiceKeyboard.getDevices({
-  configs: [{ vendorId: 7331, productId: 2049, usagePage: 65440, usage: 1 }],
-  usage: 1,
-  usagePage: 65440,
-})
-
-// 新增hid过滤设备configs
-// usage 和 usagePage 表示
+const devices = await ServiceKeyboard.getDevices()
 ```
 
 3. 初始化设备
