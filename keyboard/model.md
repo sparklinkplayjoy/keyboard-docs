@@ -150,7 +150,7 @@ interface ISOCDModeV3 {
   key1: number; // 发送键值
   key2: number; // 发送键值
   type: number; // 发送键值类型 0=按pos发送键值，1=按Key发送键值，默认:0
-  mode: number; // 发送键值模式 mode表示键值的发送模式，共有四种模式：0=后覆盖，1=a优先，2=b优先，3=中性,默认:0
+  mode: number; // 发送键值模式 mode表示键值的发送模式，共有四种模式：0=后覆盖，1=a优先，2=b优先，3=中性（两个按键都按下都不生效）,默认:0
   delay: number; // 发送键值延迟
 }
 interface IEndMode {

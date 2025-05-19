@@ -19,8 +19,10 @@ pnpm add  @sparklinkplayjoy/sdk-keyboard
 
 ```js
 import Keyboard from '@sparklinkplayjoy/sdk-keyboard'
+const vendorId = 00 // you vid 
+const productId = 00 // you pid 
 const ServiceKeyboard = new Keyboard({
-  configs: [{ vendorId: 7331, productId: 2049, usagePage: 65440, usage: 1 }],
+  configs: [{ vendorId, productId, usagePage: 65440, usage: 1 }],
   usage: 1,
   usagePage: 65440,
 });
@@ -46,19 +48,32 @@ const result = await ServiceKeyboard.init(id)
 ```js
 import { UsbDetect } from '@sparklinkplayjoy/sdk-keyboard';
 
+ // 检测到设备拔插
+UsbDetect.startMonitoring();
+
 const listener = async ({ device, type }) => {
-// 例子
+  if (type === 'disconnect') {
+  } 
   if (type === 'connect') {
-    if (device.collections.usage === usage && device.collections.usagePage === usagePage) { // 对应设备的 usage、 usagePage,
-      setTimeout(async () => {
-        await ServiceKeyboard.reconnection(device, this.device.id);
-      }, 100);
-    }
+    if (device?.collections?.length) {
+      try {
+        // 通过usage和usagePage找到对应的连接设备
+        const targetCollection = device.collections.find(
+          (collection) => collection.usage === 1 && collection.usagePage === 65440,
+        );
+        if (targetCollection) {
+          // 如果只需要执行一次重连
+          await services.reconnection(device, this.device.id);
+
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    } 
   }
-};
+}
 
 UsbDetect.on('change', listener);
-
 
 UsbDetect.off('change',listener) // 移除监听
 ```
