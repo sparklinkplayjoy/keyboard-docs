@@ -47,9 +47,10 @@ async function getMacroSettings(keyValue) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-
-
+:::
 
 ## 设置宏
 
@@ -138,6 +139,8 @@ const exampleMacros = [
 ```
 
 ### 注意事项
+
+::: tip
 *   `param`: 宏模式设置，需要包含完整的 `IMacroMode` 结构。
 *   `macros`: 宏序列数组，每个元素需要包含 `keyCode`、`timeDifference` 和 `status`。
 *   `mode`: 宏执行模式，决定了宏的执行方式：
@@ -145,3 +148,4 @@ const exampleMacros = [
     *   `1`: 点击重复执行 - 按下按键时开始重复执行，再次按下时停止
     *   `2`: 按下重复执行 - 按住按键时重复执行，松开时立即停止
     *   `3`: 按下重复执行 - 按住按键时重复执行，松开后完成当前宏序列后停止
+:::

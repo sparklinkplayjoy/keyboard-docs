@@ -92,83 +92,16 @@ async function getCompleteDksData(keyValue, keyboardItem) {
 // fetchAllDksValues(exampleKey);
 ```
 ### 注意事项
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   完整的DKS数据获取流程包括：
     *   获取行程值（DB1和DB2）
     *   获取所有DKS键值（DKS1-DKS4）
     *   获取所有触发点行程参数（TRPS1-TRPS4）
 *   `trps` 值表示触发点的行程参数（例如：63需转成二进制）
-```js
-const parse8BitToBooleans = (num) => {
-  console.log(num, 'num');
-  // 确保输入是一个8位的数字
-  if (num < 0 || num > 255) {
-    throw new Error('Input must be an 8-bit number.');
-  }
-
-  // 创建一个长度为7的数组来存储结果
-  const result = [false, false, false, false, false, false, false];
-  const bits = [0, 0, 0, 0, 0, 0, 0];
-
-  for (let i = 0; i < 8; i++) {
-    bits[i] = !!(num & (1 << i));
-  }
-
-  if (Number(bits[0]) === 1) {
-    result[0] = true;
-  }
-
-  if (Number(bits[1]) === 1) {
-    result[1] = true;
-  }
-
-  if (Number(bits[2]) === 1) {
-    result[2] = true;
-  }
-
-  if (Number(bits[3]) === 1 && Number(bits[4]) === 1) {
-    result[3] = true;
-  }
-
-  if (Number(bits[5]) === 1) {
-    result[4] = true;
-  }
-
-  if (Number(bits[6]) === 1) {
-    result[5] = true;
-  }
-
-  if (Number(bits[7]) === 1) {
-    result[6] = true;
-  }
-  return result;
-};
-
-const dksInfo =  {
-       "keyValue": 9,
-       "type": "dks",
-       "dks": {
-         "dks1": 5,
-         "dks2": 6,
-         "dks3": 8,
-         "dks4": 9
-       },
-       "trps": {
-         "trps1": 63,
-         "trps2": 63,
-         "trps3": 127,
-         "trps4": 127
-       },
-       "db": 1.4,
-       "db2": 3
-     }
-
-for (let i = 0; i < 4; i++) {
-    clickData[i] = parse8BitToBooleans(dksInfo.trps[i]);
-}
-
-```
 *   `db` 和 `db2` 表示行程值，通常以mm为单位（例如：1.4表示1.4mm）
+:::
 
 
 
@@ -206,9 +139,12 @@ async function fetchDksTravelValue(targetKeyValue, dbType) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `type`: 指定要查询的DKS类型，目前支持 `Layout_DB1` 和 `Layout_DB3`。
 *   返回值以0.1mm为单位，例如：1.4表示0.14mm。
+:::
 
 
 
@@ -266,8 +202,11 @@ async function fetchTrpsValue(targetKeyValue: number, trpsType: TrpsLayoutType) 
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `type`: 指定要查询的DKS触发点的具体类型，这决定了是获取哪个触发点的行程设置。
+:::
 
 
 
@@ -324,7 +263,10 @@ async function fetchAllTrpsValues(targetKeyValue: number) {
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 
 
@@ -385,11 +327,14 @@ async function applyDksSettings(targetKeyValue: number, dksValues: number[], trp
 ---
 
 ### 注意事项 
+
+::: tip
 *   `params.key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `params.dks`: 数组，通常按顺序对应DKS1到DKS4的键值。
 *   `params.trps`: 数组，通常按顺序对应DKS1到DKS4的触发行程。
 *   `params.dbs`: 数组，触发的行程值。
 *   返回值的 `{ dks: number }` 
+:::
 
 
 
@@ -445,8 +390,11 @@ async function fetchMptSettings(targetKeyValue: number) {
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   MPT通常允许在不同的键设置不同触发点，`dks` 数组包含这些键值，`dbs` 数组包含相关参数。
+:::
 
 
 
@@ -505,8 +453,11 @@ async function applyMptSettings(targetKeyValue: number, dksValues?: number[], db
 ---
 
 ### 注意事项 
+
+::: tip
 *   `params.key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `params.dks` 和 `params.dbs` 是可选的，允许部分更新。如果只提供 `dks`，则可能只更新键值部分，反之亦然。
+:::
 
 
 ## 获取按键的模式切换/触发延迟（MtorTgl）设置
@@ -577,8 +528,11 @@ async function getCompleteMtData(keyValue, keyboardItem) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `delay` 值以10ms为单位，例如：200表示200ms。
+:::
 
 
 
@@ -628,9 +582,12 @@ async function setMtData(keyValue, delay, dksValues) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `params.key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `params.delay`: 延迟时间需要除以10来转换为正确的单位（10ms）。
 *   `params.dks`: 数组，包含两个DKS键值。
+:::
 
 
 
@@ -674,7 +631,10 @@ async function getTglSettings(keyValue) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 
 ## 设置TGL（触发延迟）数据
@@ -724,8 +684,11 @@ async function setTglData(keyValue, dksValues, delay) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `params.key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `params.dks`: 数组，最大长度为2，包含DKS键值。
+:::
 
 
 
@@ -769,8 +732,11 @@ async function getEndSettings(keyValue) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `delay` 值以ms为单位，例如：200 表示200ms。
+:::
 
 
 
@@ -823,8 +789,11 @@ async function setEndData(keyValue, dksValues, version) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `params.key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `version`: 固件版本号。可从接口[ServiceKeyboard.getApi](/keyboard/api/info.md#获取设备api信息)拿到
+:::
 
 
 
@@ -883,10 +852,13 @@ async function getSocdSettings(keyValue, version) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `version`: 固件版本号，影响返回的数据结构。可从接口[ServiceKeyboard.getApi](/keyboard/api/info.md#获取设备api信息)拿到
 *   对于版本1.0.7及以上，返回包含 `pos1`、`pos2`、`key1`、`key2` 等字段的完整数据结构。
 *   对于其他版本，返回简化的数据结构，只包含 `pos`、`key` 等基本字段。
+:::
 
 
 
@@ -941,9 +913,12 @@ async function setSocdData(params, version) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `params`: 包含SOCD设置的所有必要参数。
 *   `version`: 固件版本号。可从接口[ServiceKeyboard.getApi](/keyboard/api/info.md#获取设备api信息)拿到
 *   参数的具体含义和取值范围请参考 [ISOCDMode、ISOCDModeV2、ISOCDModeV3的模型](/keyboard/model#高级键)。
+:::
 
 
 
@@ -981,5 +956,8 @@ async function deleteAdvancedKey(keyValue) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   此操作会删除该按键的所有高级功能设置，包括DKS、MPT、MT、TGL、END、SOCD等。
+:::

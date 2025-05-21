@@ -250,7 +250,10 @@ async function applyLogoLightingConfig(newLogoConfig: LightMode) {
 // 假设 myCustomLogoLightMode 是一个有效的 LightMode 对象
 // applyLogoLightingConfig(myCustomLogoLightMode);
 ```
-
+### 注意事项 
+::: tip
+*   `type`: 键盘的 Logo 灯只有static静态模式和dynamic动态模式两种模式，设置其他的值将会被重置为static静态模式。
+:::
 
 ## 获取单键自定义灯光颜色
 
@@ -365,7 +368,8 @@ async function setCustomKeyColor(config: { key: number; R: number; G: number; B:
 
 
 ### 注意事项 
+::: tip
 *   `data.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   要使自定义颜色生效，键盘的主灯光模式 (`ServiceKeyboard.setLighting`) 需要设置type为特定的"custom"值。
-
+::: 
 ---

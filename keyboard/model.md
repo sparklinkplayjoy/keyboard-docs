@@ -112,7 +112,8 @@ type LightMode = {
   staticColor: number; // 静态灯光颜色模式
   type: LightModeType;
   // LightModeType = 'static' | 'custom' | 'dynamic';   
-  // type的类型：custom 自定义模式，static 静态模式，dynamic 动态模式
+  // type的类型：custom 自定义模式，static 静态模式，dynamic 动态模式。
+  // 当设置Logo灯的时候type只有static静态模式和dynamic动态模式两种模式。
 };
 
 // 灯光Type

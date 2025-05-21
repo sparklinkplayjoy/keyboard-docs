@@ -228,7 +228,9 @@ async function fetchApiData(apiType: string, customArgs?: number[], use8bit?: bo
 
 ### 注意事项 
 
+::: tip
 *   `params.type` 的具体可用值和含义，请 [查看getApi的type类型](/keyboard/type#getApi)。
+:::
 
 
 ## 重新连接设备
@@ -259,40 +261,133 @@ ServiceKeyboard.reconnection()
 ### 使用示例 
 
 ```js
-import { UsbDetect } from '@sparklinkplayjoy/sdk-keyboard';
-
- // 检测到设备拔插
-UsbDetect.startMonitoring();
 
 const listener = async ({ device, type }) => {
   if (type === 'disconnect') {
+    // 设备断开连接
+    if (device?.collections?.length) {
+      try {
+        const targetCollection = device.collections.find(
+          (collection) => collection.usage === 1 && collection.usagePage === 0xffb0,
+        );
+        if (targetCollection) {
+          // 处理设备断开连接后的逻辑
+        }
+      } catch (error) {
+        console.error('设备断开连接处理失败:', error);
+      }
+    }
   } 
+  
   if (type === 'connect') {
     if (device?.collections?.length) {
       try {
-        // 通过usage和usagePage找到对应的连接设备
         const targetCollection = device.collections.find(
-          (collection) => collection.usage === 1 && collection.usagePage === 65440,
+          (collection) => collection.usage === 1 && collection.usagePage === 0xffb0,
         );
         if (targetCollection) {
-          // 如果只需要执行一次重连
-          await services.reconnection(device, this.device.id);
-
+          // 处理设备连接后的逻辑
         }
       } catch (error) {
-        console.error(error);
+        console.error('设备连接处理失败:', error);
       }
-    } 
+    }
   }
 }
 
-UsbDetect.on('change', listener);
+ServiceKeyboard.on('usbChange', listener);
 
-UsbDetect.off('change',listener) // 移除监听
+// 移除监听
+ServiceKeyboard.off('usbChange', listener);
 
-tip:在插拔事件、恢复出厂、升级结束后需要重连
+// 在插拔事件、恢复出厂、升级结束后需要重连
 ```
 
+## 设备插拔事件
+
+ServiceKeyboard.on('usbChange', callback)
+
+**简要描述:**
+监听设备的插拔事件，包括普通连接/断开、升级过程中的连接/断开等状态变化。
+
+---
+
+### 参数 
+
+| 参数名称   | 类型     | 描述                           | 是否必需 | 默认值 |
+|------------|----------|--------------------------------|----------|--------|
+| `eventName`| `string` | 事件名称，固定为 'usbChange'    | 是       | 无     |
+| `callback` | `function` | 事件回调函数，接收设备状态变化信息 | 是     | 无     |
+
+---
+
+### 回调函数参数 
+
+| 参数名称 | 类型     | 描述                           |
+|----------|----------|--------------------------------|
+| `data`   | `object` | 包含设备状态变化信息的对象      |
+| `data.type` | `string` | 事件类型，可能的值包括：<br>- 'connect': 设备连接<br>- 'disconnect': 设备断开<br>- 'isUpgrading_connect': 升级过程中设备连接<br>- 'isUpgrading_disconnect': 升级过程中设备断开 |
+| `data.device` | `Device` | 设备对象，包含设备信息 |
+| `data.updateFail` | `boolean` | 是否是在更新写入数据中更新失败了，比如在更新中过程中拔掉了键盘 |
+| `data.reconnect` | `boolean` | 是否已经重新连接成功 |
+
+---
+
+### 使用示例 
+
+```js
+ServiceKeyboard.on('usbChange', (data) => {
+  console.log('USB设备变化:', data);
+  const { device } = data;
+  
+  if (data.updateFail) {
+    // 处理更新失败的情况
+  }
+  
+  if (data.type === 'disconnect' || data.type === 'isUpgrading_disconnect') {
+    // 设备断开连接
+    if (device?.collections?.length) {
+      try {
+        const targetCollection = device.collections.find(
+          (collection) => collection.usage === 1 && collection.usagePage === 0xffb0,
+        );
+        if (targetCollection) {
+          // 处理设备断开连接后的逻辑
+        }
+      } catch (error) {
+        console.error('设备断开连接处理失败:', error);
+      }
+    }
+  }
+
+  if (data.type === 'connect' || (data.type === 'isUpgrading_connect' && data.reconnect)) {
+    if (device?.collections?.length) {
+      try {
+        const targetCollection = device.collections.find(
+          (collection) => collection.usage === 1 && collection.usagePage === 0xffb0,
+        );
+        if (targetCollection) {
+          // 处理设备连接后的逻辑
+        }
+      } catch (error) {
+        console.error('设备连接处理失败:', error);
+      }
+    }
+  }
+});
+```
+
+---
+
+### 注意事项 
+
+::: tip
+*   在恢复出厂设置、固件升级等操作后，会多次触发设备的插拔事件。
+*   建议在设备连接后重新获取设备信息、配置信息等数据。
+*   在升级过程中的设备断开和重连需要特殊处理，确保升级流程的完整性。
+*   可以通过 `data.updateFail` 判断是否在写入数据中更新失败，进行相应的错误处理。
+*   在插拔事件里已经处理好了设备的自动重连，不需要再调用重连接口了
+:::
 
 ## 设置回报率
 
@@ -345,11 +440,14 @@ tip:keyType的值需要从ServiceKeyboard.getBaseInfo接口获取，设置回报
 // const POLLING_RATE = 6; // 示例值
 // configureRateOfReturn(POLLING_RATE);
 ```
+
 ---
 
 ### 注意事项 
 
+::: tip
 *   具体的回报率值和 `type` 的关联（如果适用），请 [查看回报率类型](/keyboard/type#getApi) (注意：此链接可能指向 `getApi` 的类型，可能需要查阅相关type定义以确定回报率的参数)。
+:::
 
 
 
@@ -398,16 +496,18 @@ async function enterBootloaderMode() {
 
 ### 注意事项 
 
+::: tip
 *   执行此操作后，设备通常会断开连接并以 Bootloader 模式重新枚举（如果支持）。您可能需要重新扫描设备或使用特定的 Bootloader 工具进行后续操作（如固件更新）。
 *   tip: 擦除后，需要重新连接设备,调用重连接口`ServiceKeyboard.reconnection`。
+:::
 
 
-## 更新固件
+## Bin文件更新固件
 
 ServiceKeyboard.updateBin()
 
 **简要描述:**
-向处于 Bootloader 模式的设备更新固件。通常在此之前需要调用 `ServiceKeyboard.toBoot()`,再进入Bootloader后需要`ServiceKeyboard.reconnection`再进行更新。
+向处于 Bootloader 模式的设备更新固件。
 
 ---
 
@@ -416,7 +516,11 @@ ServiceKeyboard.updateBin()
 | 参数名称   | 类型                                                  | 描述                                                           | 是否必需 | 默认值 |
 |------------|-------------------------------------------------------|----------------------------------------------------------------|----------|--------|
 | `buffer`   | `ArrayBuffer`                                         | 包含新固件二进制数据的 `ArrayBuffer`。                          | 是       | 无     |
-| `callback` | `(data: {current: number, total: number}) => void` | 一个回调函数，用于报告固件更新的进度。`data.current` 是已传输的字节数，`data.total` 是总字节数。 | 是       | 无     |
+| `callback` | `(data: {current: number, total: number, updateStatus: string}) => void` | 一个回调函数，用于报告固件更新的进度。`data.current` 是已传输的字节数，`data.total` 是总字节数，`data.updateStatus` 是当前更新状态。 | 否       | 无     |
+| `options`  | `object`                                              | 更新过程中的配置选项。(可根据实际设备情况去调试)                                          | 否       | 有     |
+| `options.toBootDelay` | `number`                                        | 进入 Bootloader 模式后的延迟时间（毫秒）。                      | 否       | 4000   |
+| `options.writeDelay`  | `number`                                        | 写入数据时的延迟时间（毫秒）。                                  | 否       | 30     |
+| `options.toAppDelay`  | `number`                                        | 返回应用模式时的延迟时间（毫秒）。                              | 否       | 4000   |
 
 ---
 
@@ -448,10 +552,19 @@ async function performFirmwareUpdate(firmwareBuffer: ArrayBuffer) {
       reader.onload = async () => {
         loading.value = true;
         try {
-          await service.updateBin(reader.result, ({ current, total }) => {
-            progress.current = current;
-            progress.total = total;
-          });
+          const res = await ServiceKeyboard.updateBin(
+            reader.result,
+            ({ current, total, updateStatus: status }) => {
+              progress.current = current;
+              progress.total = total;
+              updateStatus.value = status;
+            },
+            {
+              toBootDelay: 4000,
+              writeDelay: 30,
+              toAppDelay: 4000,
+            }
+          );
           afterUpdate();
         } catch (error) {
           console.log('error: ', error);
@@ -475,8 +588,10 @@ async function performFirmwareUpdate(firmwareBuffer: ArrayBuffer) {
 
 ### 注意事项 
 
-*   更新固件前，通常需要先调用 `ServiceKeyboard.toBoot()` 使设备进入 Bootloader 模式并重新连接。
-*   更新后，需要重新连接设备。设备在固件更新完成后通常会自动重启。
+::: tip
+*   `callback` 函数中的 `updateStatus` 参数可以用来显示当前更新的具体状态。
+*   可以通过 `options` 参数调整更新过程中的各个延迟时间，以适应不同的设备需求。
+:::
 
 ## 恢复出厂设置
 
@@ -517,6 +632,7 @@ async function resetToFactorySettings() {
 ```
 
 ### 注意事项
+::: tip
 *   此操作会清除所有用户自定义的配置，请谨慎使用。
 *   恢复出厂设置后，设备会自动断开连接。
 *   建议在操作完成后：
@@ -525,6 +641,7 @@ async function resetToFactorySettings() {
     *   重新获取键盘布局信息
     *   重新获取其他必要的配置信息
 *   建议在操作过程中显示加载状态，以提供更好的用户体验。
+:::
 
 ## 切换配置
 
@@ -577,6 +694,7 @@ ServiceKeyboard.on('getCmd', (data) => {
 ```
 
 ### 注意事项
+::: tip
 *   `index`: 配置索引值必须在1到4之间。
 *   切换配置后，建议监听 `getCmd` 事件来获取配置切换的结果。
 *   在收到配置切换成功的通知后，通常需要重新获取以下数据：
@@ -585,5 +703,6 @@ ServiceKeyboard.on('getCmd', (data) => {
     *   按键映射
     *   其他相关设置
 *   建议在配置切换过程中显示加载状态，以提供更好的用户体验。
+:::
 
 

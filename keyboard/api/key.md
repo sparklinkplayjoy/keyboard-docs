@@ -134,8 +134,11 @@ async function fetchLayerLayout(targetKeyValue: number, layerIndex: number) {
 ---
 
 ### 注意事项 
+
+::: tip
 *   `params.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `params.layout`: 指的是Fn功能层。
+:::
 
 
 ## 改键
@@ -197,9 +200,12 @@ async function remapMultipleKeys(configs: Array<{ key: number; layout: number; v
 ---
 
 ### 注意事项 
+
+::: tip
 *   `keyConfigs[].key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `keyConfigs[].layout`: 指的是Fn功能层。
 *   `keyConfigs[].value`: 指的是您希望分配给目标按键的新的键码或功能码。
+:::
 
 
 ## 获取轴体
@@ -245,7 +251,10 @@ async function getKeyAxis(keyValue) {
 ```
 
 ### 注意事项
+
+::: tip
 *   `keyValue`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 
 
@@ -341,8 +350,11 @@ async function fetchAxisList() {
 ```
 
 ### 注意事项
+
+::: tip
 *   `hasAxisSetting`: 表示键盘是否支持轴体设置功能。
 *   `axisList`: 数组中的每个数字代表一个轴体ID，0表示该位置没有轴体。
+:::
 
 ## 全局功能轴体库查询
 
@@ -350,7 +362,10 @@ async function fetchAxisList() {
 键盘支持轴体库
 
 ### 注意事项
+
+::: tip
 *   **轴体库的具体接口请联系我们获取。**
 *   导入轴体库前，请确保数据格式正确。
+:::
 
 

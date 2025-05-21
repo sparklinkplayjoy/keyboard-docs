@@ -50,7 +50,10 @@ async function fetchKeyPerformanceMode(targetKeyValue: number) {
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 ---
 
@@ -107,7 +110,10 @@ async function applyKeyPerformanceMode(targetKeyValue: number, newMode: string, 
 ---
 
 ### 注意事项 
+
+::: tip
 *   `params.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 
 ## 获取单键首次触发行程
@@ -156,7 +162,10 @@ async function fetchKeySingleTravel(targetKeyValue: number, precision?: number) 
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 
 ## 设置单键首次触发行程
@@ -210,9 +219,12 @@ async function applyKeySingleTravel(targetKeyValue: number, newTravelValue: numb
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `value`: 要设置的行程值。
 *   `decimal`: 小数位数，默认为2。
+:::
 
 
 ## 获取RT模式下的按键行程值
@@ -265,7 +277,10 @@ async function fetchKeyRtTravel(targetKeyValue: number) {
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 
 ## 设置RT模式下的按下触发行程
@@ -320,7 +335,10 @@ async function applyKeyRtPressTravel(targetKeyValue: number, newPressTravel: num
 ---
 
 ### 注意事项 
+
+::: tip
 *   `params.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 
 ## 设置RT模式下的释放触发行程
@@ -375,7 +393,10 @@ async function applyKeyRtReleaseTravel(targetKeyValue: number, newReleaseTravel:
 ---
 
 ### 注意事项 
+
+::: tip
 *   `params.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 
 ## 获取单键的按压与抬起死区
@@ -428,7 +449,10 @@ async function fetchKeyDeadZones(targetKeyValue: number) {
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+:::
 
 
 
@@ -483,8 +507,11 @@ async function applyKeyPressDeadZone(targetKeyValue: number, newDpValue: number)
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `value`: 要设置的新的按压死区值。
+:::
 
 
 
@@ -539,8 +566,11 @@ async function applyKeyReleaseDeadZone(targetKeyValue: number, newDrValue: numbe
 ---
 
 ### 注意事项 
+
+::: tip
 *   `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
 *   `value`: 要设置的新的抬起死区值。
+:::
 
 
 
@@ -590,8 +620,9 @@ performTravelTestAndProcess();
 ---
 
 ### 注意事项 
+::: tip
 *   返回的 `status` 和 `travels` 二维数组通常直接映射到键盘的物理按键矩阵。例如，一个常见的布局可能是6行21列。
-
+::: 
 
 
 ## 开始校准
