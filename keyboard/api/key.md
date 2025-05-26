@@ -96,9 +96,9 @@ ServiceKeyboard.getLayoutKeyInfo()
 
 | 参数名称   | 类型     | 描述                                                                 | 是否必需 | 默认值 |
 |------------|----------|----------------------------------------------------------------------|----------|--------|
-| `params`   | `object` | 一个包含请求参数的对象。                                                 | 是       | 无     |
-| `params.key` | `number` | 要查询的键的 `keyValue` 值。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `params.layout` | `number` | 要查询的布局层级。目前支持的值：<br/>`0`: Fn1层<br/>`1`: Fn2层<br/>`2`: Fn3层<br/>`3`: Fn4层 | 是       | 无     |
+| `object[]`   | `Array` | 一个包含请求参数的对象的数组。                                                 | 是       | 无     |
+| `object.key` | `number` | 要查询的键的 `keyValue` 值。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
+| `object.layout` | `number` | 要查询的布局层级。目前支持的值：<br/>`0`: Fn1层<br/>`1`: Fn2层<br/>`2`: Fn3层<br/>`3`: Fn4层 | 是       | 无     |
 
 ---
 
@@ -116,7 +116,7 @@ ServiceKeyboard.getLayoutKeyInfo()
 ```typescript
 async function fetchLayerLayout(targetKeyValue: number, layerIndex: number) {
   try {
-    const layoutParams = { key: targetKeyValue, layout: layerIndex };
+    const layoutParams = [{ key: targetKeyValue, layout: layerIndex }];
     const layerLayoutGrid = await ServiceKeyboard.getLayoutKeyInfo(layoutParams);
     console.log(`键 ${targetKeyValue} 在布局层 ${layerIndex} 的完整布局信息:`, layerLayoutGrid);
     // layerLayoutGrid 结构与 defKey() 返回的类似，但反映的是指定 Fn 层的情况
