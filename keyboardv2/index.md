@@ -46,34 +46,27 @@ const result = await ServiceKeyboard.init(id)
 4. 监听hid拔插事件
 
 ```js
-import { UsbDetect } from '@sparklinkplayjoy/sdk-keyboard-v2';
+services.on("usbChange", (data) => {
+          const { device } = data;
 
- // 检测到设备拔插
-UsbDetect.startMonitoring();
+          if (data.type === 'disconnect' || data.type === 'isUpgrading_disconnect') {
+          }
+          if (data.type === 'connect' || (data.type === 'isUpgrading_connect' && data.reconnect)) {
+            if (device?.collections?.length) {
+              try {
+                const targetCollection = device.collections.find(
+                  (collection) => collection.usage === 1 && collection.usagePage === 0xffb0,
+                );
 
-const listener = async ({ device, type }) => {
-  if (type === 'disconnect') {
-  } 
-  if (type === 'connect') {
-    if (device?.collections?.length) {
-      try {
-        // 通过usage和usagePage找到对应的连接设备
-        const targetCollection = device.collections.find(
-          (collection) => collection.usage === 1 && collection.usagePage === 65440,
-        );
-        if (targetCollection) {
-          // 如果只需要执行一次重连
-          await services.reconnection(device, this.device.id);
+                if (targetCollection) {
+                 
+                }
+              } catch (error) {
+                
+              }
+            } 
+          }
+        });
 
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    } 
-  }
-}
-
-UsbDetect.on('change', listener);
-
-UsbDetect.off('change',listener) // 移除监听
+services.off('usbChange',listener) // 移除监听
 ```

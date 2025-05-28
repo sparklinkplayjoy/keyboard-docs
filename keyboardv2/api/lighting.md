@@ -1,11 +1,457 @@
 # 键盘灯光
 
-## 关闭键盘灯光
 
-ServiceKeyboard.closedLighting()
+## 获取灯光基础配置
+
+ServiceKeyboard.getLightingBase()
 
 **简要描述:**
-关闭键盘的所有灯光效果。
+获取指定区域的灯光基础配置信息。
+
+---
+
+### 参数
+
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `params` | `object` | 是 | 描述查询区域和配置类型的对象 |
+| `params.area` | `string` | 是 | 灯光区域，例如`Keyboard`,`Decorate1` |
+| `params.config` | `string` | 是 | 配置类型，例如 `Base`,`Palette`,`ColorCorrection` |
+| `lamp` | `string` | 否 | 描述灯的类型，例如"`SingleLighting`,`DoubleLighting` |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<DoubleLighting>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含灯光基础配置信息的对象。
+* **解析对象结构 (`DoubleLighting`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `area` | `string` | 灯光区域 | `"Keyboard"` |
+| `open` | `string` | 灯光开关状态 | `"Open"` |
+| `mode` | `number` | 灯光模式 | `1` |
+| `luminance` | `number` | 灯光亮度 | `80` |
+| `speed` | `number` | 灯光速度 | `80` |
+| `direction` | `string` | 灯光方向`Forward`或者`Backward` | `Forward` |
+| `selectStaticColor` | `number` | 静态颜色选择 | `0` |
+
+**返回值示例:**
+
+```js
+{
+    "area": "Keyboard",
+    "open": "Open",
+    "mode": 1,
+    "luminance": 80,
+    "speed": 80,
+    "direction": "Forward",
+    "selectStaticColor": 0
+}
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function getLightingBase() {
+  try {
+    const result = await ServiceKeyboard.getLightingBase({
+      area: "Keyboard",
+      config: "Base"
+    },"DoubleLighting");
+    console.log('灯光基础配置:', result);
+  } catch (error) {
+    console.error('获取灯光基础配置失败:', error);
+  }
+}
+
+getLightingBase();
+```
+
+---
+
+## 设置灯光基础配置
+
+ServiceKeyboard.setLightingBase()
+
+**简要描述:**
+设置指定区域的灯光基础配置信息。
+
+---
+
+### 参数
+
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `params` | `object` | 是 | 描述设置区域和配置的对象 |
+| `params.area` | `string` | 是 | 灯光区域，例如`Keyboard`,`Decorate1`|
+| `params.config` | `string` | 是 | 配置类型，例如 `Base`,`Palette`,`ColorCorrection` |
+| `params.data` | `object` | 是 | 要设置的灯光配置数据 |
+| `params.data.open` | `string` | 是 | 灯光开关状态，例如 `"Open"` |
+| `params.data.mode` | `number` | 是 | 灯光模式 |
+| `params.data.luminance` | `number` | 是 | 灯光亮度 |
+| `params.data.speed` | `number` | 是 | 灯光速度 |
+| `params.data.direction` | `string` | 是 | 灯光方向`Forward`或者`Backward` |
+| `params.data.selectStaticColor` | `number` | 是 | 静态颜色选择 |
+| `lamp` | `string` | 否 | 描述灯的类型，例如`SingleLighting`,`DoubleLighting` |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<DoubleLighting>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含设置后的灯光基础配置信息的对象。
+* **解析对象结构 (`DoubleLighting`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `area` | `string` | 灯光区域 | `"Keyboard"` |
+| `open` | `string` | 灯光开关状态 | `"Open"` |
+| `mode` | `number` | 灯光模式 | `0` |
+| `luminance` | `number` | 灯光亮度 | `80` |
+| `speed` | `number` | 灯光速度 | `80` |
+| `direction` | `string` | 灯光方向`Forward`或者`Backward` | `"Forward"` |
+| `selectStaticColor` | `number` | 静态颜色选择 | `0` |
+
+**返回值示例:**
+
+```js
+{
+    "area": "Keyboard",
+    "open": "Open",
+    "mode": 0,
+    "luminance": 80,
+    "speed": 80,
+    "direction": "Forward",
+    "selectStaticColor": 0
+}
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function setLightingBase() {
+  try {
+    const result = await ServiceKeyboard.setLightingBase({
+      area: "Keyboard",
+      config: "Base",
+      data: {
+        open: "Open",
+        mode: 0,
+        luminance: 80,
+        speed: 80,
+        direction: "Forward",
+        selectStaticColor: 0
+      }
+    }, "SingleLighting");
+    console.log('设置灯光基础配置结果:', result);
+  } catch (error) {
+    console.error('设置灯光基础配置失败:', error);
+  }
+}
+
+setLightingBase();
+```
+
+---
+
+## 获取灯光调色板配置
+
+ServiceKeyboard.getLightingPalette()
+
+**简要描述:**
+获取指定区域的灯光调色板配置信息。
+
+---
+
+### 参数
+
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `params` | `object` | 是 | 描述查询区域和配置类型的对象 |
+| `params.area` | `string` | 是 | 灯光区域，例如`Keyboard`,`Decorate1` |
+| `params.config` | `string` | 是 | 配置类型，例如 `Base`,`Palette`,`ColorCorrection` |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<ILightingPalette>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含灯光调色板配置信息的对象。
+* **解析对象结构 (`ILightingPalette`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `staticColors` | `Array<IColorInfo>` | 静态颜色数组 | - |
+
+**颜色信息结构 (`IColorInfo`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `R` | `number` | 红色分量值 (0-255) | `255` |
+| `G` | `number` | 绿色分量值 (0-255) | `0` |
+| `B` | `number` | 蓝色分量值 (0-255) | `0` |
+| `H` | `number` | 亮度值 (0-255) | `255` |
+
+**返回值示例:**
+
+```js
+{
+    "staticColors": [
+        {
+            "R": 0,
+            "G": 0,
+            "B": 0,
+            "H": 255
+        },
+        {
+            "R": 255,
+            "G": 0,
+            "B": 0,
+            "H": 255
+        },
+        {
+            "R": 0,
+            "G": 255,
+            "B": 0,
+            "H": 255
+        },
+        {
+            "R": 255,
+            "G": 255,
+            "B": 0,
+            "H": 255
+        },
+        {
+            "R": 0,
+            "G": 0,
+            "B": 255,
+            "H": 255
+        },
+        {
+            "R": 255,
+            "G": 0,
+            "B": 255,
+            "H": 255
+        },
+        {
+            "R": 0,
+            "G": 255,
+            "B": 255,
+            "H": 255
+        },
+        {
+            "R": 255,
+            "G": 255,
+            "B": 255,
+            "H": 255
+        }
+    ]
+}
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function getLightingPalette() {
+  try {
+    const result = await ServiceKeyboard.getLightingPalette({
+      area: "Keyboard",
+      config: "Palette"
+    });
+    console.log('灯光调色板配置:', result);
+  } catch (error) {
+    console.error('获取灯光调色板配置失败:', error);
+  }
+}
+
+getLightingPalette();
+```
+
+---
+
+## 设置灯光调色板配置
+
+ServiceKeyboard.setLightingPalette()
+
+**简要描述:**
+设置指定区域的灯光调色板配置信息。
+
+---
+
+### 参数
+
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `params` | `object` | 是 | 描述设置区域和配置的对象 |
+| `params.area` | `string` | 是 | 灯光区域，例如`Keyboard`,`Decorate1` |
+| `params.config` | `string` | 是 | 配置类型，例如 `Base`,`Palette`,`ColorCorrection` |
+| `params.data` | `object` | 是 | 要设置的调色板配置数据 |
+| `params.data.staticColors` | `Array<IColorInput>` | 是 | 静态颜色数组 |
+
+**颜色输入结构 (`IColorInput`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `R` | `number` | 红色分量值 (0-255) | `255` |
+| `G` | `number` | 绿色分量值 (0-255) | `0` |
+| `B` | `number` | 蓝色分量值 (0-255) | `0` |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<ILightingPalette>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含设置后的灯光调色板配置信息的对象。
+* **解析对象结构 (`ILightingPalette`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `staticColors` | `Array<IColorInfo>` | 静态颜色数组 | - |
+
+**颜色信息结构 (`IColorInfo`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `R` | `number` | 红色分量值 (0-255) | `255` |
+| `G` | `number` | 绿色分量值 (0-255) | `0` |
+| `B` | `number` | 蓝色分量值 (0-255) | `0` |
+| `H` | `number` | 亮度值 (0-255) | `0` |
+
+**返回值示例:**
+
+```js
+{
+    "staticColors": [
+        {
+            "R": 0,
+            "G": 0,
+            "B": 0,
+            "H": 0
+        },
+        {
+            "R": 255,
+            "G": 0,
+            "B": 0,
+            "H": 0
+        },
+        {
+            "R": 0,
+            "G": 219,
+            "B": 255,
+            "H": 0
+        },
+        {
+            "R": 255,
+            "G": 255,
+            "B": 0,
+            "H": 0
+        },
+        {
+            "R": 0,
+            "G": 0,
+            "B": 255,
+            "H": 0
+        },
+        {
+            "R": 255,
+            "G": 0,
+            "B": 255,
+            "H": 0
+        },
+        {
+            "R": 0,
+            "G": 255,
+            "B": 255,
+            "H": 0
+        },
+        {
+            "R": 255,
+            "G": 255,
+            "B": 255,
+            "H": 0
+        }
+    ]
+}
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function setLightingPalette() {
+  try {
+    const result = await ServiceKeyboard.setLightingPalette({
+      area: "Keyboard",
+      config: "Palette",
+      data: {
+        staticColors: [
+          {
+            R: 0,
+            G: 0,
+            B: 0
+          },
+          {
+            R: 255,
+            G: 0,
+            B: 0
+          },
+          {
+            R: 0,
+            G: 219,
+            B: 255
+          },
+          {
+            R: 255,
+            G: 255,
+            B: 0
+          },
+          {
+            R: 0,
+            G: 0,
+            B: 255
+          },
+          {
+            R: 255,
+            G: 0,
+            B: 255
+          },
+          {
+            R: 0,
+            G: 255,
+            B: 255
+          },
+          {
+            R: 255,
+            G: 255,
+            B: 255
+          }
+        ]
+      }
+    });
+    console.log('设置灯光调色板配置结果:', result);
+  } catch (error) {
+    console.error('设置灯光调色板配置失败:', error);
+  }
+}
+
+setLightingPalette();
+```
+
+## 获取自定义灯光配置
+
+ServiceKeyboard.getLightingCustom()
+
+**简要描述:**
+获取键盘的自定义灯光配置信息，返回一个二维数组，表示键盘上每个按键的RGB颜色值和自定义状态。
 
 ---
 
@@ -17,355 +463,444 @@ ServiceKeyboard.closedLighting()
 
 ### 返回值
 
-* **总体类型:** `Promise<boolean>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个布尔值。
-* **解析值:** `true` 如果灯光成功关闭，否则可能为 `false` 或 Promise 被拒绝 (具体行为需查阅实现细节)。
+* **总体类型:** `Promise<Array<Array<ICustomLightingInfo>>>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个二维数组，每个元素代表键盘上对应位置的按键灯光信息。
+* **解析对象结构 (`ICustomLightingInfo`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `R` | `number` | 红色分量值 (0-255) | `0` |
+| `G` | `number` | 绿色分量值 (0-255) | `207` |
+| `B` | `number` | 蓝色分量值 (0-255) | `244` |
+| `isCustom` | `boolean` | 是否为自定义颜色 | `false` |
+
+**返回值示例:**
+
+```js
+[
+    [
+        {
+            "R": 0,
+            "G": 207,
+            "B": 244,
+            "isCustom": false
+        },
+        // ... 更多按键
+    ],
+    // ... 更多行
+]
+```
 
 ---
 
 ### 使用示例
 
-```js
-async function turnOffKeyboardLights() {
+```typescript
+async function getLightingCustom() {
   try {
-    const success = await ServiceKeyboard.closedLighting();
-    if (success) {
-      console.log('键盘灯光已关闭。');
-    } else {
-      console.log('关闭键盘灯光失败或指令未完全执行。');
-    }
+    const result = await ServiceKeyboard.getLightingCustom();
+    console.log('自定义灯光配置:', result);
+    // 可以遍历结果来获取每个按键的颜色信息
+    result.forEach((row, rowIndex) => {
+      row.forEach((key, colIndex) => {
+        console.log(`按键[${rowIndex}][${colIndex}]的颜色: R=${key.R}, G=${key.G}, B=${key.B}, 是否自定义=${key.isCustom}`);
+      });
+    });
   } catch (error) {
-    console.error('关闭键盘灯光时发生错误:', error);
+    console.error('获取自定义灯光配置失败:', error);
   }
 }
 
-turnOffKeyboardLights();
+getLightingCustom();
 ```
 
-## 获取键盘灯光配置
+## 设置自定义灯光配置
 
-ServiceKeyboard.getLighting()
+ServiceKeyboard.setLightingCustom()
 
 **简要描述:**
-获取当前键盘主要的灯光配置信息。
+设置键盘的自定义灯光配置，可以为每个按键设置独立的RGB颜色值和自定义状态。
 
 ---
 
 ### 参数
 
-此方法不需要参数。
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `params` | `object` | 是 | 描述设置区域和配置的对象 |
+| `params.area` | `string` | 是 | 灯光区域，例如`Keyboard` |
+| `params.protocol` | `string` | 是 | 协议类型，固定为`Custom` |
+| `params.data` | `Array<Array<ICustomLightingInfo>>` | 是 | 二维数组，表示键盘上每个按键的灯光配置 |
 
----
+**按键灯光信息结构 (`ICustomLightingInfo`):**
 
-### 返回值
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `R` | `number` | 红色分量值 (0-255) | `0` |
+| `G` | `number` | 绿色分量值 (0-255) | `8` |
+| `B` | `number` | 蓝色分量值 (0-255) | `10` |
+| `isCustom` | `boolean` | 是否为自定义颜色 | `false` |
 
-* **总体类型:** `Promise<LightMode>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `LightMode` 对象，包含当前键盘灯光的详细配置。
-* **解析对象结构 (`LightMode`):**
-
-| 字段名称        | 类型              | 描述                                                                 | 示例值       |
-|-----------------|-------------------|----------------------------------------------------------------------|--------------------|
-| `open`          | `boolean`         | 灯光是否开启。                                                          | `true`             |
-| `direction`     | `boolean`         | 灯效方向 (例如，动态效果的流动方向)。`true` 表示正向，`false` 反向。 | `true`             |
-| `superResponse` | `boolean`         | 是否启用超强响应模式（通常指按键触发的快速反馈灯效）。                     | `false`            |
-| `speed`         | `number`          | 灯光效果的速度。                                                        | `3` (示例级别)     |
-| `colors`        | `string[]`        | 灯光效果所使用的颜色数组 (例如 `["#FF0000", "#00FF00"]`)。             | `["#FFFFFF"]`      |
-| `mode`          | `number`          | 当前灯光模式。`0` 表示关闭, `1-20` (或其他范围) 表示预设的动态效果, `21` (或其他特定值) 表示自定义模式。 | `1` (示例动态模式) |
-| `luminance`     | `number`          | 灯光亮度。                                                              | `100` (示例级别)   |
-| `sleepDelay`    | `number`          | 灯光进入休眠状态前的延迟时间 (单位可能为秒或分钟)。                          | `600` (示例值)     |
-| `staticColor`   | `number`          | 在静态灯光模式下所使用的颜色模式或索引。                                    | `0`                |
-| `type`          | `LightModeType`   | 灯光模式的分类或类型 (具体枚举值需查阅 `LightModeType` 定义)。           | (依赖 `LightModeType`) |
-
- 更多关于 `LightMode` 模型的详细结构，请 [查看lightMode的模型](/keyboard/model#灯光)。
-
----
-
-### 使用示例
+**参数示例:**
 
 ```js
-async function fetchKeyboardLightingConfig() {
-  try {
-    const lightingConfig = await ServiceKeyboard.getLighting();
-    console.log('当前键盘灯光配置:', lightingConfig);
-    // console.log('灯光模式:', lightingConfig.mode);
-    // console.log('亮度:', lightingConfig.luminance);
-  } catch (error) {
-    console.error('获取键盘灯光配置失败:', error);
-  }
+{
+    "area": "Keyboard",
+    "protocol": "Custom",
+    "data": [
+        [
+            {
+                "R": 0,
+                "G": 8,
+                "B": 10,
+                "isCustom": false
+            },
+            // ... 更多按键
+        ],
+        // ... 更多行
+    ]
 }
-
-fetchKeyboardLightingConfig();
 ```
 
-## 设置键盘灯光配置
-
-ServiceKeyboard.setLighting()
-
-**简要描述:**
-应用新的灯光配置到键盘。
-
----
-
-### 参数
-
-| 参数名称   | 类型       | 描述                                   | 是否必需 | 默认值 |
-|------------|------------|----------------------------------------|----------|--------|
-| `lightMode`| `LightMode`| 一个 `LightMode` 对象，包含要设置的灯光配置。 | 是       | 无     |
-
-* 关于 `LightMode` 对象的详细结构，请 [查看lightMode的模型](/keyboard/model#灯光)。
-
 ---
 
 ### 返回值
 
-**总体类型:** `同入参`
+此方法没有返回值。
 
 ---
 
 ### 使用示例
 
-```js
-async function applyKeyboardLightingConfig(newConfig: LightMode) {
+```typescript
+async function setLightingCustom() {
   try {
-    // newConfig 示例 (具体值需符合 LightMode 定义):
-    // const exampleConfig: LightMode = {
-    //   open: true,
-    //   mode: 5, // 假设是某种动态效果
-    //   speed: 4,
-    //   luminance: 80,
-    //   colors: ["#00FF00"],
-    //   direction: true,
-    //   superResponse: false,
-    //   sleepDelay: 300,
-    //   staticColor: 0,
-    //   type: LightModeType.Effect, // 假设的 LightModeType 枚举值
-    // };
-    await ServiceKeyboard.setLighting(newConfig);
-    console.log('键盘灯光配置已更新。');
-  } catch (error) {
-    console.error('设置键盘灯光配置失败:', error);
-  }
-}
-
-// 假设 myCustomLightMode 是一个有效的 LightMode 对象
-// applyKeyboardLightingConfig(myCustomLightMode);
-```
-
-## 获取键盘Logo灯光配置
-
-ServiceKeyboard.getLogoLighting()
-
-**简要描述:**
-获取键盘上 Logo 灯的当前灯光配置信息。
-
----
-
-### 参数
-
-此方法不需要参数。
-
----
-
-### 返回值
-
-* **总体类型:** `Promise<LightMode>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `LightMode` 对象，包含当前 Logo 灯的详细配置。其结构与主键盘灯光配置 (`ServiceKeyboard.getLighting()` 返回的) 类似，但可能具有不同的模式范围或特定于Logo灯的属性。
-* **解析对象结构 (`LightMode`):**
-
-| 字段名称        | 类型              | 描述                                                                 | 示例值      |
-|-----------------|-------------------|----------------------------------------------------------------------|--------------------|
-| `open`          | `boolean`         | Logo 灯光是否开启。                                                      | `true`             |
-| `direction`     | `boolean`         | 灯效方向。`true` 正向, `false` 反向。                                  | `true`             |
-| `superResponse` | `boolean`         | 是否启用超强响应模式。                                                  | `false`            |
-| `speed`         | `number`          | 灯光效果的速度。                                                        | `3`                |
-| `colors`        | `string[]`        | 灯光效果所使用的颜色数组。                                                | `["#0000FF"]`      |
-| `mode`          | `number`          | 当前Logo灯光模式 (例如，动态灯效范围可能为 `1-4`)。                       | `1`                |
-| `luminance`     | `number`          | Logo 灯光亮度。                                                          | `100`              |
-| `sleepDelay`    | `number`          | 灯光休眠时间。                                                          | `600`              |
-| `staticColor`   | `number`          | 静态灯光颜色模式。                                                      | `0`                |
-| `type`          | `LightModeType`   | 灯光模式的分类或类型。                                                  | (依赖 `LightModeType`) |
-
-更多关于 `LightMode` 模型的详细结构，请 [查看lightMode的模型](/keyboard/model#灯光)。
-
----
-
-### 使用示例
-
-```js
-async function fetchLogoLightingConfig() {
-  try {
-    const logoConfig = await ServiceKeyboard.getLogoLighting();
-    console.log('当前Logo灯光配置:', logoConfig);
-  } catch (error) {
-    console.error('获取Logo灯光配置失败:', error);
-  }
-}
-
-fetchLogoLightingConfig();
-```
-
-## 设置键盘Logo灯光配置
-
-ServiceKeyboard.setLogoLighting()
-
-**简要描述:**
-应用新的灯光配置到键盘的 Logo 灯。
-
----
-
-### 参数
-
-| 参数名称   | 类型       | 描述                                        | 是否必需 | 默认值 |
-|------------|------------|---------------------------------------------|----------|--------|
-| `lightMode`| `LightMode`| 一个 `LightMode` 对象，包含要设置的Logo灯光配置。 | 是       | 无     |
-
-* 关于 `LightMode` 对象的详细结构，请 [查看lightMode的模型](/keyboard/model#灯光)。
-
----
-
-### 返回值
-
-**总体类型:** `同入参`
-
----
-
-### 使用示例
-
-```js
-async function applyLogoLightingConfig(newLogoConfig: LightMode) {
-  try {
-    await ServiceKeyboard.setLogoLighting(newLogoConfig);
-    console.log('Logo灯光配置已更新。');
-  } catch (error) {
-    console.error('设置Logo灯光配置失败:', error);
-  }
-}
-
-// 假设 myCustomLogoLightMode 是一个有效的 LightMode 对象
-// applyLogoLightingConfig(myCustomLogoLightMode);
-```
-
-### 注意事项
-
-::: tip
-
-* `type`: 键盘的 Logo 灯只有static静态模式和dynamic动态模式两种模式，设置其他的值将会被重置为static静态模式。
-:::
-
-## 获取单键自定义灯光颜色
-
-ServiceKeyboard.getCustomLighting()
-
-**简要描述:**
-获取键盘上单个按键的自定义 RGB 灯光颜色值。
-
----
-
-### 参数
-
-| 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
-|----------|----------|----------------------------------------------------------------------|----------|--------|
-| `key`    | `number` | 要查询自定义颜色的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-
----
-
-### 返回值
-
-* **总体类型:** `Promise<{ key: number; R: number; G: number; B: number }>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含指定按键的 `keyValue` 及其RGB颜色值的对象。
-* **解析对象结构:**
-
-| 字段名称 | 类型     | 描述                     | 示例值 (可能) |
-|----------|----------|--------------------------|---------------|
-| `key`    | `number` | 查询的按键的 `keyValue`。    | `80` (示例)   |
-| `R`      | `number` | 红色 (Red) 分量值 (0-255)。 | `255`         |
-| `G`      | `number` | 绿色 (Green) 分量值 (0-255)。| `0`           |
-| `B`      | `number` | 蓝色 (Blue) 分量值 (0-255)。 | `0`           |
-
----
-
-### 使用示例
-
-```js
-async function fetchCustomKeyColor(targetKeyValue: number) {
-  try {
-    const colorInfo = await ServiceKeyboard.getCustomLighting(targetKeyValue);
-    console.log(`按键 ${colorInfo.key} 的自定义颜色: R=${colorInfo.R}, G=${colorInfo.G}, B=${colorInfo.B}`);
-  } catch (error) {
-    console.error(`获取按键 ${targetKeyValue} 自定义颜色失败:`, error);
-  }
-}
-
-// 示例：获取 keyValue 为 80 的按键的颜色
-// const exampleKey = 80;
-// fetchCustomKeyColor(exampleKey);
-```
-
-## 设置单键自定义灯光颜色
-
-ServiceKeyboard.customSetLighting()
-
-**简要描述:**
-为键盘上的单个按键设置自定义 RGB 灯光颜色。这通常在键盘灯光模式设置为自定义模式后生效。
-
----
-
-### 参数
-
-| 参数名称   | 类型     | 描述                                                                 | 是否必需 | 默认值 |
-|------------|----------|----------------------------------------------------------------------|----------|--------|
-| `data`     | `object` | 一个包含按键及其 RGB 颜色配置的对象。                                    | 是       | 无     |
-| `data.key` | `number` | 要设置自定义颜色的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `data.R`   | `number` | 红色 (Red) 分量值 (0-255)。                                            | 是       | 无     |
-| `data.G`   | `number` | 绿色 (Green) 分量值 (0-255)。                                          | 是       | 无     |
-| `data.B`   | `number` | 蓝色 (Blue) 分量值 (0-255)。                                            | 是       | 无     |
-
----
-
-### 返回值
-
-* **总体类型:** `同入参`
-
----
-
-### 使用示例
-
-```js
-async function setCustomKeyColor(config: { key: number; R: number; G: number; B: number }) {
-  try {
-    // config 示例:
-    const exampleConfig: LightMode = {
-      open: true,
-      mode: 5, // 假设是某种动态效果
-      speed: 4,
-      luminance: 80,
-      colors: ["#00FF00"],
-      direction: true,
-      superResponse: false,
-      sleepDelay: 300,
-      staticColor: 0,
-      type: "custom", //需要先设定键盘灯光为自定义模式
+    const customLightingConfig = {
+      area: "Keyboard",
+      protocol: "Custom",
+      data: [
+        [
+          {
+            R: 0,
+            G: 8,
+            B: 10,
+            isCustom: false
+          },
+          // ... 更多按键配置
+        ],
+        // ... 更多行配置
+      ]
     };
-    await ServiceKeyboard.setLighting(newConfig);
-    // const colorConfig = { key: 80, R: 255, G: 0, B: 255 }; // 将 keyValue 80 的键设置为紫色
-    await ServiceKeyboard.customSetLighting(config);
-    console.log(`按键 ${config.key} 的自定义颜色已设置为 R=${config.R}, G=${config.G}, B=${config.B}`);
+    
+    await ServiceKeyboard.setLightingCustom(customLightingConfig);
+    console.log('自定义灯光配置已设置');
   } catch (error) {
-    console.error('设置单键自定义颜色失败:', error);
+    console.error('设置自定义灯光配置失败:', error);
   }
 }
 
-// 示例调用
-// const exampleColorSetting = { key: 80, R: 0, G: 255, B: 0 }; // 设置为绿色
-// setCustomKeyColor(exampleColorSetting);
+setLightingCustom();
 ```
 
-### 注意事项
+## 获取装饰灯1自定义灯光配置
 
-::: tip
+ServiceKeyboard.getDecorate1Custom()
 
-* `data.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-* 要使自定义颜色生效，键盘的主灯光模式 (`ServiceKeyboard.setLighting`) 需要设置type为特定的"custom"值。
-:::
+**简要描述:**
+获取装饰灯1的自定义灯光配置信息，返回一个二维数组，表示装饰灯上每个LED的RGB颜色值和自定义状态。
 
 ---
+
+### 参数
+
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `params` | `object` | 是 | 描述装饰灯尺寸的对象 |
+| `params.rows` | `number` | 是 | 装饰灯的行数 |
+| `params.cols` | `number` | 是 | 装饰灯的列数 |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<Array<Array<ICustomLightingInfo>>>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个二维数组，每个元素代表装饰灯上对应位置的LED灯光信息。
+* **解析对象结构 (`ICustomLightingInfo`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `R` | `number` | 红色分量值 (0-255) | `128` |
+| `G` | `number` | 绿色分量值 (0-255) | `41` |
+| `B` | `number` | 蓝色分量值 (0-255) | `49` |
+| `isCustom` | `boolean` | 是否为自定义颜色 | `true` |
+
+**返回值示例:**
+
+```js
+[
+    [
+        {
+            "R": 128,
+            "G": 41,
+            "B": 49,
+            "isCustom": true
+        },
+        // ... 更多LED
+    ]
+]
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function getDecorate1Custom() {
+  try {
+    const result = await ServiceKeyboard.getDecorate1Custom({
+      rows: 1,
+      cols: 22
+    });
+    console.log('装饰灯1自定义灯光配置:', result);
+    // 可以遍历结果来获取每个LED的颜色信息
+    result.forEach((row, rowIndex) => {
+      row.forEach((led, colIndex) => {
+        console.log(`LED[${rowIndex}][${colIndex}]的颜色: R=${led.R}, G=${led.G}, B=${led.B}, 是否自定义=${led.isCustom}`);
+      });
+    });
+  } catch (error) {
+    console.error('获取装饰灯1自定义灯光配置失败:', error);
+  }
+}
+
+getDecorate1Custom();
+```
+
+## 设置装饰灯1自定义灯光配置
+
+ServiceKeyboard.setDecorate1Custom()
+
+**简要描述:**
+设置装饰灯1的自定义灯光配置，可以为每个LED设置独立的RGB颜色值和自定义状态。
+
+---
+
+### 参数
+
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `params` | `object` | 是 | 描述设置区域和配置的对象 |
+| `params.area` | `string` | 是 | 灯光区域，固定为`Decorate1` |
+| `params.protocol` | `string` | 是 | 协议类型，固定为`Custom` |
+| `params.data` | `Array<Array<ICustomLightingInfo>>` | 是 | 二维数组，表示装饰灯上每个LED的灯光配置 |
+
+**LED灯光信息结构 (`ICustomLightingInfo`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `R` | `number` | 红色分量值 (0-255) | `128` |
+| `G` | `number` | 绿色分量值 (0-255) | `41` |
+| `B` | `number` | 蓝色分量值 (0-255) | `49` |
+| `isCustom` | `boolean` | 是否为自定义颜色 | `true` |
+
+**参数示例:**
+
+```js
+{
+    "area": "Decorate1",
+    "protocol": "Custom",
+    "data": [
+        [
+            {
+                "R": 128,
+                "G": 41,
+                "B": 49,
+                "isCustom": true
+            },
+            // ... 更多LED
+        ]
+    ]
+}
+```
+
+---
+
+### 返回值
+
+此方法没有返回值。
+
+---
+
+### 使用示例
+
+```typescript
+async function setDecorate1Custom() {
+  try {
+    const customLightingConfig = {
+      area: "Decorate1",
+      protocol: "Custom",
+      data: [
+        [
+          {
+            R: 128,
+            G: 41,
+            B: 49,
+            isCustom: true
+          },
+          // ... 更多LED配置
+        ]
+      ]
+    };
+    
+    await ServiceKeyboard.setDecorate1Custom(customLightingConfig);
+    console.log('装饰灯1自定义灯光配置已设置');
+  } catch (error) {
+    console.error('设置装饰灯1自定义灯光配置失败:', error);
+  }
+}
+
+setDecorate1Custom();
+```
+
+## 获取灯光区域信息
+
+ServiceKeyboard.getLightingArea()
+
+**简要描述:**
+获取键盘上所有灯光区域的信息，包括主键盘灯和装饰灯的数量、行列数等配置信息。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<ILightingAreaInfo>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含所有灯光区域信息的对象。
+* **解析对象结构 (`ILightingAreaInfo`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `total` | `number` | 灯光区域 | `2` |
+| `areas` | `Array<IAreaInfo>` | 灯光区域信息数组 | - |
+
+**区域信息结构 (`IAreaInfo`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `index` | `number` | 灯效区域索引 | `0` |
+| `count` | `number` | 灯效数量 | `20` |
+| `rows` | `number` | 行数 | `6` |
+| `cols` | `number` | 列数 | `15` |
+
+**返回值示例:**
+
+```js
+{
+    "total": 2,
+    "areas": [
+        {
+            "index": 0,
+            "count": 20,
+            "rows": 6,
+            "cols": 15
+        },
+        {
+            "index": 1,
+            "count": 5,
+            "rows": 1,
+            "cols": 22
+        }
+    ]
+}
+```
+
+### 区域说明
+
+* `total` 值说明：
+  * `1`: 主键盘灯
+  * `2`: 装饰灯1
+  * `3`: 装饰灯2
+
+---
+
+### 使用示例
+
+```typescript
+async function getLightingArea() {
+  try {
+    const result = await ServiceKeyboard.getLightingArea();
+    console.log('灯光区域信息:', result);
+    
+    // 遍历所有灯光区域
+    result.areas.forEach(area => {
+      console.log(`区域索引 ${area.index}:`);
+      console.log(`- 灯效数量: ${area.count}`);
+      console.log(`- 行数: ${area.rows}`);
+      console.log(`- 列数: ${area.cols}`);
+    });
+  } catch (error) {
+    console.error('获取灯光区域信息失败:', error);
+  }
+}
+
+getLightingArea();
+```
+
+## 获取双灯效状态
+
+ServiceKeyboard.getDoubleLighting()
+
+**简要描述:**
+获取键盘的双灯效状态配置信息。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<IDoubleLightingInfo>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含双灯效状态信息的对象。
+* **解析对象结构 (`IDoubleLightingInfo`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `doubleLighting` | `number` | 双灯效状态 | `1` |
+
+**返回值示例:**
+
+```js
+{
+    "doubleLighting": 1
+}
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function getDoubleLighting() {
+  try {
+    const result = await ServiceKeyboard.getDoubleLighting();
+    console.log('双灯效状态:', result.doubleLighting);
+  } catch (error) {
+    console.error('获取双灯效状态失败:', error);
+  }
+}
+
+getDoubleLighting();
+```
+
+
+
+

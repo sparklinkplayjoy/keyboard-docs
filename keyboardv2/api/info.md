@@ -133,19 +133,14 @@ ServiceKeyboard.getBaseInfo()
 
 | 字段名称          | 类型     | 描述                     | 示例值  |
 |-------------------|----------|--------------------------|---------------|
-| `BoardID`         | `number` | 板卡ID。                 | `84084737`           |
-| `KeyboardLayout`  | `number` | 键盘布局类型。           | `5`           |
-| `KeyType`         | `number` | 按键轴体类型。           | `3`           |
-| `CustomerID`      | `number` | 客户ID。                 | `0`           |
-| `ProductionId`    | `number` | 产品ID。                 | `0`           |
-| `KeyboardRunMode` | `number` | 键盘当前的运行模式。     | `0`           |
-| `KeyboardSN`      | `string` | 键盘的序列号。           | `'123456'`          |
-| `firewareSpaceSize`| `number`| 固件可用空间大小。       | `262144`           |
-| `appVersion`      | `string` | 固件的应用版本号。       | `'App V1.1.6'`          |
-| `appBuildDate`    | `string` | 固件的编译日期。         | `'Apr 22 5180'`          |
-| `versionString`   | `string` | 包含版本信息的完整字符串。 | `''`          |
-
-更多关于 `BaseInfo` 的细节，请 [查看BaseInfo的类型](/keyboard/model#基础信息)。
+| `type`            | `number` | 设备类型。               | `1`           |
+| `subType`         | `number` | 设备子类型。             | `0`           |
+| `boardId`         | `number` | 板卡ID。                 | `3145729`     |
+| `appVersion`      | `string` | 固件的应用版本号。       | `'1.0.1.0'`   |
+| `pcbVersion`      | `string` | PCB版本号。              | `'1-0-0-0'`   |
+| `runModeVersion`  | `number` | 运行模式版本。           | `0`           |
+| `sn`              | `string` | 键盘的序列号。           | `'54817806657765148212547'` |
+| `timestamp`       | `string` | 时间戳。                 | `'2025052215:4'` |
 
 ---
 
@@ -167,71 +162,190 @@ async function fetchBaseDeviceInfo() {
 // fetchBaseDeviceInfo(); // 需在设备初始化后调用
 ```
 
-## 获取设备API信息
+## 获取协议版本
 
-ServiceKeyboard.getApi()
+ServiceKeyboard.getProtocolVersion()
 
 **简要描述:**
-通过指定的类型和参数，向设备请求特定的 API 信息。
+获取键盘设备的协议版本信息。
 
 ---
 
 ### 参数 
 
-| 参数名称   | 类型                                                 | 描述                                                         | 是否必需 | 默认值      |
-|------------|------------------------------------------------------|--------------------------------------------------------------|----------|-------------|
-| `params`   | `object`                                             | 一个包含 API 请求参数的对象。                                  | 是       | 无          |
-| `params.type` | `string`                                           | API 的类型标识符，用于指定要获取的具体信息。                 | 是       | 无          |
-| `params.hArgs`| `number[]`                                         | 可选的附加参数数组，具体含义取决于 `type`。                    | 否       | `undefined` |
-| `params.is8bit`| `boolean`                                        | 可选参数，指示是否按8位数据模式处理，具体含义取决于 `type`。   | 否       | `undefined` |
+此方法不需要参数。
 
 ---
 
 ### 返回值 
 
-*   **总体类型:** `Promise<Api>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Api` 对象，其中包含请求的 API 数据。
-*   **解析对象结构 (`Api`):**
-    *   关于 `Api` 对象的详细结构，[查看getApi的type类型](/keyboard/type#getApi)。
+*   **总体类型:** `Promise<ProtocolVersion>`
+*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含协议版本信息的对象。
+*   **解析对象结构 (`ProtocolVersion`):**
+
+| 字段名称          | 类型     | 描述                     | 示例值  |
+|-------------------|----------|--------------------------|---------|
+| `mainVersion`     | `number` | 主版本号。               | `1`     |
+| `subVersion`      | `number` | 子版本号。               | `0`     |
+| `hardwareVersion` | `number` | 硬件版本号。             | `1`     |
+| `softwareVersion` | `number` | 软件版本号。             | `0`     |
 
 ---
 
 ### 使用示例 
 
 ```js
-async function fetchApiData(apiType: string, customArgs?: number[], use8bit?: boolean) {
+async function fetchProtocolVersion() {
   try {
-    // 确保设备已初始化
-    // await ServiceKeyboard.init(deviceId);
-
-    const apiParams: { type: string; hArgs?: number[]; is8bit?: boolean } = { type: apiType };
-    if (customArgs) {
-      apiParams.hArgs = customArgs;
-    }
-    if (typeof use8bit === 'boolean') {
-      apiParams.is8bit = use8bit;
-    }
-
-    const result = await ServiceKeyboard.getApi(apiParams);
-    console.log(`API 类型 ${apiType} 的结果:`, result);
+    const versionInfo = await ServiceKeyboard.getProtocolVersion();
+    console.log('协议版本信息:', versionInfo);
   } catch (error) {
-    console.error(`获取 API 类型 ${apiType} 数据失败:`, error);
+    console.error('获取协议版本信息失败:', error);
   }
 }
 
-// const TYPE_GET_KEYBOARD_STATUS = "ORDER_TYPE_PROTOCOL_VERSION"; // 示例 type
-// fetchApiData(TYPE_GET_KEYBOARD_STATUS);
-// fetchApiData(TYPE_SOME_OTHER_API, [10, 20], true);
+// fetchProtocolVersion();
 ```
+
+## 获取配置列表
+
+ServiceKeyboard.getConfigList()
+
+**简要描述:**
+获取键盘可用的配置列表信息。
 
 ---
 
-### 注意事项 
+### 参数 
 
+此方法不需要参数。
+
+---
+
+### 返回值 
+
+*   **总体类型:** `Promise<ConfigList>`
+*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含配置列表信息的对象。
+*   **解析对象结构 (`ConfigList`):**
+
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `total`  | `number` | 配置总数。               | `4`     |
+| `list`   | `string[]` | 配置名称列表。         | `['Config1', 'Config2', 'Config3', 'Config4']` |
+
+---
+
+### 使用示例 
+
+```js
+async function fetchConfigList() {
+  try {
+    const configList = await ServiceKeyboard.getConfigList();
+    console.log('配置列表:', configList);
+    console.log('配置总数:', configList.total);
+    console.log('配置名称列表:', configList.list);
+  } catch (error) {
+    console.error('获取配置列表失败:', error);
+  }
+}
+
+// fetchConfigList();
+```
+
+## 获取当前配置
+
+ServiceKeyboard.getConfig()
+
+**简要描述:**
+获取键盘当前使用的配置信息。
+
+---
+
+### 参数 
+
+此方法不需要参数。
+
+---
+
+### 返回值 
+
+*   **总体类型:** `Promise<Config>`
+*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含当前配置信息的对象。
+*   **解析对象结构 (`Config`):**
+
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `key`    | `string` | 当前配置的名称。         | `'Config2'` |
+| `value`  | `number` | 当前配置的索引值。       | `1`     |
+
+---
+
+### 使用示例 
+
+```js
+async function fetchCurrentConfig() {
+  try {
+    const config = await ServiceKeyboard.getConfig();
+    console.log('当前配置名称:', config.key);
+    console.log('当前配置索引:', config.value);
+  } catch (error) {
+    console.error('获取当前配置失败:', error);
+  }
+}
+
+// fetchCurrentConfig();
+```
+
+## 设置当前配置
+
+ServiceKeyboard.setConfig()
+
+**简要描述:**
+设置键盘当前使用的配置。
+
+---
+
+### 参数 
+
+| 参数名称 | 类型     | 描述                     | 是否必需 | 默认值 |
+|----------|----------|--------------------------|----------|--------|
+| `config` | `string` | 要设置的配置名称。       | 是       | 无     |
+
+---
+
+### 返回值 
+
+*   **总体类型:** `Promise<void>`
+*   **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果设置失败，`Promise` 会拒绝并返回一个错误。
+
+---
+
+### 使用示例 
+
+```js
+async function setCurrentConfig(configName) {
+  try {
+    await ServiceKeyboard.setConfig(configName);
+    console.log(`已切换到配置: ${configName}`);
+  } catch (error) {
+    console.error('设置配置失败:', error);
+  }
+}
+
+// 示例：切换到 Config1
+// setCurrentConfig('Config1');
+```
+### 注意事项
 ::: tip
-*   `params.type` 的具体可用值和含义，请 [查看getApi的type类型](/keyboard/type#getApi)。
+*   `index`: 配置索引值必须在1到4之间。
+*   切换配置后，建议监听 `getCmd` 事件来获取配置切换的结果。
+*   在收到配置切换成功的通知后，通常需要重新获取以下数据：
+    *   键盘配置信息
+    *   灯光设置
+    *   按键映射
+    *   其他相关设置
+*   建议在配置切换过程中显示加载状态，以提供更好的用户体验。
 :::
-
 
 ## 重新连接设备
 
@@ -389,71 +503,9 @@ ServiceKeyboard.on('usbChange', (data) => {
 *   在插拔事件里已经处理好了设备的自动重连，不需要再调用重连接口了
 :::
 
-## 设置回报率
-
-ServiceKeyboard.setRateOfReturn()
-
-**简要描述:**
-设置键盘的回报率 (Polling Rate)。
-
----
-
-### 参数 
-
-| 参数名称 | 类型     | 描述                           | 是否必需 | 默认值 |
-|----------|----------|--------------------------------|----------|--------|
-| `value`  | `number` | 要设置的回报率值（具体单位和可选值需查阅设备文档）。 | 是       | 无     |
-
----
-
-### 返回值 
-
-*   **总体类型:** `Promise<void>`
-*   **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果设置失败，`Promise` 会拒绝并返回一个错误。
-
----
-
-### 使用示例 
-
-```js
-// keyType的值需要从ServiceKeyboard.getBaseInfo接口获取
-const keyType = 3;
-// 下拉框的值
-const rateOfReturnList = computed(() => {
-  if (keyType === 4) {
-    return ['1KHz', '500Hz', '250Hz', '125Hz'];
-  }
-  return ['8KHz', '4KHz', '2KHz', '1KHz', '500Hz', '250Hz', '125Hz'];
-});
-
-async function configureRateOfReturn(rateValue: number) {
-  try {
-    // 确保设备已初始化
-    // await ServiceKeyboard.init(deviceId);
-    await ServiceKeyboard.setRateOfReturn(rateValue);
-    console.log(`回报率已设置为: ${rateValue}`);
-  } catch (error) {
-    console.error('设置回报率失败:', error);
-  }
-}
-tip:keyType的值需要从ServiceKeyboard.getBaseInfo接口获取，设置回报率 回报率最大值只有6
-// const POLLING_RATE = 6; // 示例值
-// configureRateOfReturn(POLLING_RATE);
-```
-
----
-
-### 注意事项 
-
-::: tip
-*   具体的回报率值和 `type` 的关联（如果适用），请 [查看回报率类型](/keyboard/type#getApi) (注意：此链接可能指向 `getApi` 的类型，可能需要查阅相关type定义以确定回报率的参数)。
-:::
-
-
-
 ## 进入Bootloader模式
 
-ServiceKeyboard.toBoot()
+ServiceKeyboard.appToBoot()
 
 **简要描述:**
 使设备进入 Bootloader 模式，通常用于擦除或准备更新固件。
@@ -481,7 +533,7 @@ async function enterBootloaderMode() {
     // 确保设备已初始化
     // await ServiceKeyboard.init(deviceId);
     console.log('正在尝试使设备进入 Bootloader 模式...');
-    await ServiceKeyboard.toBoot();
+    await ServiceKeyboard.appToBoot();
     console.log('设备已成功进入 Bootloader 模式或相关指令已发送。');
     // 此时设备可能已断开连接，需要重新扫描或等待设备以 Bootloader 模式出现
   } catch (error) {
@@ -501,10 +553,57 @@ async function enterBootloaderMode() {
 *   tip: 擦除后，需要重新连接设备,调用重连接口`ServiceKeyboard.reconnection`。
 :::
 
+## 从Bootloader模式返回应用模式
+
+ServiceKeyboard.bootToApp()
+
+**简要描述:**
+使设备从 Bootloader 模式返回到应用模式。
+
+---
+
+### 参数 
+
+此方法不需要参数。
+
+---
+
+### 返回值 
+
+*   **总体类型:** `Promise<void>`
+*   **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果操作失败，`Promise` 会拒绝并返回一个错误。
+
+---
+
+### 使用示例 
+
+```js
+async function returnToAppMode() {
+  try {
+    console.log('正在尝试使设备从 Bootloader 模式返回到应用模式...');
+    await ServiceKeyboard.bootToApp();
+    console.log('设备已成功返回到应用模式。');
+    // 此时设备可能已断开连接，需要重新扫描或等待设备以应用模式出现
+  } catch (error) {
+    console.error('使设备返回到应用模式失败:', error);
+  }
+}
+
+// returnToAppMode();
+```
+
+---
+
+### 注意事项 
+
+::: tip
+*   执行此操作后，设备通常会断开连接并以应用模式重新枚举。您需要重新扫描设备或等待设备重新连接。
+*   建议在操作完成后重新连接设备，调用重连接口 `ServiceKeyboard.reconnection`。
+:::
 
 ## Bin文件更新固件
 
-ServiceKeyboard.updateBin()
+ServiceKeyboard.upgrade()
 
 **简要描述:**
 向处于 Bootloader 模式的设备更新固件。
@@ -552,7 +651,7 @@ async function performFirmwareUpdate(firmwareBuffer: ArrayBuffer) {
       reader.onload = async () => {
         loading.value = true;
         try {
-          const res = await ServiceKeyboard.updateBin(
+          const res = await ServiceKeyboard.upgrade(
             reader.result,
             ({ current, total, updateStatus: status }) => {
               progress.current = current;
@@ -595,7 +694,7 @@ async function performFirmwareUpdate(firmwareBuffer: ArrayBuffer) {
 
 ## 恢复出厂设置
 
-ServiceKeyboard.factoryDataReset()
+ServiceKeyboard.GFSRestore()
 
 **简要描述:**
 将键盘恢复到出厂默认设置。此操作会清除所有用户自定义的配置，包括灯光设置、按键映射、宏设置等。
@@ -606,103 +705,4 @@ ServiceKeyboard.factoryDataReset()
 ### 返回值
 **类型:** `Promise<void>`
 
-**描述:** 返回一个 `Promise`，该 `Promise` 在操作成功时解析为 `void`。
-
-### 使用示例
-```js
-async function resetToFactorySettings() {
-  try {
-    await ServiceKeyboard.factoryDataReset();
-    console.log('已恢复出厂设置');
-    
-    // 恢复出厂设置后，需要重新连接设备
-    // await ServiceKeyboard.reconnection(device, deviceId);
-    
-    // 重新获取设备信息
-    // const baseInfo = await ServiceKeyboard.getBaseInfo();
-    // const layoutInfo = await ServiceKeyboard.defKey();
-  } catch (error) {
-    console.error('恢复出厂设置失败:', error);
-    throw error;
-  }
-}
-
-// 示例：恢复出厂设置
-// resetToFactorySettings();
-```
-
-### 注意事项
-::: tip
-*   此操作会清除所有用户自定义的配置，请谨慎使用。
-*   恢复出厂设置后，设备会自动断开连接。
-*   建议在操作完成后：
-    *   重新连接设备
-    *   重新获取设备基础信息
-    *   重新获取键盘布局信息
-    *   重新获取其他必要的配置信息
-*   建议在操作过程中显示加载状态，以提供更好的用户体验。
-:::
-
-## 切换配置
-
-ServiceKeyboard.switchConfig()
-
-**简要描述:**
-切换键盘的配置。键盘支持多个配置（通常为4个），可以通过此接口在不同配置之间切换。
-
-### 参数
-| 参数名称 | 类型     | 描述                                                                                                | 是否必需 | 默认值 |
-| :------- | :------- | :-------------------------------------------------------------------------------------------------- | :------- | :----- |
-| `index`  | `number` | 要切换到的配置索引。有效值为1、2、3、4，分别对应四个不同的配置。                                      | 是       | 无     |
-
-### 返回值
-**类型:** `Promise<void>`
-
-**描述:** 返回一个 `Promise`，该 `Promise` 在操作成功时解析为 `void`。
-
-### 使用示例
-```js
-// 切换配置
-async function switchKeyboardConfig(configIndex) {
-  try {
-    await ServiceKeyboard.switchConfig(configIndex);
-    console.log(`已切换到配置 ${configIndex}`);
-  } catch (error) {
-    console.error('切换配置失败:', error);
-    throw error;
-  }
-}
-
-// 监听配置切换事件
-ServiceKeyboard.on('getCmd', (data) => {
-  console.log('getCmd', data);
-  if (data && data.configID !== null && data.configID !== undefined && !appStore.loading) {
-    appStore.setLoading(true, '配置切换中');
-    appStore.activeConfigIndex = data.configID;
-    
-    // 需要重新获取配置，灯光，改键等
-    // 例如：
-    // await fetchNewConfig();
-    // await fetchLightingSettings();
-    // await fetchKeyMappings();
-  }
-});
-
-// 示例：切换到配置2
-// const configIndex = 2;
-// switchKeyboardConfig(configIndex);
-```
-
-### 注意事项
-::: tip
-*   `index`: 配置索引值必须在1到4之间。
-*   切换配置后，建议监听 `getCmd` 事件来获取配置切换的结果。
-*   在收到配置切换成功的通知后，通常需要重新获取以下数据：
-    *   键盘配置信息
-    *   灯光设置
-    *   按键映射
-    *   其他相关设置
-*   建议在配置切换过程中显示加载状态，以提供更好的用户体验。
-:::
-
-
+**描述:** 返回一个 `

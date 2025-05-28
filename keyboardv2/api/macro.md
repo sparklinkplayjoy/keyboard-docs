@@ -1,161 +1,288 @@
 # 宏
 
-## 获取宏设置
-
-ServiceKeyboard.getMacro()
+## 获取宏模式
+ServiceKeyboard.getMacroMode()
 
 **简要描述:**
-获取指定按键的宏设置。
+获取指定宏ID的宏模式设置。
 
 ### 参数
-
 | 参数名称 | 类型     | 描述                                                                                                | 是否必需 | 默认值 |
 | :------- | :------- | :-------------------------------------------------------------------------------------------------- | :------- | :----- |
-| `key`    | `number` | 要查询的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
+| `params` | `object` | 包含宏ID的对象。                                                                                    | 是       | 无     |
+| `params.macroId` | `number` | 要查询的宏ID。                                                                                    | 是       | 无     |
 
 ### 返回值
+**类型:** `Promise<{ macroId: number, mode: number, valid: boolean, actNum: number, repNum: number }>`
 
-**类型:** `Promise<IMacroMode>`
+**描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，包含宏的模式设置信息。
 
-**描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `IMacroMode` 对象，包含按键的宏设置。
-
-**内容:** 关于 `IMacroMode` 对象的详细结构，请[查看IMacroMode的模型](/keyboard/model#宏)。
-
-### 使用示例
-
-```js
-async function getMacroSettings(keyValue) {
-  try {
-    const result = await ServiceKeyboard.getMacro(keyValue);
-    console.log(`按键 ${keyValue} 的宏设置:`, result);
-    // 示例返回数据:
-    // {
-    //     "key": 17,
-    //     "id": 2,
-    //     "len": 0,
-    //     "mode": 0,
-    //     "num": 2,
-    //     "delay": 3
-    // }
-    return result;
-  } catch (error) {
-    console.error('获取宏设置失败:', error);
-    throw error;
-  }
-}
-
-// 示例：获取 keyValue 为 80 的按键的宏设置
-// const exampleKey = 80;
-// getMacroSettings(exampleKey);
-```
-
-### 注意事项
-
-::: tip
-
-* `key`: 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-:::
-
-## 设置宏
-
-ServiceKeyboard.setMacro()
-
-**简要描述:**
-为指定按键设置宏功能。宏功能允许用户将一系列按键操作绑定到一个按键上，实现一键触发多个操作。
-
-### 参数
-
-| 参数名称     | 类型                    | 描述                                                                                                | 是否必需 | 默认值 |
-| :----------- | :---------------------- | :-------------------------------------------------------------------------------------------------- | :------- | :----- |
-| `param`      | `IMacroMode`           | 宏模式设置。                                                                                        | 是       | 无     |
-| `macros`     | `MacroType[]`          | 宏序列数组。                                                                                        | 是       | 无     |
-
-### 参数详细说明
-
-**IMacroMode 结构:**
-
+**内容:**
 | 字段名称 | 类型     | 描述             | 示例值 |
 | :------- | :------- | :--------------- | :----- |
-| `index`  | `number` | 宏索引。         | `2`    |
-| `len`    | `number` | 宏序列长度。     | `4`    |
-| `mode`   | `number` | 宏执行模式：<br/>`0`: 单击执行<br/>`1`: 点击重复执行（再次点击停止）<br/>`2`: 按下重复执行（弹起立刻停止）<br/>`3`: 按下重复执行（弹起后完成此次宏后停止） | `0`    |
-| `key`    | `number` | 按键的keyValue。 | `16`   |
-| `num`    | `number` | 重复次数。       | `3`    |
-| `delay`  | `number` | 延迟时间。       | `4`    |
-
-**MacroType 结构:**
-
-| 字段名称        | 类型     | 描述             | 示例值 |
-| :-------------- | :------- | :--------------- | :----- |
-| `keyCode`       | `number` | 按键码。         | `37`   |
-| `timeDifference`| `number` | 时间差（毫秒）。 | `0`    |
-| `status`        | `number` | 按键状态：<br/>`1`: 按下<br/>`0`: 释放 | `1`    |
-
-### 返回值
-
-**类型:** `Promise<void>`
-
-**描述:** 返回一个 `Promise`，该 `Promise` 在操作成功时解析为 `void`。
+| `macroId` | `number` | 宏ID。          | `1`    |
+| `mode`   | `number` | 宏执行模式。     | `0`    |
+| `valid`  | `boolean` | 宏有效标志。    | `true` |
+| `actNum` | `number` | 宏动作数量。     | `6`    |
+| `repNum` | `number` | 重复次数。       | `1`    |
 
 ### 使用示例
-
 ```js
-async function setMacroData(data, macros) {
+async function getMacroModeSettings(macroId) {
   try {
-    console.log('setMacro', data, macros);
-    const result = await ServiceKeyboard.setMacro(data, macros);
+    const result = await ServiceKeyboard.getMacroMode({ macroId });
+    console.log(`宏ID ${macroId} 的模式设置:`, result);
     return result;
   } catch (error) {
-    console.error('设置宏失败:', error);
+    console.error('获取宏模式设置失败:', error);
     throw error;
   }
 }
 
-// 示例：设置宏
-const exampleData = {
-    "index": 2,
-    "len": 4,
-    "mode": 0,  // 单击执行
-    "key": 16,
-    "num": 3,
-    "delay": 4
-};
-
-const exampleMacros = [
-    {
-        "keyCode": 37,
-        "timeDifference": 0,
-        "status": 1  // 按下
-    },
-    {
-        "keyCode": 37,
-        "timeDifference": 0,
-        "status": 0  // 释放
-    },
-    {
-        "keyCode": 14,
-        "timeDifference": 71.2,
-        "status": 1  // 按下
-    },
-    {
-        "keyCode": 14,
-        "timeDifference": 174.3,
-        "status": 0  // 释放
-    }
-];
-
-// setMacroData(exampleData, exampleMacros);
+// 示例：获取宏ID为1的宏模式设置
+// getMacroModeSettings(1);
 ```
 
 ### 注意事项
 
 ::: tip
+*   `macroId`: 要查询的宏ID。
+*   `mode` 表示宏的执行模式：
+    *   0: 点击执行，重复n次，执行期间再次点击无效
+    *   1: 点击执行，重复n次，执行期间再次点击，重新执行
+    *   2: 点击执行，重复n次，执行期间再次点击，立即停止执行
+    *   3: 点击执行，重复n次，执行期间再次点击，完成本次宏后停止执行
+    *   4: 按住执行，重复次数无限，松开后立即停止执行
+    *   5: 按住执行，重复次数无限，松开后完成本次宏后停止执行
+*   `valid`: 表示该宏是否有效。
+*   `actNum`: 表示宏中包含的动作数量。
+*   `repNum`: 表示宏的重复执行次数。
+:::
 
-* `param`: 宏模式设置，需要包含完整的 `IMacroMode` 结构。
-* `macros`: 宏序列数组，每个元素需要包含 `keyCode`、`timeDifference` 和 `status`。
-* `mode`: 宏执行模式，决定了宏的执行方式：
-  * `0`: 单击执行 - 按下按键时执行一次宏序列
-  * `1`: 点击重复执行 - 按下按键时开始重复执行，再次按下时停止
-  * `2`: 按下重复执行 - 按住按键时重复执行，松开时立即停止
-  * `3`: 按下重复执行 - 按住按键时重复执行，松开后完成当前宏序列后停止
+## 设置宏模式
+ServiceKeyboard.setMacroMode()
+
+**简要描述:**
+设置指定宏ID的宏模式配置。
+
+### 参数
+| 参数名称 | 类型     | 描述                                                                                                | 是否必需 | 默认值 |
+| :------- | :------- | :-------------------------------------------------------------------------------------------------- | :------- | :----- |
+| `params` | `object` | 包含宏模式设置的对象。                                                                              | 是       | 无     |
+| `params.macroId` | `number` | 要设置的宏ID。                                                                                    | 是       | 无     |
+| `params.mode` | `number` | 宏执行模式。                                                                                      | 是       | 无     |
+| `params.valid` | `number` | 宏有效标志（1表示有效，0表示无效）。                                                              | 是       | 无     |
+| `params.actNum` | `number` | 宏动作数量。                                                                                      | 是       | 无     |
+| `params.repNum` | `number` | 重复次数。                                                                                        | 是       | 无     |
+
+### 返回值
+**类型:** `Promise<{ macroId: number, mode: number, valid: boolean, actNum: number, repNum: number }>`
+
+**描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，包含设置后的宏模式信息。
+
+**内容:**
+| 字段名称 | 类型     | 描述             | 示例值 |
+| :------- | :------- | :--------------- | :----- |
+| `macroId` | `number` | 宏ID。          | `0`    |
+| `mode`   | `number` | 宏执行模式。     | `0`    |
+| `valid`  | `boolean` | 宏有效标志。    | `true` |
+| `actNum` | `number` | 宏动作数量。     | `8`    |
+| `repNum` | `number` | 重复次数。       | `0`    |
+
+### 使用示例
+```js
+async function setMacroModeSettings(macroId, mode, valid, actNum, repNum) {
+  try {
+    const params = {
+      macroId,
+      mode,
+      valid,
+      actNum,
+      repNum
+    };
+    
+    const result = await ServiceKeyboard.setMacroMode(params);
+    console.log(`宏ID ${macroId} 的模式设置已更新:`, result);
+    return result;
+  } catch (error) {
+    console.error('设置宏模式失败:', error);
+    throw error;
+  }
+}
+
+// 示例：设置宏ID为0的宏模式
+// setMacroModeSettings(0, 0, 1, 8, 0);
+```
+
+### 注意事项
+
+::: tip
+*   `macroId`: 要设置的宏ID。
+*   `mode` 表示宏的执行模式：
+    *   0: 点击执行，重复n次，执行期间再次点击无效
+    *   1: 点击执行，重复n次，执行期间再次点击，重新执行
+    *   2: 点击执行，重复n次，执行期间再次点击，立即停止执行
+    *   3: 点击执行，重复n次，执行期间再次点击，完成本次宏后停止执行
+    *   4: 按住执行，重复次数无限，松开后立即停止执行
+    *   5: 按住执行，重复次数无限，松开后完成本次宏后停止执行
+*   `valid`: 输入时使用数字（1表示有效，0表示无效），返回时转换为布尔值。
+*   `actNum`: 表示宏中包含的动作数量。
+*   `repNum`: 表示宏的重复执行次数，0表示不重复。
+:::
+
+
+## 获取宏数据
+ServiceKeyboard.getMacroData()
+
+**简要描述:**
+获取指定宏ID的宏动作数据。由于宏动作数据可能较多，接口支持分页获取。
+
+### 参数
+| 参数名称 | 类型     | 描述                                                                                                | 是否必需 | 默认值 |
+| :------- | :------- | :-------------------------------------------------------------------------------------------------- | :------- | :----- |
+| `params` | `object` | 包含宏ID和偏移量的对象。                                                                            | 是       | 无     |
+| `params.macroId` | `number` | 要查询的宏ID。                                                                                    | 是       | 无     |
+| `params.offset` | `number` | 分页偏移量，用于计算分页。                                    | 是       | 无     |
+
+### 返回值
+**类型:** `Promise<{ macroId: number, offset: number, macros: Array<{ status: number, delay: number, keyCode: number }> }>`
+
+**描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，包含宏的动作数据信息。
+
+**内容:**
+| 字段名称 | 类型     | 描述             | 示例值 |
+| :------- | :------- | :--------------- | :----- |
+| `macroId` | `number` | 宏ID。          | `0`    |
+| `offset` | `number` | 分页偏移量。     | `0`    |
+| `macros` | `Array` | 宏动作数组。     | -      |
+
+**macros 数组中的对象结构:**
+| 字段名称 | 类型     | 描述             | 示例值 |
+| :------- | :------- | :--------------- | :----- |
+| `status` | `number` | 按键状态：1=按下，0=弹起。 | `1`    |
+| `delay`  | `number` | 动作执行后的延时，单位为ms。 | `47`   |
+| `keyCode`| `number` | 按键码。         | `22`   |
+
+### 使用示例
+```js
+async function getMacroDataSettings(macroId, offset) {
+  try {
+    const params = {
+      macroId,
+      offset
+    };
+    
+    const result = await ServiceKeyboard.getMacroData(params);
+    console.log(`宏ID ${macroId} 的动作数据:`, result);
+    return result;
+  } catch (error) {
+    console.error('获取宏数据失败:', error);
+    throw error;
+  }
+}
+
+// 示例：获取宏ID为0的第一页动作数据
+// getMacroDataSettings(0, 0);
+```
+
+### 注意事项
+
+::: tip
+*   `macroId`: 要查询的宏ID。
+*   `offset`: 分页偏移量，用于分页获取宏动作数据。
+*   `macros` 数组中的每个对象表示一个宏动作：
+    *   `status`: 1表示按下，0表示弹起。
+    *   `delay`: 表示该动作执行后的延时时间，单位为ms。
+    *   `keyCode`: 表示要触发的按键码。
+*   返回的 `macros` 数组长度固定为15，未使用的动作位置会被填充为 `{ status: 0, delay: 0, keyCode: 0 }`。
+:::
+
+## 设置宏数据
+ServiceKeyboard.setMacroData()
+
+**简要描述:**
+设置指定宏ID的宏动作数据。由于宏动作数据可能较多，接口支持分页设置。
+
+### 参数
+| 参数名称 | 类型     | 描述                                                                                                | 是否必需 | 默认值 |
+| :------- | :------- | :-------------------------------------------------------------------------------------------------- | :------- | :----- |
+| `params` | `object` | 包含宏ID、偏移量和动作数组的对象。                                                                  | 是       | 无     |
+| `params.macroId` | `number` | 要设置的宏ID。                                                                                    | 是       | 无     |
+| `params.offset` | `number` | 分页偏移量，用于计算分页。                                    | 是       | 无     |
+| `params.actions` | `Array` | 宏动作数组。                                                                                      | 是       | 无     |
+
+**actions 数组中的对象结构:**
+| 字段名称 | 类型     | 描述             | 示例值 |
+| :------- | :------- | :--------------- | :----- |
+| `status` | `number` | 按键状态：1=按下，0=弹起。 | `1`    |
+| `delay`  | `number` | 动作执行后的延时，单位为ms。 | `119`  |
+| `keyCode`| `number` | 按键码。         | `7`    |
+
+### 返回值
+**类型:** `Promise<Array<{ macroId: number, offset: number, macros: Array<{ status: number, delay: number, keyCode: number }> }>>`
+
+**描述:** 返回一个 `Promise`，该 `Promise` 解析为一个数组，包含设置后的宏动作数据信息。
+
+**内容:**
+| 字段名称 | 类型     | 描述             | 示例值 |
+| :------- | :------- | :--------------- | :----- |
+| `macroId` | `number` | 宏ID。          | `0`    |
+| `offset` | `number` | 分页偏移量。     | `0`    |
+| `macros` | `Array` | 宏动作数组。     | -      |
+
+**macros 数组中的对象结构:**
+| 字段名称 | 类型     | 描述             | 示例值 |
+| :------- | :------- | :--------------- | :----- |
+| `status` | `number` | 按键状态：1=按下，0=弹起。 | `1`    |
+| `delay`  | `number` | 动作执行后的延时，单位为ms。 | `119`  |
+| `keyCode`| `number` | 按键码。         | `7`    |
+
+### 使用示例
+```js
+async function setMacroDataSettings(macroId, offset, actions) {
+  try {
+    const params = {
+      macroId,
+      offset,
+      actions
+    };
+    
+    const result = await ServiceKeyboard.setMacroData(params);
+    console.log(`宏ID ${macroId} 的动作数据已更新:`, result);
+    return result;
+  } catch (error) {
+    console.error('设置宏数据失败:', error);
+    throw error;
+  }
+}
+
+// 示例：设置宏ID为0的第一页动作数据
+const exampleActions = [
+    {
+        "status": 1,
+        "delay": 119,
+        "keyCode": 7
+    },
+    {
+        "status": 1,
+        "delay": 32,
+        "keyCode": 4
+    }
+    // ... 更多动作
+];
+
+// setMacroDataSettings(0, 0, exampleActions);
+```
+
+### 注意事项
+
+::: tip
+*   `macroId`: 要设置的宏ID。
+*   `offset`: 分页偏移量，用于分页设置宏动作数据。
+*   `actions` 数组中的每个对象表示一个宏动作：
+    *   `status`: 1表示按下，0表示弹起。
+    *   `delay`: 表示该动作执行后的延时时间，单位为ms。
+    *   `keyCode`: 表示要触发的按键码。
+*   返回的 `macros` 数组长度固定为15，未使用的动作位置会被填充为 `{ status: 0, delay: 0, keyCode: 0 }`。
+*   设置成功后，返回的数据结构与 `getMacroData` 接口返回的数据结构一致。
 :::

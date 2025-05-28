@@ -1,11 +1,13 @@
 # 键盘性能设置
 
-## 获取单键的性能模式与高级键模式
 
-ServiceKeyboard.getPerformanceMode()
+
+## 获取按键性能配置
+
+ServiceKeyboard.getPerformance()
 
 **简要描述:**
-获取指定按键当前的性能模式 (例如：单键触发、RT模式) 和高级键模式。
+获取指定按键的所有性能相关配置信息，包括模式、行程值、死区等参数。
 
 ---
 
@@ -13,38 +15,67 @@ ServiceKeyboard.getPerformanceMode()
 
 | 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
 |----------|----------|----------------------------------------------------------------------|----------|--------|
-| `key`    | `number` | 要查询的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
+| `params` | `object` | 一个包含按键位置信息的对象。                                             | 是       | 无     |
+| `params.row` | `number` | 按键在键盘矩阵中的行号。                                               | 是       | 无     |
+| `params.col` | `number` | 按键在键盘矩阵中的列号。                                               | 是       | 无     |
 
 ---
 
 ### 返回值
 
-* **总体类型:** `Promise<{ touchMode: string, advancedKeyMode: number }>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含指定按键性能模式和高级键模式的对象。
-* **解析对象结构:**
+* **总体类型:** `Promise<IPerformanceInfo>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含按键所有性能配置信息的对象。
+* **解析对象结构 (`IPerformanceInfo`):**
 
-| 字段名称        | 类型     | 描述                                                     | 示例值  |
-|-----------------|----------|----------------------------------------------------------|---------------|
-| `touchMode`     | `string` | 按键的性能模式。可能的值：`"single"` (单键触发), `"rt"` (RT模式), `"global"` (跟随全局设置)。 | `"single"`    |
-| `advancedKeyMode`| `number` | 按键的高级键模式的数值表示。                               | `0`           |
+| 字段名称            | 类型     | 描述                     | 示例值  |
+|---------------------|----------|--------------------------|---------|
+| `mode`              | `number` | 触发方式                 | `0`     |
+| `normalPress`       | `number` | 普通触发按下行程         | `2`     |
+| `normalRelease`     | `number` | 普通触发释放行程         | `2`     |
+| `rtFirstTouch`      | `number` | RT触发首次触发行程       | `0.5`   |
+| `rtPress`           | `number` | RT首次触发按下行程       | `0.3`   |
+| `rtRelease`         | `number` | RT首次触发释放行程       | `0.3`   |
+| `pressDeadStroke`   | `number` | 按下死区                 | `0.2`   |
+| `releaseDeadStroke` | `number` | 抬起死区                 | `0.2`   |
+| `axis`              | `number` | 轴体                     | `0`     |
+| `calibrate`         | `number` | 校准标志                 | `0`     |
+
+**返回值示例:**
+
+```js
+{
+    "mode": 0,
+    "normalPress": 2,
+    "normalRelease": 2,
+    "rtFirstTouch": 0.5,
+    "rtPress": 0.3,
+    "rtRelease": 0.3,
+    "pressDeadStroke": 0.2,
+    "releaseDeadStroke": 0.2,
+    "axis": 0,
+    "calibrate": 0
+}
+```
 
 ---
 
 ### 使用示例
 
-```js
-async function fetchKeyPerformanceMode(targetKeyValue: number) {
+```typescript
+async function getKeyPerformance(row: number, col: number) {
   try {
-    const modeInfo = await ServiceKeyboard.getPerformanceMode(targetKeyValue);
-    console.log(`按键 ${targetKeyValue} 的性能模式: ${modeInfo.touchMode}, 高级键模式: ${modeInfo.advancedKeyMode}`);
+    const result = await ServiceKeyboard.getPerformance({
+      row: row,
+      col: col
+    });
+    console.log('按键性能配置:', result);
   } catch (error) {
-    console.error(`获取按键 ${targetKeyValue} 性能模式失败:`, error);
+    console.error('获取按键性能配置失败:', error);
   }
 }
 
-// 示例：获取 keyValue 为 80 的按键的模式
-// const exampleKey = 80;
-// fetchKeyPerformanceMode(exampleKey);
+// 示例：获取第5行第14列的按键性能配置
+getKeyPerformance(5, 14);
 ```
 
 ---
@@ -53,59 +84,168 @@ async function fetchKeyPerformanceMode(targetKeyValue: number) {
 
 ::: tip
 
-* `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+* `row` 和 `col` 的值需要根据键盘的实际矩阵布局来确定。
+* 返回的配置信息包含了按键的所有性能相关参数，可以用于显示或修改按键的性能设置。
 :::
 
 ---
 
-## 设置单键的性能模式与高级键模式
+## 设置按键性能配置
 
-ServiceKeyboard.setPerformanceMode()
+ServiceKeyboard.setPerformance()
 
 **简要描述:**
-设置指定按键的性能模式 (例如：单击、RT模式、全局) 和高级键模式。
+设置指定按键的所有性能相关配置信息，包括触发方式、行程值、死区等参数。
 
 ---
 
 ### 参数
 
-| 参数名称            | 类型     | 描述                                                                 | 是否必需 | 默认值 |
-|---------------------|----------|----------------------------------------------------------------------|----------|--------|
-| `params`            | `object` | 一个包含设置参数的对象。                                                 | 是       | 无     |
-| `params.key`        | `number` | 要设置的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `params.mode`       | `string` | 要设置的性能模式。允许的值：`"single"` (单击), `"rt"` (RT模式), `"global"` (跟随全局设置)。 | 是       | 无     |
-| `params.advancedKeyMode`| `number` | 要设置的高级键模式的数值。                                           | 是       | 无     |
+| 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
+|----------|----------|----------------------------------------------------------------------|----------|--------|
+| `params` | `object` | 一个包含按键性能配置信息的对象。                                         | 是       | 无     |
+| `params.isGlobalTriggering` | `boolean` | 是否使用全局触发 | 是 | 无 |
+| `params.globalTriggeringValue` | `number` | 全局触发值 | 是 | 无 |
+| `params.isRt` | `boolean` | 是否启用RT模式 | 是 | 无 |
+| `params.isSingle` | `boolean` | 是否启用单键触发 | 是 | 无 |
+| `params.normalPress` | `number` | 普通触发按下行程 | 是 | 无 |
+| `params.rtFirstTouch` | `number` | RT触发首次触发行程 | 是 | 无 |
+| `params.rtPress` | `number` | RT首次触发按下行程 | 是 | 无 |
+| `params.rtRelease` | `number` | RT首次触发释放行程 | 是 | 无 |
+| `params.axis` | `number` | 轴体 | 是 | 无 |
+| `params.mode` | `number` | 触发方式 | 是 | 无 |
+| `params.pressDeadStroke` | `number` | 按下死区 | 是 | 无 |
+| `params.releaseDeadStroke` | `number` | 抬起死区 | 是 | 无 |
+| `params.advancedKeyMode` | `number` | 高级键模式 | 是 | 无 |
+| `params.calibrationData` | `number` | 校准数据 | 是 | 无 |
+| `params.calibrations` | `number` | 校准值 | 是 | 无 |
+| `params.calibrate` | `number` | 校准标志 | 是 | 无 |
+| `params.travels` | `number` | 行程值 | 是 | 无 |
+| `params.row` | `number` | 按键在键盘矩阵中的行号 | 是 | 无 |
+| `params.col` | `number` | 按键在键盘矩阵中的列号 | 是 | 无 |
+| `params.keyValue` | `number` | 按键值 | 是 | 无 |
+| `params.singleTriggeringValue` | `number` | 单键触发值 | 是 | 无 |
+| `params.rtPressValue` | `number` | RT按下触发值 | 是 | 无 |
+| `params.rtReleaseValue` | `number` | RT释放触发值 | 是 | 无 |
+| `params.deadBandPressValue` | `number` | 按下死区值 | 是 | 无 |
+| `params.deadBandReleaseValue` | `number` | 释放死区值 | 是 | 无 |
+| `params.axisID` | `number` | 轴体ID | 是 | 无 |
+
+**参数示例:**
+
+```js
+{
+    "isGlobalTriggering": true,
+    "globalTriggeringValue": 0,
+    "isRt": false,
+    "isSingle": false,
+    "normalPress": 1.506,
+    "rtFirstTouch": 0.5,
+    "rtPress": 0.3,
+    "rtRelease": 0.3,
+    "axis": 0,
+    "mode": 0,
+    "pressDeadStroke": 0.2,
+    "releaseDeadStroke": 0.2,
+    "advancedKeyMode": 0,
+    "calibrationData": 0,
+    "calibrations": 0,
+    "calibrate": 0,
+    "travels": 0,
+    "row": 4,
+    "col": 5,
+    "keyValue": 25,
+    "singleTriggeringValue": 0,
+    "rtPressValue": 0,
+    "rtReleaseValue": 0,
+    "deadBandPressValue": 0,
+    "deadBandReleaseValue": 0,
+    "axisID": 0
+}
+```
 
 ---
 
 ### 返回值
 
-* **总体类型:** `Promise<{ touchMode: string, advancedKeyMode: number }>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，表示已成功应用的性能模式和高级键模式。结构与 `getPerformanceMode` 的返回值相同。
-* **解析对象结构:** (同 `getPerformanceMode` 返回值结构)
+* **总体类型:** `Promise<IPerformanceInfo>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含设置后的按键性能配置信息的对象。
+* **解析对象结构 (`IPerformanceInfo`):**
+
+| 字段名称            | 类型     | 描述                     | 示例值  |
+|---------------------|----------|--------------------------|---------|
+| `mode`              | `number` | 触发方式                 | `0`     |
+| `normalPress`       | `number` | 普通触发按下行程         | `1.506` |
+| `normalRelease`     | `number` | 普通触发释放行程         | `1.506` |
+| `rtFirstTouch`      | `number` | RT触发首次触发行程       | `0.5`   |
+| `rtPress`           | `number` | RT首次触发按下行程       | `0.3`   |
+| `rtRelease`         | `number` | RT首次触发释放行程       | `0.3`   |
+| `pressDeadStroke`   | `number` | 按下死区                 | `0.2`   |
+| `releaseDeadStroke` | `number` | 抬起死区                 | `0.2`   |
+| `axis`              | `number` | 轴体                     | `0`     |
+| `calibrate`         | `number` | 校准标志                 | `0`     |
+
+**返回值示例:**
+
+```js
+{
+    "mode": 0,
+    "normalPress": 1.506,
+    "normalRelease": 1.506,
+    "rtFirstTouch": 0.5,
+    "rtPress": 0.3,
+    "rtRelease": 0.3,
+    "pressDeadStroke": 0.2,
+    "releaseDeadStroke": 0.2,
+    "axis": 0,
+    "calibrate": 0
+}
+```
 
 ---
 
 ### 使用示例
 
-```js
-async function applyKeyPerformanceMode(targetKeyValue: number, newMode: string, newAdvancedMode: number) {
+```typescript
+async function setKeyPerformance() {
   try {
     const params = {
-      key: targetKeyValue,
-      mode: newMode,
-      advancedKeyMode: newAdvancedMode
+      isGlobalTriggering: true,
+      globalTriggeringValue: 0,
+      isRt: false,
+      isSingle: false,
+      normalPress: 1.506,
+      rtFirstTouch: 0.5,
+      rtPress: 0.3,
+      rtRelease: 0.3,
+      axis: 0,
+      mode: 0,
+      pressDeadStroke: 0.2,
+      releaseDeadStroke: 0.2,
+      advancedKeyMode: 0,
+      calibrationData: 0,
+      calibrations: 0,
+      calibrate: 0,
+      travels: 0,
+      row: 4,
+      col: 5,
+      keyValue: 25,
+      singleTriggeringValue: 0,
+      rtPressValue: 0,
+      rtReleaseValue: 0,
+      deadBandPressValue: 0,
+      deadBandReleaseValue: 0,
+      axisID: 0
     };
-    const result = await ServiceKeyboard.setPerformanceMode(params);
-    console.log(`按键 ${targetKeyValue} 模式已更新:`, result);
+    
+    const result = await ServiceKeyboard.setPerformance(params);
+    console.log('设置按键性能配置结果:', result);
   } catch (error) {
-    console.error(`设置按键 ${targetKeyValue} 模式失败:`, error);
+    console.error('设置按键性能配置失败:', error);
   }
 }
 
-// 示例：将 keyValue 为 80 的按键设置为 RT 模式，高级模式为 1
-// const exampleKey = 80;
-// applyKeyPerformanceMode(exampleKey, "rt", 1);
+setKeyPerformance();
 ```
 
 ---
@@ -114,126 +254,19 @@ async function applyKeyPerformanceMode(targetKeyValue: number, newMode: string, 
 
 ::: tip
 
-* `params.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+* 所有参数都是必需的，需要提供完整的配置信息。
+* 参数值需要符合键盘的实际规格和限制。
+* 设置完成后，建议使用 `getPerformance` 接口验证设置是否生效。
 :::
 
-## 获取单键首次触发行程
+---
 
-ServiceKeyboard.getSingleTravel()
+## 获取ADC采样数据
+
+ServiceKeyboard.getADCSample()
 
 **简要描述:**
-获取指定按键在非RT模式下的首次触发行程值。
-
----
-
-### 参数
-
-| 参数名称  | 类型     | 描述                                                                 | 是否必需 | 默认值 |
-|-----------|----------|----------------------------------------------------------------------|----------|--------|
-| `key`     | `number` | 要查询的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `decimal` | `number` | 返回值的小数位数。                                                       | 否       | `2`    |
-
----
-
-### 返回值
-
-* **总体类型:** `Promise<number>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个数字，表示指定按键当前的首次触发行程值。
-
----
-
-### 使用示例
-
-```js
-async function fetchKeySingleTravel(targetKeyValue: number, precision?: number) {
-  try {
-    const travelValue = await ServiceKeyboard.getSingleTravel(targetKeyValue, precision);
-    console.log(`按键 ${targetKeyValue} 的首次触发行程: ${travelValue}`);
-  } catch (error) {
-    console.error(`获取按键 ${targetKeyValue} 首次触发行程失败:`, error);
-  }
-}
-
-// 示例：获取 keyValue 为 80 的按键的行程，保留两位小数
-// const exampleKey = 80;
-// fetchKeySingleTravel(exampleKey, 2);
-// fetchKeySingleTravel(exampleKey); // 使用默认小数位数
-```
-
----
-
-### 注意事项
-
-::: tip
-
-* `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-:::
-
-## 设置单键首次触发行程
-
-ServiceKeyboard.setSingleTravel()
-
-**简要描述:**
-设置指定按键在非RT模式下的首次触发行程值。
-
----
-
-### 参数
-
-| 参数名称  | 类型     | 描述                                                                 | 是否必需 | 默认值 |
-|-----------|----------|----------------------------------------------------------------------|----------|--------|
-| `key`     | `number` | 要设置的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `value`   | `number` | 要设置的新的行程值。                                                     | 是       | 无     |
-| `decimal` | `number` | 处理行程值时使用的小数位数。                                               | 否       | `2`    |
-
----
-
-### 返回值
-
-* **总体类型:** `Promise<number>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个数字，表示已成功应用的行程值。
-
----
-
-### 使用示例
-
-```js
-async function applyKeySingleTravel(targetKeyValue: number, newTravelValue: number, precision?: number) {
-  try {
-    // 如果 precision 未提供，SDK 内部或此处调用可能会使用默认值
-    const updatedTravel = await ServiceKeyboard.setSingleTravel(targetKeyValue, newTravelValue, precision);
-    console.log(`按键 ${targetKeyValue} 首次触发行程已更新为: ${updatedTravel}`);
-  } catch (error) {
-    console.error(`设置按键 ${targetKeyValue} 首次触发行程失败:`, error);
-  }
-}
-
-// 示例：设置 keyValue 为 80 的按键的行程为 1.2mm，使用默认小数位数
-// const exampleKey = 80;
-// applyKeySingleTravel(exampleKey, 1.2);
-
-// 示例：设置 keyValue 为 81 的按键的行程为 1.5mm，指定3位小数
-// const anotherKey = 81;
-// applyKeySingleTravel(anotherKey, 1.5, 3);
-```
-
----
-
-### 注意事项
-
-::: tip
-
-* `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-* `value`: 要设置的行程值。
-* `decimal`: 小数位数，默认为2。
-:::
-
-## 获取RT模式下的按键行程值
-
-ServiceKeyboard.getRtTravel()
-
-**简要描述:**
-获取指定按键在RT（Rapid Trigger）模式下的按下触发行程和释放触发行程。
+获取指定行的ADC采样数据，用于分析按键的物理状态。
 
 ---
 
@@ -241,38 +274,84 @@ ServiceKeyboard.getRtTravel()
 
 | 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
 |----------|----------|----------------------------------------------------------------------|----------|--------|
-| `key`    | `number` | 要查询的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
+| `params` | `object` | 一个包含行号信息的对象。                                                 | 是       | 无     |
+| `params.row` | `number` | 要获取ADC采样数据的行号。                                               | 是       | 无     |
 
 ---
 
 ### 返回值
 
-* **总体类型:** `Promise<{pressTravel: number, releaseTravel: number}>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含RT模式下按下和释放行程值的对象。
-* **解析对象结构:**
+* **总体类型:** `Promise<IADCSampleInfo>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含ADC采样数据的对象。
+* **解析对象结构 (`IADCSampleInfo`):**
 
-| 字段名称      | 类型     | 描述                 | 示例值  |
-|---------------|----------|----------------------|---------------|
-| `pressTravel` | `number` | RT模式下的按下触发行程。 | `0.35` (示例)  |
-| `releaseTravel`| `number`| RT模式下的释放触发行程。 | `0.43` (示例)  |
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `adc`    | `number` | ADC值                    | `0`     |
+| `row`    | `number` | 行号                     | `3`     |
+| `data`   | `number[]` | ADC采样数据数组，包含该行所有按键的采样值 | `[2715, 2700, ...]` |
+
+**返回值示例:**
+
+```js
+{
+    "adc": 0,
+    "row": 3,
+    "data": [
+        2715,
+        2700,
+        2686,
+        2693,
+        2704,
+        2772,
+        2674,
+        2688,
+        2688,
+        2684,
+        2692,
+        2680,
+        0,
+        2684,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ]
+}
+```
 
 ---
 
 ### 使用示例
 
-```js
-async function fetchKeyRtTravel(targetKeyValue: number) {
+```typescript
+async function getADCSampleData(row: number) {
   try {
-    const rtSettings = await ServiceKeyboard.getRtTravel(targetKeyValue);
-    console.log(`按键 ${targetKeyValue} RT行程: 按下 ${rtSettings.pressTravel}, 释放 ${rtSettings.releaseTravel}`);
+    const result = await ServiceKeyboard.getADCSample({
+      row: row
+    });
+    console.log('ADC采样数据:', result);
+    console.log('行号:', result.row);
+    console.log('采样数据:', result.data);
   } catch (error) {
-    console.error(`获取按键 ${targetKeyValue} RT行程失败:`, error);
+    console.error('获取ADC采样数据失败:', error);
   }
 }
 
-// 示例：获取 keyValue 为 80 的按键的RT行程
-// const exampleKey = 80;
-// fetchKeyRtTravel(exampleKey);
+// 示例：获取第3行的ADC采样数据
+getADCSampleData(3);
 ```
 
 ---
@@ -281,15 +360,19 @@ async function fetchKeyRtTravel(targetKeyValue: number) {
 
 ::: tip
 
-* `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+* `row` 的值需要根据键盘的实际矩阵布局来确定。
+* `data` 数组中的值表示每个按键的ADC采样值，0表示该位置没有按键或无效数据。
+* ADC采样值可用于分析按键的物理状态和触发情况。
 :::
 
-## 设置RT模式下的按下触发行程
+---
 
-ServiceKeyboard.setRtPressTravel()
+## 获取路由数据
+
+ServiceKeyboard.getRoute()
 
 **简要描述:**
-设置指定按键在RT（Rapid Trigger）模式下的按下触发行程值。
+获取指定行的路由数据，用于分析按键的触发状态。
 
 ---
 
@@ -297,40 +380,85 @@ ServiceKeyboard.setRtPressTravel()
 
 | 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
 |----------|----------|----------------------------------------------------------------------|----------|--------|
-| `params` | `object` | 一个包含设置参数的对象。                                                 | 是       | 无     |
-| `params.key` | `number` | 要设置的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `params.value`| `number`| 要设置的RT模式下的按下触发行程值。                                       | 是       | 无     |
+| `params` | `object` | 一个包含行号信息的对象。                                                 | 是       | 无     |
+| `params.row` | `number` | 要获取路由数据的行号。                                                   | 是       | 无     |
 
 ---
 
 ### 返回值
 
-* **总体类型:** `Promise<{ pressTravel: number }>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，包含已成功应用的RT模式按下触发行程值。
-* **解析对象结构:**
+* **总体类型:** `Promise<IRouteInfo>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含路由数据的对象。
+* **解析对象结构 (`IRouteInfo`):**
 
-| 字段名称      | 类型     | 描述                 | 示例值  |
-|---------------|----------|----------------------|---------------|
-| `pressTravel` | `number` | 已设置的按下触发行程。   | `0.5` (示例)  |
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `route`  | `number` | 路由值                   | `1`     |
+| `row`    | `number` | 行号                     | `3`     |
+| `data`   | `number[]` | 路由数据数组，包含该行所有按键的路由值 | `[0, 0, 0, ...]` |
+
+**返回值示例:**
+
+```js
+{
+    "route": 1,
+    "row": 3,
+    "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        343,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ]
+}
+```
 
 ---
 
 ### 使用示例
 
-```js
-async function applyKeyRtPressTravel(targetKeyValue: number, newPressTravel: number) {
+```typescript
+async function getRouteData(row: number) {
   try {
-    const params = { key: targetKeyValue, value: newPressTravel };
-    const result = await ServiceKeyboard.setRtPressTravel(params);
-    console.log(`按键 ${targetKeyValue} RT按下行程已更新为: ${result.pressTravel}`);
+    const result = await ServiceKeyboard.getRoute({
+      row: row
+    });
+    console.log('路由数据:', result);
+    console.log('行号:', result.row);
+    console.log('路由值:', result.route);
+    console.log('数据:', result.data);
   } catch (error) {
-    console.error(`设置按键 ${targetKeyValue} RT按下行程失败:`, error);
+    console.error('获取路由数据失败:', error);
   }
 }
 
-// 示例：设置 keyValue 为 80 的按键的RT按下行程为 0.4mm
-// const exampleKey = 80;
-// applyKeyRtPressTravel(exampleKey, 0.4);
+// 示例：获取第3行的路由数据
+getRouteData(3);
 ```
 
 ---
@@ -339,289 +467,9 @@ async function applyKeyRtPressTravel(targetKeyValue: number, newPressTravel: num
 
 ::: tip
 
-* `params.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-:::
-
-## 设置RT模式下的释放触发行程
-
-ServiceKeyboard.setRtReleaseTravel()
-
-**简要描述:**
-设置指定按键在RT（Rapid Trigger）模式下的释放触发行程值。
-
----
-
-### 参数
-
-| 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
-|----------|----------|----------------------------------------------------------------------|----------|--------|
-| `params` | `object` | 一个包含设置参数的对象。                                                 | 是       | 无     |
-| `params.key` | `number` | 要设置的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `params.value`| `number`| 要设置的RT模式下的释放触发行程值。                                       | 是       | 无     |
-
----
-
-### 返回值
-
-* **总体类型:** `Promise<{ releaseTravel: number }>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，包含已成功应用的RT模式释放触发行程值。
-* **解析对象结构:**
-
-| 字段名称        | 类型     | 描述                 | 示例值  |
-|-----------------|----------|----------------------|---------------|
-| `releaseTravel` | `number` | 已设置的释放触发行程。   | `0.2` (示例)  |
-
----
-
-### 使用示例
-
-```js
-async function applyKeyRtReleaseTravel(targetKeyValue: number, newReleaseTravel: number) {
-  try {
-    const params = { key: targetKeyValue, value: newReleaseTravel };
-    const result = await ServiceKeyboard.setRtReleaseTravel(params);
-    console.log(`按键 ${targetKeyValue} RT释放行程已更新为: ${result.releaseTravel}`);
-  } catch (error) {
-    console.error(`设置按键 ${targetKeyValue} RT释放行程失败:`, error);
-  }
-}
-
-// 示例：设置 keyValue 为 80 的按键的RT释放行程为 0.2mm
-// const exampleKey = 80;
-// applyKeyRtReleaseTravel(exampleKey, 0.2);
-```
-
----
-
-### 注意事项
-
-::: tip
-
-* `params.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-:::
-
-## 获取单键的按压与抬起死区
-
-ServiceKeyboard.getDpDr()
-
-**简要描述:**
-获取指定按键的按压死区 (DP) 和抬起死区 (DR) 的设置值。
-
----
-
-### 参数
-
-| 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
-|----------|----------|----------------------------------------------------------------------|----------|--------|
-| `key`    | `number` | 要查询的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-
----
-
-### 返回值
-
-* **总体类型:** `Promise<{ pressDead: number, releaseDead: number }>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含指定按键按压死区和抬起死区值的对象。
-* **解析对象结构:**
-
-| 字段名称      | 类型     | 描述           | 示例值  |
-|---------------|----------|----------------|---------------|
-| `pressDead`   | `number` | 按键的按压死区值。 | `0.5` (示例)    |
-| `releaseDead` | `number` | 按键的抬起死区值。 | `0.5` (示例)    |
-
----
-
-### 使用示例
-
-```js
-async function fetchKeyDeadZones(targetKeyValue: number) {
-  try {
-    const deadZones = await ServiceKeyboard.getDpDr(targetKeyValue);
-    console.log(`按键 ${targetKeyValue} 死区: 按压 ${deadZones.pressDead}, 抬起 ${deadZones.releaseDead}`);
-  } catch (error) {
-    console.error(`获取按键 ${targetKeyValue} 死区设置失败:`, error);
-  }
-}
-
-// 示例：获取 keyValue 为 80 的按键的死区设置
-// const exampleKey = 80;
-// fetchKeyDeadZones(exampleKey);
-```
-
----
-
-### 注意事项
-
-::: tip
-
-* `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-:::
-
-## 设置单键的按压死区 (DP)
-
-ServiceKeyboard.setDp()
-
-**简要描述:**
-设置指定按键的按压死区 (DP) 值。
-
----
-
-### 参数
-
-| 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
-|----------|----------|----------------------------------------------------------------------|----------|--------|
-| `key`    | `number` | 要设置的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `value`  | `number` | 要设置的新的按压死区值。                                               | 是       | 无     |
-
----
-
-### 返回值
-
-* **总体类型:** `Promise<{ pressDead: number }>` (或 `Promise<void>`，具体需确认API行为)
-* **描述:** 返回一个 `Promise`。成功时解析，可能返回包含已设置的按压死区值的对象，或无特定返回值。
-* **解析对象结构 (如果适用):**
-
-| 字段名称    | 类型     | 描述             | 示例值  |
-|-------------|----------|------------------|---------------|
-| `pressDead` | `number` | 已设置的按压死区值。 | `0.5` (示例)    |
-
----
-
-### 使用示例
-
-```js
-async function applyKeyPressDeadZone(targetKeyValue: number, newDpValue: number) {
-  try {
-    // 假设返回更新后的值或void
-    const result = await ServiceKeyboard.setDp(targetKeyValue, newDpValue);
-    console.log(`按键 ${targetKeyValue} 按压死区已更新。`, result || '');
-  } catch (error) {
-    console.error(`设置按键 ${targetKeyValue} 按压死区失败:`, error);
-  }
-}
-
-// 示例：设置 keyValue 为 80 的按键的按压死区为 0.8
-// const exampleKey = 80;
-// applyKeyPressDeadZone(exampleKey, 0.8);
-```
-
----
-
-### 注意事项
-
-::: tip
-
-* `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-* `value`: 要设置的新的按压死区值。
-:::
-
-## 设置单键的抬起死区 (DR)
-
-ServiceKeyboard.setDr()
-
-**简要描述:**
-设置指定按键的抬起死区 (DR) 值。
-
----
-
-### 参数
-
-| 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
-|----------|----------|----------------------------------------------------------------------|----------|--------|
-| `key`    | `number` | 要设置的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `value`  | `number` | 要设置的新的抬起死区值。                                               | 是       | 无     |
-
----
-
-### 返回值
-
-* **总体类型:** `Promise<{ releaseDead: number }>` (或 `Promise<void>`，具体需确认API行为)
-* **描述:** 返回一个 `Promise`。成功时解析，可能返回包含已设置的抬起死区值的对象，或无特定返回值。
-* **解析对象结构 (如果适用):**
-
-| 字段名称      | 类型     | 描述             | 示例值  |
-|---------------|----------|------------------|---------------|
-| `releaseDead` | `number` | 已设置的抬起死区值。 | `0.5` (示例)    |
-
----
-
-### 使用示例
-
-```js
-async function applyKeyReleaseDeadZone(targetKeyValue: number, newDrValue: number) {
-  try {
-    // 假设返回更新后的值或void
-    const result = await ServiceKeyboard.setDr(targetKeyValue, newDrValue);
-    console.log(`按键 ${targetKeyValue} 抬起死区已更新。`, result || '');
-  } catch (error) {
-    console.error(`设置按键 ${targetKeyValue} 抬起死区失败:`, error);
-  }
-}
-
-// 示例：设置 keyValue 为 80 的按键的抬起死区为 0.8
-// const exampleKey = 80;
-// applyKeyReleaseDeadZone(exampleKey, 0.8);
-```
-
----
-
-### 注意事项
-
-::: tip
-
-* `key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-* `value`: 要设置的新的抬起死区值。
-:::
-
-## 行程测试
-
-ServiceKeyboard.getRm6X21Travel()
-
-**简要描述:**
-获取特定于 RM6X21 方案的实时行程测试数据。此数据通常包含键盘上所有按键的当前触发状态和物理行程值，以二维数组的形式表示。
-
----
-
-### 参数
-
-此方法通常不需要参数，它会返回整个键盘矩阵的行程数据。
-
----
-
-### 返回值
-
-* **总体类型:** `Promise<{ status: number[][], travels: number[][] }>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象。此对象包含两个二维数组：`status` 和 `travels`。这些数组代表键盘按键矩阵（例如，一个6行21列的布局），分别提供每个按键的触发状态和物理行程值。
-* **解析对象结构:**
-
-| 字段名称  | 类型        | 描述                                                                                                | 示例值 (片段)                                      |
-|-----------|-------------|-----------------------------------------------------------------------------------------------------|----------------------------------------------------|
-| `status`  | `number[][]`| 一个二维数组 (例如, `number[6][21]`)，表示键盘上每个按键的触发状态。内部数组的每个元素代表一个按键的状态码 (例如, `0x02` 可能表示按下状态)。 | `[[0, 2, 0, ...], [0, 0, 0, ...], ...]`            |
-| `travels` | `number[][]`| 一个二维数组 (例如, `number[6][21]`)，表示键盘上每个按键的当前物理行程值。                                            | `[[10, 155, 12, ...], [8, 0, 9, ...], ...]`          |
-
----
-
-### 使用示例
-
-```js
-async function performTravelTestAndProcess() {
-  try {
-    const result = await ServiceKeyboard.getRm6X21Travel();
-    console.log('行程测试数据:', result);
-  } catch (error) {
-    console.error('行程测试失败:', error);
-  }
-}
-
-performTravelTestAndProcess();
-```
-
----
-
-### 注意事项
-
-::: tip
-
-* 返回的 `status` 和 `travels` 二维数组通常直接映射到键盘的物理按键矩阵。例如，一个常见的布局可能是6行21列。
+* `row` 的值需要根据键盘的实际矩阵布局来确定。
+* `data` 数组中的值表示每个按键的路由值，0表示该位置没有按键或无效数据。
+* 路由值可用于分析按键的触发状态和信号传输情况。
 :::
 
 ## 开始校准
@@ -633,22 +481,20 @@ ServiceKeyboard.calibrationStart
 
 ---
 
-### 参数
+### 参数 
 
 此方法不需要参数。
 
 ---
 
-### 返回值
+### 返回值 
 
-* **总体类型:** `Promise<Calibration>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Calibration` 对象，其中包含校准过程的状态或初始数据。
-* **解析对象结构 (`Calibration`):**
-  * 关于 `Calibration` 对象的详细结构，请 [查看Calibration的类型](/keyboard/model#设备)。
+*   **总体类型:** `Promise<Calibration>`
+*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Calibration` 对象，其中包含校准过程的状态或初始数据。
 
 ---
 
-### 使用示例
+### 使用示例 
 
 ```js
 async function beginCalibration() {
@@ -666,6 +512,7 @@ async function beginCalibration() {
 // beginCalibration();
 ```
 
+
 ## 结束校准
 
 ServiceKeyboard.calibrationEnd
@@ -675,22 +522,20 @@ ServiceKeyboard.calibrationEnd
 
 ---
 
-### 参数
+### 参数 
 
 此方法不需要参数。
 
 ---
 
-### 返回值
+### 返回值 
 
-* **总体类型:** `Promise<Calibration>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Calibration` 对象，其中包含校准完成后的状态或最终数据。
-* **解析对象结构 (`Calibration`):**
-  * 关于 `Calibration` 对象的详细结构，请 [查看Calibration的类型](/keyboard/model#设备)。
+*   **总体类型:** `Promise<Calibration>`
+*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Calibration` 对象，其中包含校准完成后的状态或最终数据。
 
 ---
 
-### 使用示例
+### 使用示例 
 
 ```js
 async function finishCalibration() {
@@ -709,51 +554,194 @@ async function finishCalibration() {
 // finishCalibration();
 ```
 
-## 获取键盘校准数据
+## 获取校准状态
 
-ServiceKeyboard.getRm6X21Calibration()
+ServiceKeyboard.getCalibrationStatus()
 
 **简要描述:**
-获取特定于 RM6X21 方案的键盘校准数据，包括校准随机值和对应的行程值。开启前需要`ServiceKeyboard.calibrationStart`,结束后需`ServiceKeyboard.calibrationEnd`
+获取指定行的按键校准状态信息。
 
 ---
 
 ### 参数
 
-不需要参数
+| 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
+|----------|----------|----------------------------------------------------------------------|----------|--------|
+| `params` | `object` | 一个包含行号信息的对象。                                                 | 是       | 无     |
+| `params.row` | `number` | 要获取校准状态的行号。                                                   | 是       | 无     |
 
 ---
 
 ### 返回值
 
-* **总体类型:** `Promise<{ calibrations: number[], travels: number[] }>`
-* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含校准随机值和行程值数组的对象。
-* **解析对象结构:**
+* **总体类型:** `Promise<ICalibrationStatusInfo>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含校准状态信息的对象。
+* **解析对象结构 (`ICalibrationStatusInfo`):**
 
-| 字段名称       | 类型        | 描述                               | 示例值 (可能)          |
-|----------------|-------------|------------------------------------|------------------------|
-| `calibrations` | `number[]`  | 一个包含校准过程中产生的随机值的数组。 | `[123, 456, 789]` (示例) |
-| `travels`      | `number[]`  | 一个数组，包含与校准值对应的按键行程值。 | `[15, 30, 55]` (示例)  |
+| 字段名称    | 类型     | 描述                     | 示例值  |
+|-------------|----------|--------------------------|---------|
+| `calibrate` | `number` | 校准状态值               | `2`     |
+| `row`       | `number` | 行号                     | `3`     |
+| `data`      | `number[]` | 校准状态数组，包含该行所有按键的校准状态 | `[0, 0, 0, ...]` |
+
+**返回值示例:**
+
+```js
+{
+    "calibrate": 2,
+    "row": 3,
+    "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ]
+}
+```
 
 ---
 
 ### 使用示例
 
-```js
-async function fetchCalibrationData() {
+```typescript
+async function getCalibrationStatusData(row: number) {
   try {
-    // 根据实际API需求，这里可能需要传递参数，例如 key 或 value
-    // const result = await ServiceKeyboard.getRm6X21Calibration(someKey, someValue);
-    const result = await ServiceKeyboard.getRm6X21Calibration(); // 假设无需参数
-    console.log('键盘校准数据:', result);
-    console.log('校准随机值:', result.calibrations);
-    console.log('对应行程值:', result.travels);
+    const result = await ServiceKeyboard.getCalibrationStatus({
+      row: row
+    });
+    console.log('校准状态:', result);
+    console.log('行号:', result.row);
+    console.log('校准状态值:', result.calibrate);
+    console.log('状态数据:', result.data);
   } catch (error) {
-    console.error('获取校准数据失败:', error);
+    console.error('获取校准状态失败:', error);
   }
 }
 
-fetchCalibrationData();
+// 示例：获取第3行的校准状态
+getCalibrationStatusData(3);
 ```
 
 ---
+
+### 注意事项
+
+::: tip
+
+* `row` 的值需要根据键盘的实际矩阵布局来确定。
+* `data` 数组中的值表示每个按键的校准状态，0表示该位置没有按键或未校准。
+* 校准状态值可用于判断按键是否需要校准或校准是否完成。
+:::
+
+---
+
+## 获取轴体列表
+
+ServiceKeyboard.getAxisList()
+
+**简要描述:**
+获取键盘支持的所有轴体类型列表。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<IAxisListInfo>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含轴体列表信息的对象。
+* **解析对象结构 (`IAxisListInfo`):**
+
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `total`  | `number` | 轴体类型总数             | `4`     |
+| `list`   | `number[]` | 轴体类型ID数组，包含所有支持的轴体类型 | `[54, 24, 1, 69]` |
+
+**返回值示例:**
+
+```js
+{
+    "total": 4,
+    "list": [
+        54,
+        24,
+        1,
+        69
+    ]
+}
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function getAxisListData() {
+  try {
+    const result = await ServiceKeyboard.getAxisList();
+    console.log('轴体列表:', result);
+    console.log('轴体总数:', result.total);
+    console.log('轴体类型列表:', result.list);
+  } catch (error) {
+    console.error('获取轴体列表失败:', error);
+  }
+}
+
+// 获取轴体列表
+getAxisListData();
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 返回的轴体类型ID可用于设置按键的轴体类型。
+* 不同的轴体类型ID代表不同的轴体型号或特性。
+* 在使用 `setPerformance` 接口设置轴体时，应使用此列表中的有效ID。
+:::
+
+---
+
+## 全局功能轴体库查询
+
+**简要描述:**
+键盘支持轴体库
+
+### 注意事项
+
+::: tip
+*   **轴体库的具体接口请联系我们获取。**
+*   导入轴体库前，请确保数据格式正确。
+:::
