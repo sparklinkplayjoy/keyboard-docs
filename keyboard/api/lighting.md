@@ -156,12 +156,12 @@ async function applyKeyboardLightingConfig(newConfig: LightMode) {
 
 
 
-## 获取键盘Logo灯光配置
+## 获取键盘装饰灯灯光配置
 
 ServiceKeyboard.getLogoLighting()
 
 **简要描述:**
-获取键盘上 Logo 灯的当前灯光配置信息。
+获取键盘上装饰灯的当前灯光配置信息。
 
 ---
 
@@ -179,13 +179,13 @@ ServiceKeyboard.getLogoLighting()
 
 | 字段名称        | 类型              | 描述                                                                 | 示例值      |
 |-----------------|-------------------|----------------------------------------------------------------------|--------------------|
-| `open`          | `boolean`         | Logo 灯光是否开启。                                                      | `true`             |
+| `open`          | `boolean`         | 装饰灯灯光是否开启。                                                      | `true`             |
 | `direction`     | `boolean`         | 灯效方向。`true` 正向, `false` 反向。                                  | `true`             |
 | `superResponse` | `boolean`         | 是否启用超强响应模式。                                                  | `false`            |
 | `speed`         | `number`          | 灯光效果的速度。                                                        | `3`                |
 | `colors`        | `string[]`        | 灯光效果所使用的颜色数组。                                                | `["#0000FF"]`      |
-| `mode`          | `number`          | 当前Logo灯光模式 (例如，动态灯效范围可能为 `1-4`)。                       | `1`                |
-| `luminance`     | `number`          | Logo 灯光亮度。                                                          | `100`              |
+| `mode`          | `number`          | 当前装饰灯灯光模式 (例如，动态灯效范围可能为 `1-4`)。                       | `1`                |
+| `luminance`     | `number`          | 装饰灯灯光亮度。                                                          | `100`              |
 | `sleepDelay`    | `number`          | 灯光休眠时间。                                                          | `600`              |
 | `staticColor`   | `number`          | 静态灯光颜色模式。                                                      | `0`                |
 | `type`          | `LightModeType`   | 灯光模式的分类或类型。                                                  | (依赖 `LightModeType`) |
@@ -200,9 +200,9 @@ ServiceKeyboard.getLogoLighting()
 async function fetchLogoLightingConfig() {
   try {
     const logoConfig = await ServiceKeyboard.getLogoLighting();
-    console.log('当前Logo灯光配置:', logoConfig);
+    console.log('当前装饰灯灯光配置:', logoConfig);
   } catch (error) {
-    console.error('获取Logo灯光配置失败:', error);
+    console.error('获取装饰灯灯光配置失败:', error);
   }
 }
 
@@ -210,12 +210,12 @@ fetchLogoLightingConfig();
 ```
 
 
-## 设置键盘Logo灯光配置
+## 设置键盘装饰灯灯光配置
 
 ServiceKeyboard.setLogoLighting()
 
 **简要描述:**
-应用新的灯光配置到键盘的 Logo 灯。
+应用新的灯光配置到键盘的装饰灯。
 
 ---
 
@@ -241,9 +241,9 @@ ServiceKeyboard.setLogoLighting()
 async function applyLogoLightingConfig(newLogoConfig: LightMode) {
   try {
     await ServiceKeyboard.setLogoLighting(newLogoConfig);
-    console.log('Logo灯光配置已更新。');
+    console.log('装饰灯灯光配置已更新。');
   } catch (error) {
-    console.error('设置Logo灯光配置失败:', error);
+    console.error('设置装饰灯灯光配置失败:', error);
   }
 }
 
@@ -252,7 +252,7 @@ async function applyLogoLightingConfig(newLogoConfig: LightMode) {
 ```
 ### 注意事项 
 ::: tip
-*   `type`: 键盘的 Logo 灯只有static静态模式和dynamic动态模式两种模式，设置其他的值将会被重置为static静态模式。
+*   `type`: 键盘的装饰灯只有static静态模式和dynamic动态模式两种模式，设置其他的值将会被重置为static静态模式。
 :::
 
 ## 获取单键自定义灯光颜色
