@@ -28,6 +28,19 @@ ServiceKeyboard.getPerformanceMode()
 | `touchMode`     | `string` | 按键的性能模式。可能的值：`"single"` (单键触发), `"rt"` (RT模式), `"global"` (跟随全局设置)。 | `"single"`    |
 | `advancedKeyMode`| `number` | 按键的高级键模式的数值表示。                               | `0`           |
 
+**advancedKeyMode 的值说明:**
+| 值   | 含义  | 描述 |
+|------|-------|------|
+| `0`  | 无    | 无特殊功能 |
+| `1`  | DKS   | 双键切换 |
+| `2`  | MPT   | 多次触发 |
+| `3`  | MT    | 多重触发 |
+| `4`  | TGL   | 切换模式 |
+| `5`  | END   | 结束模式 |
+| `6`  | MCR   | Macro，宏功能 |
+| `8`  | SOCD  | 同时相反方向处理 |
+| `9`  | RS    | 快速切换 |
+
 ---
 
 ### 使用示例 

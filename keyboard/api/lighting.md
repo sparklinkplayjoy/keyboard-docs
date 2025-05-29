@@ -174,7 +174,7 @@ ServiceKeyboard.getLogoLighting()
 ### 返回值 
 
 *   **总体类型:** `Promise<LightMode>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `LightMode` 对象，包含当前 Logo 灯的详细配置。其结构与主键盘灯光配置 (`ServiceKeyboard.getLighting()` 返回的) 类似，但可能具有不同的模式范围或特定于Logo灯的属性。
+*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `LightMode` 对象，包含当前装饰灯的详细配置。其结构与主键盘灯光配置 (`ServiceKeyboard.getLighting()` 返回的) 类似，但可能具有不同的模式范围或特定于装饰灯的属性。
 *   **解析对象结构 (`LightMode`):**
 
 | 字段名称        | 类型              | 描述                                                                 | 示例值      |
@@ -223,7 +223,7 @@ ServiceKeyboard.setLogoLighting()
 
 | 参数名称   | 类型       | 描述                                        | 是否必需 | 默认值 |
 |------------|------------|---------------------------------------------|----------|--------|
-| `lightMode`| `LightMode`| 一个 `LightMode` 对象，包含要设置的Logo灯光配置。 | 是       | 无     |
+| `lightMode`| `LightMode`| 一个 `LightMode` 对象，包含要设置的装饰灯灯光配置。 | 是       | 无     |
 
 *   关于 `LightMode` 对象的详细结构，请 [查看lightMode的模型](/keyboard/model#灯光)。
 
