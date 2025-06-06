@@ -1,6 +1,5 @@
 # 键盘灯光
 
-
 ## 获取灯光基础配置
 
 ServiceKeyboard.getLightingBase()
@@ -20,6 +19,13 @@ ServiceKeyboard.getLightingBase()
 | `lamp` | `string` | 否 | 描述灯的类型，例如"`SingleLighting`,`DoubleLighting` |
 
 ---
+
+::: tip
+
+* 特殊灯效区域api见下方文档
+* 单灯位和双灯位见下方文档
+
+:::
 
 ### 返回值
 
@@ -901,6 +907,57 @@ async function getDoubleLighting() {
 getDoubleLighting();
 ```
 
+:::tip
 
+主要是用来控制单双灯位的命令
 
+:::
 
+## 获取特殊灯位（空格灯）
+
+ServiceKeyboard.getSaturation()
+
+**简要描述:**
+获取特殊灯位，空格灯位的单个灯珠控制
+
+ ---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+灯珠的数量specialLighting :number= 1
+
+**返回值示例:**
+
+```js
+{
+    "specialLighting": 1
+}
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function getSpecialLighting() {
+  try {
+    const result = await ServiceKeyboard.getSpecialLighting();
+    console.log('空格灯位:', "specialLighting": result.specialLighting);
+  } catch (error) {
+    console.error('空格灯位:', error);
+  }
+}
+
+```
+
+:::tip
+
+主要是用来获取空格灯珠的设置
+
+:::

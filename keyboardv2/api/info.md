@@ -4,23 +4,22 @@
 
 ServiceKeyboard.getDevices()
 
-
 **简要描述:**
 获取连接到系统的设备列表。
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<Device[]>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Device` 对象数组。每个 `Device` 对象代表一个已连接的键盘设备。
-*   **解析对象结构 (`Device`):**
+* **总体类型:** `Promise<Device[]>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Device` 对象数组。每个 `Device` 对象代表一个已连接的键盘设备。
+* **解析对象结构 (`Device`):**
 
 | 字段名称 | 类型 | 描述 | 示例值 |
 |---------|------|------|--------|
@@ -35,7 +34,7 @@ ServiceKeyboard.getDevices()
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function fetchDevices() {
@@ -57,7 +56,6 @@ async function fetchDevices() {
 fetchDevices();
 ```
 
-
 ## 初始化指定的键盘设备
 
 ServiceKeyboard.init()
@@ -67,7 +65,7 @@ ServiceKeyboard.init()
 
 ---
 
-### 参数 
+### 参数
 
 | 参数名称 | 类型     | 描述                     | 是否必需 | 默认值 |
 |----------|----------|--------------------------|----------|--------|
@@ -75,18 +73,18 @@ ServiceKeyboard.init()
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<Device | null>`
-*   **描述:** 返回一个 `Promise`。
-    *   **Promise 解析 (Resolves):** `Device` - 设备初始化成功时，解析为该设备的 `Device` 对象。
-    *   **Promise 解析 (Resolves):** `null` - 设备初始化失败或未找到指定设备时，解析为 `null`。
-*   **解析对象结构 (`Device`):**
-    *   关于 `Device` 对象的详细结构，请 [查看Device的类型](/keyboard/model#设备)。
+* **总体类型:** `Promise<Device | null>`
+* **描述:** 返回一个 `Promise`。
+  * **Promise 解析 (Resolves):** `Device` - 设备初始化成功时，解析为该设备的 `Device` 对象。
+  * **Promise 解析 (Resolves):** `null` - 设备初始化失败或未找到指定设备时，解析为 `null`。
+* **解析对象结构 (`Device`):**
+  * 关于 `Device` 对象的详细结构，请 [查看Device的类型](/keyboard/model#设备)。
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function initializeDevice(deviceId: string) {
@@ -109,7 +107,6 @@ async function initializeDevice(deviceId: string) {
 // initializeDevice(exampleDeviceId);
 ```
 
-
 ## 获取设备的基础硬件和固件信息
 
 ServiceKeyboard.getBaseInfo()
@@ -119,17 +116,17 @@ ServiceKeyboard.getBaseInfo()
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数 (通常在成功调用 `ServiceKeyboard.init()` 后使用)。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<BaseInfo>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含设备基础信息的 `BaseInfo` 对象。
-*   **解析对象结构 (`BaseInfo`):**
+* **总体类型:** `Promise<BaseInfo>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含设备基础信息的 `BaseInfo` 对象。
+* **解析对象结构 (`BaseInfo`):**
 
 | 字段名称          | 类型     | 描述                     | 示例值  |
 |-------------------|----------|--------------------------|---------------|
@@ -144,7 +141,7 @@ ServiceKeyboard.getBaseInfo()
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function fetchBaseDeviceInfo() {
@@ -171,17 +168,17 @@ ServiceKeyboard.getProtocolVersion()
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<ProtocolVersion>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含协议版本信息的对象。
-*   **解析对象结构 (`ProtocolVersion`):**
+* **总体类型:** `Promise<ProtocolVersion>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含协议版本信息的对象。
+* **解析对象结构 (`ProtocolVersion`):**
 
 | 字段名称          | 类型     | 描述                     | 示例值  |
 |-------------------|----------|--------------------------|---------|
@@ -192,7 +189,7 @@ ServiceKeyboard.getProtocolVersion()
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function fetchProtocolVersion() {
@@ -216,17 +213,17 @@ ServiceKeyboard.getConfigList()
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<ConfigList>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含配置列表信息的对象。
-*   **解析对象结构 (`ConfigList`):**
+* **总体类型:** `Promise<ConfigList>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含配置列表信息的对象。
+* **解析对象结构 (`ConfigList`):**
 
 | 字段名称 | 类型     | 描述                     | 示例值  |
 |----------|----------|--------------------------|---------|
@@ -235,7 +232,7 @@ ServiceKeyboard.getConfigList()
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function fetchConfigList() {
@@ -261,17 +258,17 @@ ServiceKeyboard.getConfig()
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<Config>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含当前配置信息的对象。
-*   **解析对象结构 (`Config`):**
+* **总体类型:** `Promise<Config>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含当前配置信息的对象。
+* **解析对象结构 (`Config`):**
 
 | 字段名称 | 类型     | 描述                     | 示例值  |
 |----------|----------|--------------------------|---------|
@@ -280,7 +277,7 @@ ServiceKeyboard.getConfig()
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function fetchCurrentConfig() {
@@ -305,7 +302,7 @@ ServiceKeyboard.setConfig()
 
 ---
 
-### 参数 
+### 参数
 
 | 参数名称 | 类型     | 描述                     | 是否必需 | 默认值 |
 |----------|----------|--------------------------|----------|--------|
@@ -313,14 +310,14 @@ ServiceKeyboard.setConfig()
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<void>`
-*   **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果设置失败，`Promise` 会拒绝并返回一个错误。
+* **总体类型:** `Promise<void>`
+* **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果设置失败，`Promise` 会拒绝并返回一个错误。
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function setCurrentConfig(configName) {
@@ -335,16 +332,19 @@ async function setCurrentConfig(configName) {
 // 示例：切换到 Config1
 // setCurrentConfig('Config1');
 ```
+
 ### 注意事项
+
 ::: tip
-*   `index`: 配置索引值必须在1到4之间。
-*   切换配置后，建议监听 `getCmd` 事件来获取配置切换的结果。
-*   在收到配置切换成功的通知后，通常需要重新获取以下数据：
-    *   键盘配置信息
-    *   灯光设置
-    *   按键映射
-    *   其他相关设置
-*   建议在配置切换过程中显示加载状态，以提供更好的用户体验。
+
+* `index`: 配置索引值必须在1到4之间。
+* 切换配置后，建议监听 `getCmd` 事件来获取配置切换的结果。
+* 在收到配置切换成功的通知后，通常需要重新获取以下数据：
+  * 键盘配置信息
+  * 灯光设置
+  * 按键映射
+  * 其他相关设置
+* 建议在配置切换过程中显示加载状态，以提供更好的用户体验。
 :::
 
 ## 重新连接设备
@@ -356,7 +356,7 @@ ServiceKeyboard.reconnection()
 
 ---
 
-### 参数 
+### 参数
 
 | 参数名称   | 类型     | 描述                           | 是否必需 | 默认值 |
 |------------|----------|--------------------------------|----------|--------|
@@ -365,14 +365,14 @@ ServiceKeyboard.reconnection()
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<void>`
-*   **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果重连失败，`Promise` 会拒绝并返回一个错误。
+* **总体类型:** `Promise<void>`
+* **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果重连失败，`Promise` 会拒绝并返回一个错误。
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 
@@ -426,7 +426,7 @@ ServiceKeyboard.on('usbChange', callback)
 
 ---
 
-### 参数 
+### 参数
 
 | 参数名称   | 类型     | 描述                           | 是否必需 | 默认值 |
 |------------|----------|--------------------------------|----------|--------|
@@ -435,7 +435,7 @@ ServiceKeyboard.on('usbChange', callback)
 
 ---
 
-### 回调函数参数 
+### 回调函数参数
 
 | 参数名称 | 类型     | 描述                           |
 |----------|----------|--------------------------------|
@@ -447,7 +447,7 @@ ServiceKeyboard.on('usbChange', callback)
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 ServiceKeyboard.on('usbChange', (data) => {
@@ -493,14 +493,15 @@ ServiceKeyboard.on('usbChange', (data) => {
 
 ---
 
-### 注意事项 
+### 注意事项
 
 ::: tip
-*   在恢复出厂设置、固件升级等操作后，会多次触发设备的插拔事件。
-*   建议在设备连接后重新获取设备信息、配置信息等数据。
-*   在升级过程中的设备断开和重连需要特殊处理，确保升级流程的完整性。
-*   可以通过 `data.updateFail` 判断是否在写入数据中更新失败，进行相应的错误处理。
-*   在插拔事件里已经处理好了设备的自动重连，不需要再调用重连接口了
+
+* 在恢复出厂设置、固件升级等操作后，会多次触发设备的插拔事件。
+* 建议在设备连接后重新获取设备信息、配置信息等数据。
+* 在升级过程中的设备断开和重连需要特殊处理，确保升级流程的完整性。
+* 可以通过 `data.updateFail` 判断是否在写入数据中更新失败，进行相应的错误处理。
+* 在插拔事件里已经处理好了设备的自动重连，不需要再调用重连接口了
 :::
 
 ## 进入Bootloader模式
@@ -512,20 +513,20 @@ ServiceKeyboard.appToBoot()
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<void>`
-*   **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果操作失败，`Promise` 会拒绝并返回一个错误。
+* **总体类型:** `Promise<void>`
+* **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果操作失败，`Promise` 会拒绝并返回一个错误。
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function enterBootloaderMode() {
@@ -546,11 +547,12 @@ async function enterBootloaderMode() {
 
 ---
 
-### 注意事项 
+### 注意事项
 
 ::: tip
-*   执行此操作后，设备通常会断开连接并以 Bootloader 模式重新枚举（如果支持）。您可能需要重新扫描设备或使用特定的 Bootloader 工具进行后续操作（如固件更新）。
-*   tip: 擦除后，需要重新连接设备,调用重连接口`ServiceKeyboard.reconnection`。
+
+* 执行此操作后，设备通常会断开连接并以 Bootloader 模式重新枚举（如果支持）。您可能需要重新扫描设备或使用特定的 Bootloader 工具进行后续操作（如固件更新）。
+* tip: 擦除后，需要重新连接设备,调用重连接口`ServiceKeyboard.reconnection`。
 :::
 
 ## 从Bootloader模式返回应用模式
@@ -562,20 +564,20 @@ ServiceKeyboard.bootToApp()
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<void>`
-*   **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果操作失败，`Promise` 会拒绝并返回一个错误。
+* **总体类型:** `Promise<void>`
+* **描述:** 返回一个 `Promise`。操作成功完成时，`Promise` 解析，无特定返回值。如果操作失败，`Promise` 会拒绝并返回一个错误。
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function returnToAppMode() {
@@ -594,11 +596,12 @@ async function returnToAppMode() {
 
 ---
 
-### 注意事项 
+### 注意事项
 
 ::: tip
-*   执行此操作后，设备通常会断开连接并以应用模式重新枚举。您需要重新扫描设备或等待设备重新连接。
-*   建议在操作完成后重新连接设备，调用重连接口 `ServiceKeyboard.reconnection`。
+
+* 执行此操作后，设备通常会断开连接并以应用模式重新枚举。您需要重新扫描设备或等待设备重新连接。
+* 建议在操作完成后重新连接设备，调用重连接口 `ServiceKeyboard.reconnection`。
 :::
 
 ## Bin文件更新固件
@@ -610,7 +613,7 @@ ServiceKeyboard.upgrade()
 
 ---
 
-### 参数 
+### 参数
 
 | 参数名称   | 类型                                                  | 描述                                                           | 是否必需 | 默认值 |
 |------------|-------------------------------------------------------|----------------------------------------------------------------|----------|--------|
@@ -623,11 +626,11 @@ ServiceKeyboard.upgrade()
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<{ success: boolean }>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，指明固件更新是否成功。
-*   **解析对象结构:**
+* **总体类型:** `Promise<{ success: boolean }>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，指明固件更新是否成功。
+* **解析对象结构:**
 
 | 字段名称  | 类型      | 描述             | 示例值  |
 |-----------|-----------|------------------|---------|
@@ -635,7 +638,7 @@ ServiceKeyboard.upgrade()
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function performFirmwareUpdate(firmwareBuffer: ArrayBuffer) {
@@ -685,11 +688,12 @@ async function performFirmwareUpdate(firmwareBuffer: ArrayBuffer) {
 
 ---
 
-### 注意事项 
+### 注意事项
 
 ::: tip
-*   `callback` 函数中的 `updateStatus` 参数可以用来显示当前更新的具体状态。
-*   可以通过 `options` 参数调整更新过程中的各个延迟时间，以适应不同的设备需求。
+
+* `callback` 函数中的 `updateStatus` 参数可以用来显示当前更新的具体状态。
+* 可以通过 `options` 参数调整更新过程中的各个延迟时间，以适应不同的设备需求。
 :::
 
 ## 恢复出厂设置
@@ -700,9 +704,11 @@ ServiceKeyboard.GFSRestore()
 将键盘恢复到出厂默认设置。此操作会清除所有用户自定义的配置，包括灯光设置、按键映射、宏设置等。
 
 ### 参数
+
 此方法不需要参数。
 
 ### 返回值
+
 **类型:** `Promise<void>`
 
 **描述:** 返回一个 `
