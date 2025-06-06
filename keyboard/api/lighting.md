@@ -9,21 +9,21 @@ ServiceKeyboard.closedLighting()
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<boolean>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个布尔值。
-*   **解析值:** `true` 如果灯光成功关闭，否则可能为 `false` 或 Promise 被拒绝 (具体行为需查阅实现细节)。
+* **总体类型:** `Promise<boolean>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个布尔值。
+* **解析值:** `true` 如果灯光成功关闭，否则可能为 `false` 或 Promise 被拒绝 (具体行为需查阅实现细节)。
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function turnOffKeyboardLights() {
@@ -42,7 +42,6 @@ async function turnOffKeyboardLights() {
 turnOffKeyboardLights();
 ```
 
-
 ## 获取键盘灯光配置
 
 ServiceKeyboard.getLighting()
@@ -52,17 +51,17 @@ ServiceKeyboard.getLighting()
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<LightMode>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `LightMode` 对象，包含当前键盘灯光的详细配置。
-*   **解析对象结构 (`LightMode`):**
+* **总体类型:** `Promise<LightMode>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `LightMode` 对象，包含当前键盘灯光的详细配置。
+* **解析对象结构 (`LightMode`):**
 
 | 字段名称        | 类型              | 描述                                                                 | 示例值       |
 |-----------------|-------------------|----------------------------------------------------------------------|--------------------|
@@ -81,7 +80,7 @@ ServiceKeyboard.getLighting()
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function fetchKeyboardLightingConfig() {
@@ -98,8 +97,6 @@ async function fetchKeyboardLightingConfig() {
 fetchKeyboardLightingConfig();
 ```
 
-
-
 ## 设置键盘灯光配置
 
 ServiceKeyboard.setLighting()
@@ -109,23 +106,23 @@ ServiceKeyboard.setLighting()
 
 ---
 
-### 参数 
+### 参数
 
 | 参数名称   | 类型       | 描述                                   | 是否必需 | 默认值 |
 |------------|------------|----------------------------------------|----------|--------|
 | `lightMode`| `LightMode`| 一个 `LightMode` 对象，包含要设置的灯光配置。 | 是       | 无     |
 
-*   关于 `LightMode` 对象的详细结构，请 [查看lightMode的模型](/keyboard/model#灯光)。
+* 关于 `LightMode` 对象的详细结构，请 [查看lightMode的模型](/keyboard/model#灯光)。
 
 ---
 
-### 返回值 
+### 返回值
 
 **总体类型:** `同入参`
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function applyKeyboardLightingConfig(newConfig: LightMode) {
@@ -154,8 +151,6 @@ async function applyKeyboardLightingConfig(newConfig: LightMode) {
 // applyKeyboardLightingConfig(myCustomLightMode);
 ```
 
-
-
 ## 获取键盘装饰灯灯光配置
 
 ServiceKeyboard.getLogoLighting()
@@ -165,17 +160,17 @@ ServiceKeyboard.getLogoLighting()
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<LightMode>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `LightMode` 对象，包含当前装饰灯的详细配置。其结构与主键盘灯光配置 (`ServiceKeyboard.getLighting()` 返回的) 类似，但可能具有不同的模式范围或特定于装饰灯的属性。
-*   **解析对象结构 (`LightMode`):**
+* **总体类型:** `Promise<LightMode>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `LightMode` 对象，包含当前装饰灯的详细配置。其结构与主键盘灯光配置 (`ServiceKeyboard.getLighting()` 返回的) 类似，但可能具有不同的模式范围或特定于装饰灯的属性。
+* **解析对象结构 (`LightMode`):**
 
 | 字段名称        | 类型              | 描述                                                                 | 示例值      |
 |-----------------|-------------------|----------------------------------------------------------------------|--------------------|
@@ -194,7 +189,7 @@ ServiceKeyboard.getLogoLighting()
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function fetchLogoLightingConfig() {
@@ -209,7 +204,6 @@ async function fetchLogoLightingConfig() {
 fetchLogoLightingConfig();
 ```
 
-
 ## 设置键盘装饰灯灯光配置
 
 ServiceKeyboard.setLogoLighting()
@@ -219,23 +213,23 @@ ServiceKeyboard.setLogoLighting()
 
 ---
 
-### 参数 
+### 参数
 
 | 参数名称   | 类型       | 描述                                        | 是否必需 | 默认值 |
 |------------|------------|---------------------------------------------|----------|--------|
 | `lightMode`| `LightMode`| 一个 `LightMode` 对象，包含要设置的装饰灯灯光配置。 | 是       | 无     |
 
-*   关于 `LightMode` 对象的详细结构，请 [查看lightMode的模型](/keyboard/model#灯光)。
+* 关于 `LightMode` 对象的详细结构，请 [查看lightMode的模型](/keyboard/model#灯光)。
 
 ---
 
-### 返回值 
+### 返回值
 
 **总体类型:** `同入参`
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function applyLogoLightingConfig(newLogoConfig: LightMode) {
@@ -250,9 +244,12 @@ async function applyLogoLightingConfig(newLogoConfig: LightMode) {
 // 假设 myCustomLogoLightMode 是一个有效的 LightMode 对象
 // applyLogoLightingConfig(myCustomLogoLightMode);
 ```
-### 注意事项 
+
+### 注意事项
+
 ::: tip
-*   `type`: 键盘的装饰灯只有static静态模式和dynamic动态模式两种模式，设置其他的值将会被重置为static静态模式。
+
+* `type`: 键盘的装饰灯只有static静态模式和dynamic动态模式两种模式，设置其他的值将会被重置为static静态模式。
 :::
 
 ## 获取单键自定义灯光颜色
@@ -264,7 +261,7 @@ ServiceKeyboard.getCustomLighting()
 
 ---
 
-### 参数 
+### 参数
 
 | 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
 |----------|----------|----------------------------------------------------------------------|----------|--------|
@@ -272,11 +269,11 @@ ServiceKeyboard.getCustomLighting()
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<{ key: number; R: number; G: number; B: number }>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含指定按键的 `keyValue` 及其RGB颜色值的对象。
-*   **解析对象结构:**
+* **总体类型:** `Promise<{ key: number; R: number; G: number; B: number }>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含指定按键的 `keyValue` 及其RGB颜色值的对象。
+* **解析对象结构:**
 
 | 字段名称 | 类型     | 描述                     | 示例值 (可能) |
 |----------|----------|--------------------------|---------------|
@@ -287,7 +284,7 @@ ServiceKeyboard.getCustomLighting()
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function fetchCustomKeyColor(targetKeyValue: number) {
@@ -304,7 +301,6 @@ async function fetchCustomKeyColor(targetKeyValue: number) {
 // fetchCustomKeyColor(exampleKey);
 ```
 
-
 ## 设置单键自定义灯光颜色
 
 ServiceKeyboard.customSetLighting()
@@ -314,7 +310,7 @@ ServiceKeyboard.customSetLighting()
 
 ---
 
-### 参数 
+### 参数
 
 | 参数名称   | 类型     | 描述                                                                 | 是否必需 | 默认值 |
 |------------|----------|----------------------------------------------------------------------|----------|--------|
@@ -326,14 +322,13 @@ ServiceKeyboard.customSetLighting()
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `同入参`
-
+* **总体类型:** `同入参`
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function setCustomKeyColor(config: { key: number; R: number; G: number; B: number }) {
@@ -365,11 +360,71 @@ async function setCustomKeyColor(config: { key: number; R: number; G: number; B:
 // setCustomKeyColor(exampleColorSetting);
 ```
 
+### 注意事项
 
-
-### 注意事项 
 ::: tip
-*   `data.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
-*   要使自定义颜色生效，键盘的主灯光模式 (`ServiceKeyboard.setLighting`) 需要设置type为特定的"custom"值。
-::: 
+
+* `data.key`: 此处 `key` 指的是通过 `ServiceKeyboard.defKey()` 获取到的 `IDefKeyInfo` 对象中的 `keyValue` 属性。
+* 要使自定义颜色生效，键盘的主灯光模式 (`ServiceKeyboard.setLighting`) 需要设置type为特定的"custom"值。
+:::
+* 记得自定义完成以后在下发saveCustomLighting保存命令哦，不需要每一条都发。
+
+---
+
+## 保存自定义灯光颜色
+
+ServiceKeyboard.saveCustomLighting();
+
+**简要描述:**
+
+当自定义灯光发送完成以后要发送一个自定义保存命令下去。
+
+---
+
+### 参数
+
+无
+
+### 返回值
+
+null
+
+---
+
+### 使用示例
+
+```js
+async function saveCustomLighting() {
+  try {
+    // config 示例:
+    const exampleConfig: LightMode = {
+      open: true,
+      mode: 5, // 假设是某种动态效果
+      speed: 4,
+      luminance: 80,
+      colors: ["#00FF00"],
+      direction: true,
+      superResponse: false,
+      sleepDelay: 300,
+      staticColor: 0,
+      type: "custom", //需要先设定键盘灯光为自定义模式
+    };
+
+   await ServiceKeyboard.customSetLighting(config);
+  // 最后一步发送保存
+  await ServiceKeyboard.saveCustomLighting(newConfig);
+  
+  } catch (error) {
+  }
+}
+
+
+```
+
+### 注意事项
+
+::: tip
+可以在切换页面，或者切换点击事件的时候进行切换。
+:::
+
 ---
