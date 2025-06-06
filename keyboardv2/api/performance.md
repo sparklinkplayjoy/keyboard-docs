@@ -1,7 +1,5 @@
 # 键盘性能设置
 
-
-
 ## 获取按键性能配置
 
 ServiceKeyboard.getPerformance()
@@ -104,64 +102,36 @@ ServiceKeyboard.setPerformance()
 | 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
 |----------|----------|----------------------------------------------------------------------|----------|--------|
 | `params` | `object` | 一个包含按键性能配置信息的对象。                                         | 是       | 无     |
-| `params.isGlobalTriggering` | `boolean` | 是否使用全局触发 | 是 | 无 |
-| `params.globalTriggeringValue` | `number` | 全局触发值 | 是 | 无 |
-| `params.isRt` | `boolean` | 是否启用RT模式 | 是 | 无 |
-| `params.isSingle` | `boolean` | 是否启用单键触发 | 是 | 无 |
+| `params.row` | `number` | 按键在键盘矩阵中的行号 | 是 | 无 |
+| `params.col` | `number` | 按键在键盘矩阵中的列号 | 是 | 无 |
+| `params.mode` | `number` | 触发方式 | 是 | 无 |
 | `params.normalPress` | `number` | 普通触发按下行程 | 是 | 无 |
+| `params.normalRelease` | `number` | 普通触发释放行程 | 是 | 无 |
 | `params.rtFirstTouch` | `number` | RT触发首次触发行程 | 是 | 无 |
 | `params.rtPress` | `number` | RT首次触发按下行程 | 是 | 无 |
 | `params.rtRelease` | `number` | RT首次触发释放行程 | 是 | 无 |
-| `params.axis` | `number` | 轴体 | 是 | 无 |
-| `params.mode` | `number` | 触发方式 | 是 | 无 |
 | `params.pressDeadStroke` | `number` | 按下死区 | 是 | 无 |
 | `params.releaseDeadStroke` | `number` | 抬起死区 | 是 | 无 |
-| `params.advancedKeyMode` | `number` | 高级键模式 | 是 | 无 |
-| `params.calibrationData` | `number` | 校准数据 | 是 | 无 |
-| `params.calibrations` | `number` | 校准值 | 是 | 无 |
+| `params.axis` | `number` | 轴体 | 是 | 无 |
 | `params.calibrate` | `number` | 校准标志 | 是 | 无 |
-| `params.travels` | `number` | 行程值 | 是 | 无 |
-| `params.row` | `number` | 按键在键盘矩阵中的行号 | 是 | 无 |
-| `params.col` | `number` | 按键在键盘矩阵中的列号 | 是 | 无 |
-| `params.keyValue` | `number` | 按键值 | 是 | 无 |
-| `params.singleTriggeringValue` | `number` | 单键触发值 | 是 | 无 |
-| `params.rtPressValue` | `number` | RT按下触发值 | 是 | 无 |
-| `params.rtReleaseValue` | `number` | RT释放触发值 | 是 | 无 |
-| `params.deadBandPressValue` | `number` | 按下死区值 | 是 | 无 |
-| `params.deadBandReleaseValue` | `number` | 释放死区值 | 是 | 无 |
-| `params.axisID` | `number` | 轴体ID | 是 | 无 |
 
 **参数示例:**
 
 ```js
 {
-    "isGlobalTriggering": true,
-    "globalTriggeringValue": 0,
-    "isRt": false,
-    "isSingle": false,
+    "row": 4,
+    "col": 5,
+    "mode": 0,
     "normalPress": 1.506,
+    "normalRelease": 1.506,
     "rtFirstTouch": 0.5,
     "rtPress": 0.3,
     "rtRelease": 0.3,
-    "axis": 0,
-    "mode": 0,
     "pressDeadStroke": 0.2,
     "releaseDeadStroke": 0.2,
-    "advancedKeyMode": 0,
-    "calibrationData": 0,
-    "calibrations": 0,
+    "axis": 0,
     "calibrate": 0,
-    "travels": 0,
-    "row": 4,
-    "col": 5,
-    "keyValue": 25,
-    "singleTriggeringValue": 0,
-    "rtPressValue": 0,
-    "rtReleaseValue": 0,
-    "deadBandPressValue": 0,
-    "deadBandReleaseValue": 0,
-    "axisID": 0
-}
+    }
 ```
 
 ---
@@ -189,16 +159,18 @@ ServiceKeyboard.setPerformance()
 
 ```js
 {
-    "mode": 0,
-    "normalPress": 1.506,
-    "normalRelease": 1.506,
-    "rtFirstTouch": 0.5,
-    "rtPress": 0.3,
-    "rtRelease": 0.3,
-    "pressDeadStroke": 0.2,
-    "releaseDeadStroke": 0.2,
-    "axis": 0,
-    "calibrate": 0
+  row: number;
+  col: number;
+  mode: number; // 触发方式
+  normalPress: number; // 普通触发按下行程
+  normalRelease: number; // 普通触发释放行程
+  rtFirstTouch: number; // RT触发首次触发行程
+  rtPress: number; // RT首次触发按下行程
+  rtRelease: number; // RT首次触发释放行程
+  pressDeadStroke: number; // 按下死区
+  releaseDeadStroke: number; // 抬起死区
+  axis: number; // 轴体
+  calibrate: number; // 校准标志
 }
 ```
 
@@ -210,32 +182,18 @@ ServiceKeyboard.setPerformance()
 async function setKeyPerformance() {
   try {
     const params = {
-      isGlobalTriggering: true,
-      globalTriggeringValue: 0,
-      isRt: false,
-      isSingle: false,
+      row: 4,
+      col: 5,
+      mode: 0,
       normalPress: 1.506,
+      normalRelease:1.506,
       rtFirstTouch: 0.5,
       rtPress: 0.3,
       rtRelease: 0.3,
-      axis: 0,
-      mode: 0,
       pressDeadStroke: 0.2,
       releaseDeadStroke: 0.2,
-      advancedKeyMode: 0,
-      calibrationData: 0,
-      calibrations: 0,
+      axis: 0,
       calibrate: 0,
-      travels: 0,
-      row: 4,
-      col: 5,
-      keyValue: 25,
-      singleTriggeringValue: 0,
-      rtPressValue: 0,
-      rtReleaseValue: 0,
-      deadBandPressValue: 0,
-      deadBandReleaseValue: 0,
-      axisID: 0
     };
     
     const result = await ServiceKeyboard.setPerformance(params);
@@ -481,20 +439,20 @@ ServiceKeyboard.calibrationStart
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<Calibration>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Calibration` 对象，其中包含校准过程的状态或初始数据。
+* **总体类型:** `Promise<Calibration>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Calibration` 对象，其中包含校准过程的状态或初始数据。
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function beginCalibration() {
@@ -512,7 +470,6 @@ async function beginCalibration() {
 // beginCalibration();
 ```
 
-
 ## 结束校准
 
 ServiceKeyboard.calibrationEnd
@@ -522,20 +479,20 @@ ServiceKeyboard.calibrationEnd
 
 ---
 
-### 参数 
+### 参数
 
 此方法不需要参数。
 
 ---
 
-### 返回值 
+### 返回值
 
-*   **总体类型:** `Promise<Calibration>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Calibration` 对象，其中包含校准完成后的状态或最终数据。
+* **总体类型:** `Promise<Calibration>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个 `Calibration` 对象，其中包含校准完成后的状态或最终数据。
 
 ---
 
-### 使用示例 
+### 使用示例
 
 ```js
 async function finishCalibration() {
@@ -742,6 +699,7 @@ getAxisListData();
 ### 注意事项
 
 ::: tip
-*   **轴体库的具体接口请联系我们获取。**
-*   导入轴体库前，请确保数据格式正确。
+
+* **轴体库的具体接口请联系我们获取。**
+* 导入轴体库前，请确保数据格式正确。
 :::

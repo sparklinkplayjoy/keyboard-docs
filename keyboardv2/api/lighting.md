@@ -624,6 +624,7 @@ ServiceKeyboard.getDecorate1Custom()
 | `params` | `object` | 是 | 描述装饰灯尺寸的对象 |
 | `params.rows` | `number` | 是 | 装饰灯的行数 |
 | `params.cols` | `number` | 是 | 装饰灯的列数 |
+| `params.area` | `string` | 是 | 区域 | "Keyboard" | "Decorate1" | "Decorate2" | "Decorate3" | "Decorate4" | "Decorate5"
 
 ---
 
@@ -666,6 +667,7 @@ async function getDecorate1Custom() {
     const result = await ServiceKeyboard.getDecorate1Custom({
       rows: 1,
       cols: 22
+      area:"Keyboard" | "Decorate1" | "Decorate2" | "Decorate3" | "Decorate4" | "Decorate5"
     });
     console.log('装饰灯1自定义灯光配置:', result);
     // 可以遍历结果来获取每个LED的颜色信息
