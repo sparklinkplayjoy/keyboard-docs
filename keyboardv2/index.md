@@ -7,7 +7,7 @@
 ### 引入
 
 ```bash
-pnpm add  @sparklinkplayjoy/sdk-keyboardv2
+pnpm add  @sparklinkplayjoy/sdk-keyboard-test-v2
 
 ```
 
@@ -18,7 +18,7 @@ pnpm add  @sparklinkplayjoy/sdk-keyboardv2
 1. 引入
 
 ```js
-import Keyboard from '@sparklinkplayjoy/sdk-keyboardv2'
+import Keyboard from '@sparklinkplayjoy/sdk-keyboard-test-v2'
 const vendorId = 00 // you vid 
 const productId = 00 // you pid 
 const ServiceKeyboard = new Keyboard({
