@@ -112,7 +112,7 @@ ServiceKeyboard.setPerformance()
 | `params.rtRelease` | `number` | RT首次触发释放行程 | 是 | 无 |
 | `params.pressDeadStroke` | `number` | 按下死区 | 是 | 无 |
 | `params.releaseDeadStroke` | `number` | 抬起死区 | 是 | 无 |
-| `params.axis` | `number` | 轴体 | 是 | 无 |
+| `params.axis` | `number` | 获取的轴体列表索引 | 是 | 无 |
 | `params.calibrate` | `number` | 校准标志 | 是 | 无 |
 
 **参数示例:**
