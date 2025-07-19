@@ -35,7 +35,7 @@ ServiceKeyboard.getPerformance()
 | `rtRelease`         | `number` | RT首次触发释放行程       | `0.3`   |
 | `pressDeadStroke`   | `number` | 按下死区                 | `0.2`   |
 | `releaseDeadStroke` | `number` | 抬起死区                 | `0.2`   |
-| `axis`              | `number` | 轴体                     | `0`     |
+| `axis`              | `number` | 获取的轴体列表索引         | `0`     |
 | `calibrate`         | `number` | 校准标志                 | `0`     |
 
 **返回值示例:**
