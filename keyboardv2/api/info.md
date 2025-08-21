@@ -93,7 +93,7 @@ async function initializeDevice(deviceId: string) {
     if (device) {
       console.log('设备初始化成功:', device);
       // 现在可以使用 device 对象与设备进行交互
-      // const deviceInfo = await ServiceKeyboard.getBaseInfo(); 
+      // const deviceInfo = await ServiceKeyboard.getDevicesInfo(); 
     } else {
       console.log('设备初始化失败或未找到设备。');
     }
@@ -109,7 +109,7 @@ async function initializeDevice(deviceId: string) {
 
 ## 获取设备的基础硬件和固件信息
 
-ServiceKeyboard.getBaseInfo()
+ServiceKeyboard.getDevicesInfo()
 
 **简要描述:**
 获取当前已初始化设备的基础硬件和固件信息。
@@ -148,7 +148,7 @@ async function fetchBaseDeviceInfo() {
   try {
     // 确保设备已初始化
     // await ServiceKeyboard.init(deviceId);
-    const baseInfo = await ServiceKeyboard.getBaseInfo();
+    const baseInfo = await ServiceKeyboard.getDevicesInfo();
     console.log('设备基础信息:', baseInfo);
     // console.log('固件版本:', baseInfo.appVersion);
   } catch (error) {
