@@ -347,6 +347,359 @@ async function setCurrentConfig(configName) {
 * 建议在配置切换过程中显示加载状态，以提供更好的用户体验。
 :::
 
+## 获取配置名称
+
+ServiceKeyboard.getConfigName(index)
+
+**简要描述:**
+根据配置索引获取配置名称。
+
+---
+
+### 参数
+
+| 参数名称 | 类型     | 描述               | 是否必需 | 默认值 |
+|----------|----------|--------------------|----------|--------|
+| `index`  | `number` | 配置索引（1-4）。  | 是       | 无     |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<string>`
+* **描述:** 返回该索引对应的配置名称。
+
+---
+
+### 使用示例
+
+```js
+async function fetchConfigName(index) {
+  // 需协议版本 >= v1.0.3.0（可通过 ServiceKeyboard.getProtocolVersion 校验）
+  const name = await ServiceKeyboard.getConfigName(index);
+  console.log('配置名称:', name);
+  return name;
+}
+```
+
+---
+
+### 注意事项
+
+:::: tip
+
+* 需要设备协议版本至少为 `v1.0.3.0`。
+* 协议版本可通过 `ServiceKeyboard.getProtocolVersion()` 获取。
+* `index` 建议传入有效范围（通常 1-4）。
+::::
+
+## 设置配置名称
+
+ServiceKeyboard.setConfigName(index, name)
+
+**简要描述:**
+设置指定配置索引的配置名称。
+
+---
+
+### 参数
+
+| 参数名称 | 类型     | 描述               | 是否必需 | 默认值 |
+|----------|----------|--------------------|----------|--------|
+| `index`  | `number` | 配置索引（1-4）。  | 是       | 无     |
+| `name`   | `string` | 要设置的配置名称。 | 是       | 无     |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<void>`
+* **描述:** 设置成功解析为 `void`，失败时抛出错误。
+
+---
+
+### 使用示例
+
+```js
+async function updateConfigName(index, name) {
+  // 需协议版本 >= v1.0.3.0（可通过 ServiceKeyboard.getProtocolVersion 校验）
+  await ServiceKeyboard.setConfigName(index, name);
+  console.log(`已设置配置 ${index} 的名称为: ${name}`);
+}
+```
+
+---
+
+### 注意事项
+
+:::: tip
+
+* 需要设备协议版本至少为 `v1.0.3.0`。
+* 建议对 `name` 做长度与字符集校验，避免设备端写入失败。
+* 设置后可调用 `ServiceKeyboard.getConfigName(index)` 读取校验。
+::::
+
+## 回报率列表查询
+
+ServiceKeyboard.getRateOfReturnList()
+
+**简要描述:**
+获取设备支持的回报率列表。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<{ list: string[] }>`
+* **描述:** 返回包含回报率字符串列表，如 `['R8','R16', ...]`。
+
+---
+
+### 使用示例
+
+```js
+async function fetchRateOfReturnList() {
+  // 需协议版本 >= v1.0.7.0
+  const { list } = await ServiceKeyboard.getRateOfReturnList();
+  // 若需要下拉使用，可转成 {label,value,key}
+  return list.map((rate, index) => ({ label: rate.replace('R', ''), value: index, key: rate }));
+}
+```
+
+---
+
+### 注意事项
+
+:::: tip
+
+* 需要设备协议版本至少为 `v1.0.7.0`。
+* 列表项通常以 `R` 加速率数字的形式返回，例如 `R8KHz`。
+::::
+
+## 获取当前回报率
+
+ServiceKeyboard.getRateOfReturn()
+
+**简要描述:**
+获取设备当前使用的回报率索引。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<{ value: number }>`
+* **描述:** 返回当前回报率对应的索引。
+
+---
+
+### 使用示例
+
+```js
+async function fetchCurrentRateOfReturn() {
+  // 需协议版本 >= v1.0.7.0
+  const { value } = await ServiceKeyboard.getRateOfReturn();
+  return value;
+}
+```
+
+---
+
+### 注意事项
+
+:::: tip
+
+* 需要设备协议版本至少为 `v1.0.7.0`。
+* 可结合 `getRateOfReturnList()` 将索引映射到实际显示名称。
+::::
+
+## 设置回报率
+
+ServiceKeyboard.setRateOfReturn(value)
+
+**简要描述:**
+设置设备回报率。
+
+---
+
+### 参数
+
+| 参数名称 | 类型     | 描述                                 | 是否必需 | 默认值 |
+|----------|----------|--------------------------------------|----------|--------|
+| `value`  | `number` | 目标回报率索引（来自列表的 value 字段）。 | 是       | 无     |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<void>`
+* **描述:** 设置成功解析为 `void`，失败时抛出错误。
+
+---
+
+### 使用示例
+
+```js
+async function updateRateOfReturn(value) {
+  // 需协议版本 >= v1.0.7.0
+  await ServiceKeyboard.setRateOfReturn(value);
+}
+```
+
+---
+
+### 注意事项
+
+:::: tip
+
+* 需要设备协议版本至少为 `v1.0.7.0`。
+* 建议在设置后再次调用 `getRateOfReturn()` 校验结果，或根据需要刷新 UI。
+::::
+
+## 获取 RT 精度
+
+ServiceKeyboard.getRtPrecision()
+
+**简要描述:**
+获取设备支持的RT最小精度（步进最小值）。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<{ min: number }>`
+* **描述:** 返回最小步进精度，单位与设备定义一致（例如毫秒）。
+
+**返回值示例:**
+
+```js
+{
+  "min": 0.001
+}
+```
+
+---
+
+### 使用示例
+
+```js
+async function fetchRtPrecision() {
+  const { min } = await ServiceKeyboard.getRtPrecision();
+  console.log('RT精度最小步进:', min);
+  return min;
+}
+```
+
+## 获取系统睡眠时间（分钟）
+
+ServiceKeyboard.getLightingSleepTime()
+
+**简要描述:**
+获取键盘系统睡眠时间（单位：分钟）。0 表示永不休眠，1 表示 1 分钟，2 表示 2 分钟，依次类推。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<number>`
+* **描述:** 返回系统睡眠时间（分钟）。
+
+**返回值示例:**
+
+```js
+3 // 表示 3 分钟
+```
+
+---
+
+### 使用示例
+
+```js
+async function fetchLightingSleepTime() {
+  // 需协议版本 >= v1.0.4.0
+  const minutes = await ServiceKeyboard.getLightingSleepTime();
+  console.log('系统睡眠时间(分钟):', minutes);
+  return minutes;
+}
+```
+
+---
+
+### 注意事项
+
+:::: tip
+
+* 需要设备协议版本至少为 `v1.0.4.0`。
+* 0 表示永不休眠；正整数表示分钟数。
+::::
+
+## 设置系统睡眠时间（分钟）
+
+ServiceKeyboard.setLightingSleepTime(time)
+
+**简要描述:**
+设置键盘系统睡眠时间（单位：分钟）。0 表示永不休眠，1 表示 1 分钟，2 表示 2 分钟，依次类推。
+
+---
+
+### 参数
+
+| 参数名称 | 类型     | 描述                 | 是否必需 | 默认值 |
+|----------|----------|----------------------|----------|--------|
+| `time`   | `number` | 睡眠时间（分钟）。   | 是       | 无     |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<void>`
+* **描述:** 设置成功解析为 `void`，失败时抛出错误。
+
+---
+
+### 使用示例
+
+```js
+async function updateLightingSleepTime(time) {
+  // 需协议版本 >= v1.0.4.0
+  await ServiceKeyboard.setLightingSleepTime(time);
+  console.log('已设置系统睡眠时间(分钟):', time);
+}
+```
+
+---
+
+### 注意事项
+
+:::: tip
+
+* 需要设备协议版本至少为 `v1.0.4.0`。
+* 0 表示永不休眠；建议根据需求限制为合理的分钟数范围。
+::::
+
 ## 重新连接设备
 
 ServiceKeyboard.reconnection()

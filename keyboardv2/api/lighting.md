@@ -917,10 +917,10 @@ getDoubleLighting();
 
 ## 获取特殊灯位（空格灯）
 
-ServiceKeyboard.getSaturation()
+ServiceKeyboard.getSpecialLighting()
 
 **简要描述:**
-获取特殊灯位，空格灯位的单个灯珠控制
+获取特殊灯位（空格键）灯珠数量，用于单独控制空格键位置的灯珠。
 
  ---
 
@@ -932,7 +932,8 @@ ServiceKeyboard.getSaturation()
 
 ### 返回值
 
-灯珠的数量specialLighting :number= 1
+* **总体类型:** `Promise<{ specialLighting: number }>`
+* **描述:** 返回空格键位置的灯珠数量。
 
 **返回值示例:**
 
@@ -950,16 +951,17 @@ ServiceKeyboard.getSaturation()
 async function getSpecialLighting() {
   try {
     const result = await ServiceKeyboard.getSpecialLighting();
-    console.log('空格灯位:', "specialLighting": result.specialLighting);
+    console.log('空格键灯珠数量 specialLighting:', result.specialLighting);
   } catch (error) {
-    console.error('空格灯位:', error);
+    console.error('获取空格键灯珠数量失败:', error);
   }
 }
 
+getSpecialLighting();
 ```
 
-:::tip
+::::tip
 
-主要是用来获取空格灯珠的设置
+主要用于读取空格键位置可控灯珠的数量。
 
-:::
+::::
