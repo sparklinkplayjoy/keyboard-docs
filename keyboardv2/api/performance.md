@@ -1,3 +1,36 @@
+## 轴体版本识别（无限轴体）
+
+**简要描述:**
+通过轴体列表判断设备轴体体系版本：当 `getAxisList().list.length === 0` 时，代表为“无限轴体（v2）”。
+
+---
+
+### 使用示例
+
+```typescript
+async function getAxisVersion(): Promise<number[]> {
+  const result = await ServiceKeyboard.getAxisList();
+  const { list } = result;
+  const isAxisStatus = list.length === 0 ? 'v2' : 'v1';
+  return isAxisStatus === 'v1' ? list : [];
+}
+```
+
+---
+
+### 注意事项
+
+:::: tip
+
+* `list.length === 0` 表示为“无限轴体（v2）”。
+* 在 v2 模式下，请在 `getPerformance` 中读取并在 `setPerformance` 中设置以下三项：
+  * `axisV2Id`
+  * `axisRangeMax`
+  * `axisCoefficient`
+::::
+
+---
+
 # 键盘性能设置
 
 ## 获取按键性能配置
@@ -35,12 +68,16 @@ ServiceKeyboard.getPerformance()
 | `rtRelease`         | `number` | RT首次触发释放行程       | `0.3`   |
 | `pressDeadStroke`   | `number` | 按下死区                 | `0.2`   |
 | `releaseDeadStroke` | `number` | 抬起死区                 | `0.2`   |
-| `axis`              | `number` | 获取的轴体列表索引         | `0`     |
+| `axis`              | `number` | 获取的轴体列表索引（v1） | `0`     |
 | `calibrate`         | `number` | 校准标志                 | `0`     |
+| `axisV2Id`          | `number` | 轴体ID（v2，无限轴体时有效） | `0` |
+| `axisRangeMax`      | `number` | 轴体最大行程范围（v2）   | `4`     |
+| `axisCoefficient`   | `number` | 轴体系数（v2）           | `1`     |
 
 **返回值示例:**
 
 ```js
+// v1（有限轴体）：含 axis（索引），不含 v2 字段
 {
     "mode": 0,
     "normalPress": 2,
@@ -53,6 +90,22 @@ ServiceKeyboard.getPerformance()
     "axis": 0,
     "calibrate": 0
 }
+
+// v2（无限轴体）：不含 axis（索引），增加 v2 三项
+{
+    "mode": 0,
+    "normalPress": 2,
+    "normalRelease": 2,
+    "rtFirstTouch": 0.5,
+    "rtPress": 0.3,
+    "rtRelease": 0.3,
+    "pressDeadStroke": 0.2,
+    "releaseDeadStroke": 0.2,
+    "axisV2Id": 1001,
+    "axisRangeMax": 4,
+    "axisCoefficient": 1,
+    "calibrate": 0
+}
 ```
 
 ---
@@ -62,10 +115,7 @@ ServiceKeyboard.getPerformance()
 ```typescript
 async function getKeyPerformance(row: number, col: number) {
   try {
-    const result = await ServiceKeyboard.getPerformance({
-      row: row,
-      col: col
-    });
+    const result = await ServiceKeyboard.getPerformance({ row, col });
     console.log('按键性能配置:', result);
   } catch (error) {
     console.error('获取按键性能配置失败:', error);
@@ -80,11 +130,11 @@ getKeyPerformance(5, 14);
 
 ### 注意事项
 
-::: tip
+:::: tip
 
-* `row` 和 `col` 的值需要根据键盘的实际矩阵布局来确定。
-* 返回的配置信息包含了按键的所有性能相关参数，可以用于显示或修改按键的性能设置。
-:::
+* v1：通过 `axis`（索引）指向 `getAxisList().list` 中的某个轴体。
+* v2（无限轴体）：不再使用 `axis` 索引，改为使用 `axisV2Id`、`axisRangeMax`、`axisCoefficient` 三项描述轴体。
+::::
 
 ---
 
@@ -112,26 +162,49 @@ ServiceKeyboard.setPerformance()
 | `params.rtRelease` | `number` | RT首次触发释放行程 | 是 | 无 |
 | `params.pressDeadStroke` | `number` | 按下死区 | 是 | 无 |
 | `params.releaseDeadStroke` | `number` | 抬起死区 | 是 | 无 |
+| `params.axis` | `number` | 轴体索引（v1 时必填；v2 不使用） | 否 | 无 |
+| `params.axisV2Id` | `number` | 轴体ID（v2 时必填；v1 不使用） | 否 | 无 |
+| `params.axisRangeMax` | `number` | 轴体最大行程范围（v2 时必填） | 否 | 无 |
+| `params.axisCoefficient` | `number` | 轴体系数（v2 时必填） | 否 | 无 |
 | `params.axis` | `number` | 获取的轴体列表索引 | 是 | 无 |
 | `params.calibrate` | `number` | 校准标志 | 是 | 无 |
 
 **参数示例:**
 
 ```js
+// v1（有限轴体）示例
 {
-    "row": 4,
-    "col": 5,
-    "mode": 0,
-    "normalPress": 1.506,
-    "normalRelease": 1.506,
-    "rtFirstTouch": 0.5,
-    "rtPress": 0.3,
-    "rtRelease": 0.3,
-    "pressDeadStroke": 0.2,
-    "releaseDeadStroke": 0.2,
-    "axis": 0,
-    "calibrate": 0,
-    }
+  "row": 4,
+  "col": 5,
+  "mode": 0,
+  "normalPress": 1.506,
+  "normalRelease": 1.506,
+  "rtFirstTouch": 0.5,
+  "rtPress": 0.3,
+  "rtRelease": 0.3,
+  "pressDeadStroke": 0.2,
+  "releaseDeadStroke": 0.2,
+  "axis": 0,
+  "calibrate": 0
+}
+
+// v2（无限轴体）示例
+{
+  "row": 4,
+  "col": 5,
+  "mode": 0,
+  "normalPress": 1.506,
+  "normalRelease": 1.506,
+  "rtFirstTouch": 0.5,
+  "rtPress": 0.3,
+  "rtRelease": 0.3,
+  "pressDeadStroke": 0.2,
+  "releaseDeadStroke": 0.2,
+  "axisV2Id": 1001,
+  "axisRangeMax": 4,
+  "axisCoefficient": 1,
+  "calibrate": 0
+}
 ```
 
 ---
@@ -140,20 +213,7 @@ ServiceKeyboard.setPerformance()
 
 * **总体类型:** `Promise<IPerformanceInfo>`
 * **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含设置后的按键性能配置信息的对象。
-* **解析对象结构 (`IPerformanceInfo`):**
-
-| 字段名称            | 类型     | 描述                     | 示例值  |
-|---------------------|----------|--------------------------|---------|
-| `mode`              | `number` | 触发方式                 | `0`     |
-| `normalPress`       | `number` | 普通触发按下行程         | `1.506` |
-| `normalRelease`     | `number` | 普通触发释放行程         | `1.506` |
-| `rtFirstTouch`      | `number` | RT触发首次触发行程       | `0.5`   |
-| `rtPress`           | `number` | RT首次触发按下行程       | `0.3`   |
-| `rtRelease`         | `number` | RT首次触发释放行程       | `0.3`   |
-| `pressDeadStroke`   | `number` | 按下死区                 | `0.2`   |
-| `releaseDeadStroke` | `number` | 抬起死区                 | `0.2`   |
-| `axis`              | `number` | 轴体                     | `0`     |
-| `calibrate`         | `number` | 校准标志                 | `0`     |
+* **解析对象结构 (`IPerformanceInfo`):** 同“获取按键性能配置”的返回结构，v1/v2 字段含义一致。
 
 **返回值示例:**
 
@@ -169,7 +229,10 @@ ServiceKeyboard.setPerformance()
   rtRelease: number; // RT首次触发释放行程
   pressDeadStroke: number; // 按下死区
   releaseDeadStroke: number; // 抬起死区
-  axis: number; // 轴体
+  axis?: number; // v1 有效
+  axisV2Id?: number; // v2 有效
+  axisRangeMax?: number; // v2 有效
+  axisCoefficient?: number; // v2 有效
   calibrate: number; // 校准标志
 }
 ```
@@ -181,21 +244,22 @@ ServiceKeyboard.setPerformance()
 ```typescript
 async function setKeyPerformance() {
   try {
+    // v1 或 v2 请根据 getAxisList().list.length 判断，并填入对应字段
     const params = {
       row: 4,
       col: 5,
       mode: 0,
       normalPress: 1.506,
-      normalRelease:1.506,
+      normalRelease: 1.506,
       rtFirstTouch: 0.5,
       rtPress: 0.3,
       rtRelease: 0.3,
       pressDeadStroke: 0.2,
       releaseDeadStroke: 0.2,
-      axis: 0,
+      // v1: axis: 0,
+      // v2: axisV2Id: 1001, axisRangeMax: 4, axisCoefficient: 1,
       calibrate: 0,
-    };
-    
+    } as any;
     const result = await ServiceKeyboard.setPerformance(params);
     console.log('设置按键性能配置结果:', result);
   } catch (error) {
@@ -210,12 +274,12 @@ setKeyPerformance();
 
 ### 注意事项
 
-::: tip
+:::: tip
 
-* 所有参数都是必需的，需要提供完整的配置信息。
-* 参数值需要符合键盘的实际规格和限制。
-* 设置完成后，建议使用 `getPerformance` 接口验证设置是否生效。
-:::
+* 如果 `ServiceKeyboard.getAxisList().list.length === 0`，表示为 v2（无限轴体），`setPerformance` 需设置 `axisV2Id`、`axisRangeMax`、`axisCoefficient`。
+* 如果为 v1，请设置 `axis`（索引）并忽略 v2 三项。
+* 设置完成后，建议使用 `getPerformance` 校验配置是否生效。
+::::
 
 ---
 

@@ -700,6 +700,43 @@ async function updateLightingSleepTime(time) {
 * 0 表示永不休眠；建议根据需求限制为合理的分钟数范围。
 ::::
 
+## 关闭当前设备
+
+ServiceKeyboard.closeDevice()
+
+**简要描述:**
+关闭当前已初始化并连接的设备，会释放与该设备的会话。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<void>`
+* **描述:** 操作成功解析为 `void`；如关闭失败会抛出错误。
+
+---
+
+### 使用示例
+
+```js
+async function closeCurrentDevice() {
+  try {
+    await ServiceKeyboard.closeDevice();
+    console.log('当前设备已关闭');
+  } catch (error) {
+    console.error('关闭设备失败:', error);
+  }
+}
+
+// closeCurrentDevice();
+```
+
 ## 重新连接设备
 
 ServiceKeyboard.reconnection()

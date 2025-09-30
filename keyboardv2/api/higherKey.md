@@ -33,7 +33,7 @@ ServiceKeyboard.getHigherKey()
 - `4`: TGL（触发延迟）
 - `5`: END（结束触发）
 - `6`: SOCD（同时按下冲突解决）
-- `7`: RS（保留）
+- `7`: RS（迅洁）
 
 ### 使用示例
 ```js
@@ -552,3 +552,70 @@ async function setSocdHigherKey(row, col, row2, col2, socdMode, delay, kcs) {
 *   返回的 `mode` 值固定为6，表示SOCD类型。
 *   返回值是一个数组，包含两个对象的配置信息，分别对应两个按键的设置。
 :::
+
+## 设置RS高级键
+ServiceKeyboard.setHigherKeyRS()
+
+**简要描述:**
+为指定按键位置设置RS（保留/自定义联动）高级键配置。该功能可为两个按键建立联动关系，并设置延迟与键值。
+
+### 参数
+| 参数名称 | 类型     | 描述                                                                                                | 是否必需 | 默认值 |
+| :------- | :------- | :-------------------------------------------------------------------------------------------------- | :------- | :----- |
+| `params` | `object` | 包含按键位置和RS设置的对象。                                                                        | 是       | 无     |
+| `params.row` | `number` | 第一个按键在键盘矩阵中的行号。                                                                     | 是       | 无     |
+| `params.col` | `number` | 第一个按键在键盘矩阵中的列号。                                                                     | 是       | 无     |
+| `params.mode` | `string` | 固定为 'RS'，表示设置RS高级键。                                                                      | 是       | 无     |
+| `params.data` | `object` | 包含RS配置的数据对象。                                                                             | 是       | 无     |
+| `params.data.row2` | `number` | 第二个按键在键盘矩阵中的行号。                                                                   | 是       | 无     |
+| `params.data.col2` | `number` | 第二个按键在键盘矩阵中的列号。                                                                   | 是       | 无     |
+| `params.data.delay` | `number` | 延迟时间，单位为ms。                                                                             | 是       | 无     |
+| `params.data.kcs` | `number[]` | 键值数组，长度为2，对应两个按键的键值。                                                           | 是       | 无     |
+
+### 返回值
+**类型:** `Promise<{ row: number, col: number, mode: number, data: { row2: number, col2: number, kcs: number[], delay: number } }>`
+
+**描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，包含设置后的RS配置信息。
+
+**内容:**
+| 字段名称 | 类型     | 描述             | 示例值 |
+| :------- | :------- | :--------------- | :----- |
+| `row`    | `number` | 第一个按键的行号。     | `3`    |
+| `col`    | `number` | 第一个按键的列号。     | `1`    |
+| `mode`   | `number` | 高级键类型，固定为7（RS）。 | `7`    |
+| `data`   | `object` | RS配置数据。    | -      |
+| `data.row2` | `number` | 第二个按键的行号。 | `3` |
+| `data.col2` | `number` | 第二个按键的列号。 | `2` |
+| `data.kcs` | `number[]` | 两个按键的键值数组。 | `[4, 22]` |
+| `data.delay` | `number` | 延迟时间，单位为ms。 | `0` |
+
+### 使用示例
+```js
+async function setRsHigherKey(row, col, data) {
+  try {
+    console.log('setRS', { row, col, mode: 'RS', data });
+    const result = await ServiceKeyboard.setHigherKeyRS({ row, col, mode: 'RS', data });
+    console.log('设置RS高级键完成:', result);
+  } catch (error) {
+    console.error('设置RS高级键失败:', error);
+  }
+}
+
+// 示例入参：
+// setRsHigherKey(3, 1, {
+//   row2: 3,
+//   col2: 2,
+//   delay: 0,
+//   kcs: [4, 22]
+// });
+```
+
+### 注意事项
+
+:::: tip
+* `row`/`col` 表示第一个按键位置，`row2`/`col2` 表示第二个按键位置。
+* `mode` 必须设置为 'RS'。
+* `kcs` 必须为长度为 2 的数组。
+* `delay` 为延迟时间，单位为 ms。
+* 返回的 `mode` 值为 7，表示 RS 类型。
+::::
