@@ -537,7 +537,7 @@ ServiceKeyboard.setRateOfReturn(value)
 
 | 参数名称 | 类型     | 描述                                 | 是否必需 | 默认值 |
 |----------|----------|--------------------------------------|----------|--------|
-| `value`  | `number` | 目标回报率索引（来自列表的 value 字段）。 | 是       | 无     |
+| `value`  | `string` | 目标回报率索引（来自列表的 value 字段）。 | 是       | 无     |
 
 ---
 
@@ -555,6 +555,9 @@ async function updateRateOfReturn(value) {
   // 需协议版本 >= v1.0.7.0
   await ServiceKeyboard.setRateOfReturn(value);
 }
+
+updateRateOfReturn('R1KHz')
+
 ```
 
 ---
