@@ -16,7 +16,7 @@ ServiceKeyboard.getLightingBase()
 | `params` | `object` | 是 | 描述查询区域和配置类型的对象 |
 | `params.area` | `string` | 是 | 灯光区域，例如`Keyboard`,`Decorate1` |
 | `params.config` | `string` | 是 | 配置类型，例如 `Base`,`Palette`,`ColorCorrection` |
-| `lamp` | `string` | 否 | 描述灯的类型，例如"`SingleLighting`,`DoubleLighting` |
+| `params.lamp` | `string` | 否 | 描述灯的类型，例如`SingleLighting`,`DoubleLighting` |
 
 ---
 
@@ -66,8 +66,9 @@ async function getLightingBase() {
   try {
     const result = await ServiceKeyboard.getLightingBase({
       area: "Keyboard",
-      config: "Base"
-    },"DoubleLighting");
+      config: "Base",
+      lamp: "DoubleLighting"
+    });
     console.log('灯光基础配置:', result);
   } catch (error) {
     console.error('获取灯光基础配置失败:', error);
@@ -102,7 +103,7 @@ ServiceKeyboard.setLightingBase()
 | `params.data.speed` | `number` | 是 | 灯光速度 |
 | `params.data.direction` | `string` | 是 | 灯光方向`Forward`或者`Backward` |
 | `params.data.selectStaticColor` | `number` | 是 | 静态颜色选择 |
-| `lamp` | `string` | 否 | 描述灯的类型，例如`SingleLighting`,`DoubleLighting` |
+| `params.lamp` | `string` | 否 | 描述灯的类型，例如`SingleLighting`,`DoubleLighting` |
 
 ---
 
@@ -146,6 +147,7 @@ async function setLightingBase() {
     const result = await ServiceKeyboard.setLightingBase({
       area: "Keyboard",
       config: "Base",
+      lamp: "SingleLighting",
       data: {
         open: "Open",
         mode: 0,
@@ -154,7 +156,7 @@ async function setLightingBase() {
         direction: "Forward",
         selectStaticColor: 0
       }
-    }, "SingleLighting");
+    });
     console.log('设置灯光基础配置结果:', result);
   } catch (error) {
     console.error('设置灯光基础配置失败:', error);
