@@ -1011,10 +1011,9 @@ ServiceKeyboard.upgrade()
 | 参数名称   | 类型                                                  | 描述                                                           | 是否必需 | 默认值 |
 |------------|-------------------------------------------------------|----------------------------------------------------------------|----------|--------|
 | `buffer`   | `ArrayBuffer`                                         | 包含新固件二进制数据的 `ArrayBuffer`。                          | 是       | 无     |
-| `callback` | `(data: {current: number, total: number, updateStatus: string}) => void` | 一个回调函数，用于报告固件更新的进度。`data.current` 是已传输的字节数，`data.total` 是总字节数，`data.updateStatus` 是当前更新状态。 | 否       | 无     |
+| `callback` | `(data: {current: number, total: number, updateStatus: string, percentage: number}) => void` | 一个回调函数，用于报告固件更新的进度。`data.current` 是已传输的字节数，`data.total` 是总字节数，`data.updateStatus` 是当前更新状态，`data.percentage` 为当前进度百分比（0-100）。 | 否       | 无     |
 | `options`  | `object`                                              | 更新过程中的配置选项。(可根据实际设备情况去调试)                                          | 否       | 有     |
 | `options.toBootDelay` | `number`                                        | 进入 Bootloader 模式后的延迟时间（毫秒）。                      | 否       | 4000   |
-| `options.writeDelay`  | `number`                                        | 写入数据时的延迟时间（毫秒）。                                  | 否       | 30     |
 | `options.toAppDelay`  | `number`                                        | 返回应用模式时的延迟时间（毫秒）。                              | 否       | 4000   |
 
 ---
@@ -1049,14 +1048,14 @@ async function performFirmwareUpdate(firmwareBuffer: ArrayBuffer) {
         try {
           const res = await ServiceKeyboard.upgrade(
             reader.result,
-            ({ current, total, updateStatus: status }) => {
+            ({ current, total, updateStatus: status, percentage }) => {
               progress.current = current;
               progress.total = total;
+              progress.percent = percentage;
               updateStatus.value = status;
             },
             {
               toBootDelay: 4000,
-              writeDelay: 30,
               toAppDelay: 4000,
             }
           );
@@ -1078,6 +1077,13 @@ async function performFirmwareUpdate(firmwareBuffer: ArrayBuffer) {
 // const myFirmwareArrayBuffer: ArrayBuffer = ...;
 // performFirmwareUpdate(myFirmwareArrayBuffer);
 ```
+
+:::: danger
+
+* 当 `updateStatus` 为 `APPNoDevice` 时，需要重新执行授权流程：依次调用 `ServiceKeyboard.getDevices()` 与 `ServiceKeyboard.init()`，确保设备重新授权成功后再继续升级。
+* 当 `updateStatus` 为 `noDevice` 时，同样需要重新授权（`getDevices` + `init`），并在成功后重新走一遍固件升级流程。
+
+::::
 
 ---
 

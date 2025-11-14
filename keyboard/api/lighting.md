@@ -303,7 +303,7 @@ async function fetchCustomKeyColor(targetKeyValue: number) {
 
 ## 设置单键自定义灯光颜色
 
-ServiceKeyboard.customSetLighting()
+ServiceKeyboard.setCustomLighting()
 
 **简要描述:**
 为键盘上的单个按键设置自定义 RGB 灯光颜色。这通常在键盘灯光模式设置为自定义模式后生效。
@@ -316,9 +316,9 @@ ServiceKeyboard.customSetLighting()
 |------------|----------|----------------------------------------------------------------------|----------|--------|
 | `data`     | `object` | 一个包含按键及其 RGB 颜色配置的对象。                                    | 是       | 无     |
 | `data.key` | `number` | 要设置自定义颜色的按键的 `keyValue`。此值通常来自 `ServiceKeyboard.defKey()` 返回的 `IDefKeyInfo` 对象中的 `keyValue` 属性。 | 是       | 无     |
-| `data.R`   | `number` | 红色 (Red) 分量值 (0-255)。                                            | 是       | 无     |
-| `data.G`   | `number` | 绿色 (Green) 分量值 (0-255)。                                          | 是       | 无     |
-| `data.B`   | `number` | 蓝色 (Blue) 分量值 (0-255)。                                            | 是       | 无     |
+| `data.r`   | `number` | 红色 (Red) 分量值 (0-255)。                                            | 是       | 无     |
+| `data.g`   | `number` | 绿色 (Green) 分量值 (0-255)。                                          | 是       | 无     |
+| `data.b`   | `number` | 蓝色 (Blue) 分量值 (0-255)。                                            | 是       | 无     |
 
 ---
 
@@ -331,7 +331,7 @@ ServiceKeyboard.customSetLighting()
 ### 使用示例
 
 ```js
-async function setCustomKeyColor(config: { key: number; R: number; G: number; B: number }) {
+async function setCustomKeyColor(config: { key: number; r: number; g: number; b: number }) {
   try {
     // config 示例:
     const exampleConfig: LightMode = {
@@ -348,7 +348,7 @@ async function setCustomKeyColor(config: { key: number; R: number; G: number; B:
     };
     await ServiceKeyboard.setLighting(newConfig);
     // const colorConfig = { key: 80, R: 255, G: 0, B: 255 }; // 将 keyValue 80 的键设置为紫色
-    await ServiceKeyboard.customSetLighting(config);
+    await ServiceKeyboard.setCustomLighting(config);
     console.log(`按键 ${config.key} 的自定义颜色已设置为 R=${config.R}, G=${config.G}, B=${config.B}`);
   } catch (error) {
     console.error('设置单键自定义颜色失败:', error);
@@ -410,7 +410,7 @@ async function saveCustomLighting() {
       type: "custom", //需要先设定键盘灯光为自定义模式
     };
 
-   await ServiceKeyboard.customSetLighting(config);
+   await ServiceKeyboard.setCustomLighting(config);
   // 最后一步发送保存
   await ServiceKeyboard.saveCustomLighting(newConfig);
   
