@@ -20,17 +20,194 @@ async function getAxisVersion(): Promise<number[]> {
 
 ### 注意事项
 
-:::: tip
+::: tip
 
 * `list.length === 0` 表示为“无限轴体（v2）”。
 * 在 v2 模式下，请在 `getPerformance` 中读取并在 `setPerformance` 中设置以下三项：
   * `axisV2Id`
   * `axisRangeMax`
   * `axisCoefficient`
-::::
+---
+:::
+
+## 获取轴体列表 V3
+
+httpService.getAxisListV3()
+
+**简要描述:**
+通过网络 GET 请求获取轴体列表数据，包含轴体品牌、型号、参数等详细信息。
+
+**请求类型:** GET
+
+**实际接口 URL:**
+`https://api.sparklinkplayjoy.com/api/v1/getAxisListV3`
+
+**请求示例:**
+`https://api.sparklinkplayjoy.com/api/v1/getAxisListV3?board_id=00300001&vid=1ca6&pid=3001&t=1764816395732`
 
 ---
 
+### 参数
+
+| 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
+|----------|----------|----------------------------------------------------------------------|----------|--------|
+| `params` | `object` | 一个包含设备信息和时间戳的对象。                                        | 是       | 无     |
+| `params.board_id` | `string` | 设备板 ID，需转换为 16 进制并补零至 8 位字符串。                        | 是       | 无     |
+| `params.vid` | `string` | 设备厂商 ID (Vendor ID)，需转换为 16 进制并补零至 4 位字符串。            | 是       | 无     |
+| `params.pid` | `string` | 设备产品 ID (Product ID)，需转换为 16 进制并补零至 4 位字符串。           | 是       | 无     |
+| `params.t` | `number` | 当前时间戳（毫秒），用于防止缓存。                                       | 是       | 无     |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<IAxisListV3Info>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含轴体品牌和详细信息的数组。
+* **解析对象结构:**
+
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `type_id` | `number` | 轴体品牌 ID               | `168`   |
+| `type_name` | `string` | 轴体品牌名称（中文）      | `其它`   |
+| `type_name_en` | `string` | 轴体品牌名称（英文）      | `other`  |
+| `type_sort` | `number` | 品牌排序值                | `0`     |
+| `list` | `Array<IAxisDetail>` | 该品牌下的轴体列表        | `[...]`  |
+
+#### `IAxisDetail` 结构:
+
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `axis_id` | `number` | 轴体 ID                  | `794`   |
+| `axis_name` | `string` | 轴体名称                 | `天青轴Pro` |
+| `axis_range_max` | `number` | 轴体最大行程范围          | `3610`  |
+| `magnetic_flux` | `number` | 磁通量                   | `500`   |
+| `axis_color` | `string` | 轴体颜色（16进制）        | `#74e1fd` |
+| `image_url` | `string` | 轴体图片 URL              | `#`     |
+| `brand` | `string` | 轴体品牌                 | `other`  |
+| `type_id` | `number` | 轴体品牌 ID               | `168`   |
+| `type_name` | `string` | 轴体品牌名称（中文）      | `其它`   |
+| `type_name_en` | `string` | 轴体品牌名称（英文）      | `other`  |
+| `type_sort` | `number` | 品牌排序值                | `0`     |
+| `aixsDetail` | `Array<IAxisParameter>` | 轴体参数详情列表        | `[...]`  |
+
+#### `IAxisParameter` 结构:
+
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `axis_id` | `number` | 轴体参数 ID               | `12704`  |
+| `axis_range_max` | `number` | 轴体最大行程范围          | `3610`   |
+| `axis_coefficient` | `number` | 轴体系数                 | `18100`  |
+
+**返回值示例:**
+
+```js
+[
+    {
+        "type_id": 166,
+        "type_name": "佳达隆",
+        "type_name_en": "GATERON",
+        "type_sort": 0,
+        "list": []
+    },
+    {
+        "type_id": 167,
+        "type_name": "正牌科电",
+        "type_name_en": "TTC",
+        "type_sort": 0,
+        "list": []
+    },
+    {
+        "type_id": 168,
+        "type_name": "其它",
+        "type_name_en": "other",
+        "type_sort": 0,
+        "list": [
+            {
+                "axis_id": 794,
+                "axis_name": "天青轴Pro",
+                "axis_range_max": 3610,
+                "magnetic_flux": 500,
+                "axis_color": "#74e1fd",
+                "image_url": "#",
+                "brand": "other",
+                "type_id": 168,
+                "type_name": "其它",
+                "type_name_en": "other",
+                "type_sort": 0,
+                "aixsDetail": [
+                    {
+                        "axis_id": 12704,
+                        "axis_range_max": 3610,
+                        "axis_coefficient": 18100
+                    }
+                ]
+            }
+        ]
+    }
+]
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function getAxisListV3Data() {
+  try {
+    // 从设备存储中获取必要信息
+    const boardId = deviceStore.info?.boardId.toString(16).padStart(8, '0');
+    const vid = deviceStore.device?.vendorId.toString(16).padStart(4, '0');
+    const pid = deviceStore.device?.productId.toString(16).padStart(4, '0');
+    
+    // 构建参数
+    const params = {
+      board_id: boardId,
+      vid,
+      pid,
+      t: Date.now()
+    };
+    
+    // 调用接口获取轴体列表
+    const result = await httpService.getAxisListV3(params);
+    console.log('轴体列表 V3 数据:', result);
+    
+    // 处理轴体数据
+    result.forEach(brand => {
+      console.log(`品牌: ${brand.type_name} (${brand.type_name_en})`);
+      brand.list.forEach(axis => {
+        console.log(`  轴体: ${axis.axis_name}`);
+        console.log(`    最大行程: ${axis.axis_range_max}`);
+        console.log(`    颜色: ${axis.axis_color}`);
+        axis.aixsDetail.forEach(param => {
+          console.log(`    参数 ID: ${param.axis_id}`);
+          console.log(`    系数: ${param.axis_coefficient}`);
+        });
+      });
+    });
+    
+    return result;
+  } catch (error) {
+    console.error('获取轴体列表 V3 失败:', error);
+    return [];
+  }
+}
+
+// 获取轴体列表 V3 数据
+getAxisListV3Data();
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 此接口为网络 GET 请求，需确保设备网络连接正常。
+* 参数中的 `board_id`、`vid`、`pid` 需要转换为 16 进制格式并补零至指定长度。
+* 返回的轴体数据可用于设置按键的轴体类型和参数。
+* 不同的轴体 ID 和参数代表不同的轴体型号和特性。
+:::
+---
 # 键盘性能设置
 
 ## 获取按键性能配置
