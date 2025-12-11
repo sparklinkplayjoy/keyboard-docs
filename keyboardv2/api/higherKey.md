@@ -139,7 +139,7 @@ ServiceKeyboard.setHigherKeyDKS()
 | `params.col` | `number` | 按键在键盘矩阵中的列号。                                                                           | 是       | 无     |
 | `params.data` | `object` | 包含DKS配置的数据对象。                                                                           | 是       | 无     |
 | `params.data.kcs` | `number[]` | DKS各层级的键值数组，长度为4。                                                                     | 是       | 无     |
-| `params.data.trps` | `number[]` | DKS各层级的触发点行程参数数组，长度为4。                                                           | 是       | 无     |
+| `params.data.trps` | `number[]` | DKS各层级的触发点行程参数数组，长度为4。每个值代表8个比特：低四位（0-3位）表示逐渐按下，高四位（4-7位）表示逐渐松开。按到底和刚抬起是同一个点位。例如31（二进制：0001 1111）表示低四位为1111，高四位为0001。 | 是       | 无     |
 | `params.data.dbs` | `number[]` | DKS的死区设置数组，长度为2，单位为mm。                                                             | 是       | 无     |
 
 ### 返回值
@@ -155,7 +155,7 @@ ServiceKeyboard.setHigherKeyDKS()
 | `mode`   | `number` | 高级键类型，固定为1（DKS）。 | `1`    |
 | `data`   | `object` | DKS配置数据。    | -      |
 | `data.kcs` | `number[]` | DKS各层级的键值数组。 | `[20, 26, 8, 9]` |
-| `data.trps` | `number[]` | DKS各层级的触发点行程参数数组。 | `[127, 120, 120, 120]` |
+| `data.trps` | `number[]` | DKS各层级的触发点行程参数数组。每个值代表8个比特：低四位表示逐渐按下，高四位表示逐渐松开。 | `[31, 31, 31, 31]` |
 | `data.dbs` | `number[]` | DKS的行程设置数组。第0位为最小行程，第1位为最大行程 | `[1.5, 3]` |
 
 ### 使用示例
@@ -181,7 +181,7 @@ async function setDksHigherKey(row, col, kcs, trps, dbs) {
 
 // 示例：设置位置为 (4, 6) 的按键的DKS配置
 // const exampleKcs = [20, 26, 8, 9];
-// const exampleTrps = [127, 120, 120, 120];
+// const exampleTrps = [31, 158, 229, 255];  // 31 = 0001 1111 (二进制)，低四位1111表示按下，高四位0001表示松开
 // const exampleDbs = [1.5, 3];
 // setDksHigherKey(4, 6, exampleKcs, exampleTrps, exampleDbs);
 ```
@@ -191,7 +191,11 @@ async function setDksHigherKey(row, col, kcs, trps, dbs) {
 ::: tip
 *   `row` 和 `col` 表示要设置DKS的按键位置。
 *   `kcs` 数组必须包含4个键值，分别对应DKS的4个层级。
-*   `trps` 数组必须包含4个触发点行程参数，分别对应DKS的4个层级，需转成二进制使用。
+*   `trps` 数组必须包含4个触发点行程参数，分别对应DKS的4个层级。每个参数值代表8个比特：
+    *   低四位（0-3位）：表示逐渐按下时的触发点
+    *   高四位（4-7位）：表示逐渐松开时的触发点
+    *   按到底和刚抬起是同一个点位
+    *   例如：31（二进制：0001 1111）表示低四位为1111，高四位为0001
 *   `dbs` 数组必须包含2个行程值，第0位为最小行程，第1位为最大行程，单位为mm。
 *   返回的 `mode` 值固定为1，表示DKS类型。
 :::

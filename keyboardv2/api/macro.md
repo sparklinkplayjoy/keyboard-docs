@@ -1,5 +1,50 @@
 # 宏
 
+## 获取宏空间信息
+ServiceKeyboard.getMacroSpaceInfo()
+
+**简要描述:**
+获取宏的空间信息，包括宏数量和最多支持的宏动作数量。
+
+### 参数
+该方法无需参数。
+
+### 返回值
+**类型:** `Promise<{ macroCount: number, macroNumber: number }>`
+
+**描述:** 返回一个 `Promise`，该 `Promise` 解析为一个对象，包含宏的空间信息。
+
+**内容:**
+| 字段名称 | 类型     | 描述             | 示例值 |
+| :------- | :------- | :--------------- | :----- |
+| `macroCount` | `number` | 宏数量。          | `16`    |
+| `macroNumber` | `number` | 最多支持的宏动作数量。     | `960`    |
+
+### 使用示例
+```js
+async function getMacroSpaceInfo() {
+  try {
+    const result = await ServiceKeyboard.getMacroSpaceInfo();
+    console.log('宏空间信息:', result);
+    return result;
+  } catch (error) {
+    console.error('获取宏空间信息失败:', error);
+    throw error;
+  }
+}
+
+// 示例：获取宏空间信息
+// getMacroSpaceInfo();
+```
+
+### 注意事项
+
+::: tip
+*   此接口需要协议版本 1.1.4.0 或更高版本才可用。
+*   `macroCount`: 表示宏的总数量。
+*   `macroNumber`: 表示最多支持的宏动作数量。
+:::
+
 ## 获取宏模式
 ServiceKeyboard.getMacroMode()
 
