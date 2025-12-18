@@ -489,40 +489,44 @@ ServiceKeyboard.setHigherKeySOCD()
 | `params.col` | `number` | 第一个按键在键盘矩阵中的列号。                                                                     | 是       | 无     |
 | `params.row2` | `number` | 第二个按键在键盘矩阵中的行号。                                                                     | 是       | 无     |
 | `params.col2` | `number` | 第二个按键在键盘矩阵中的列号。                                                                     | 是       | 无     |
-| `params.mode` | `string` | 设置为 'SOCD' 表示设置SOCD高级键。                                                                  | 是       | 无     |
-| `params.socdMode` | `number` | SOCD模式：0=后覆盖，1=前优先，2=后优先，3=中性（两个按键都按下都不生效）。                         | 是       | 无     |
+| `params.mode` | `number` | SOCD的工作模式：0=后覆盖，1=前优先，2=后优先，3=中性（两个按键都按下时都不生效）。                       | 是       | 无     |
 | `params.delay` | `number` | 延迟时间，单位为ms。                                                                               | 是       | 无     |
 | `params.kcs` | `number[]` | SOCD的键值数组，长度为2。                                                                         | 是       | 无     |
 
-### 返回值
-**类型:** `Promise<Array<{ row: number, col: number, mode: number, data: { row2: number, col2: number, kcs: number[], delay: number, socdMode: number } }>>`
+### 数据示例
+以下是一个完整的SOCD高级键设置数据示例：
+```json
+{
+  "row": 4,
+  "col": 3,
+  "row2": 4,
+  "col2": 5,
+  "mode": 2,
+  "delay": 12,
+  "kcs": [
+    60,
+    25
+  ]
+}
+```
 
-**描述:** 返回一个 `Promise`，该 `Promise` 解析为一个数组，包含两个对象的SOCD配置信息。
-
-**内容:**
-| 字段名称 | 类型     | 描述             | 示例值 |
-| :------- | :------- | :--------------- | :----- |
-| `row`    | `number` | 按键的行号。     | `3`    |
-| `col`    | `number` | 按键的列号。     | `6`    |
-| `mode`   | `number` | 高级键类型，固定为6（SOCD）。 | `6`    |
-| `data`   | `object` | SOCD配置数据。    | -      |
-| `data.row2` | `number` | 配对按键的行号。 | `3` |
-| `data.col2` | `number` | 配对按键的列号。 | `7` |
-| `data.kcs` | `number[]` | SOCD的键值数组。 | `[16, 18]` |
-| `data.delay` | `number` | 延迟时间，单位为ms。 | `0` |
-| `data.socdMode` | `number` | SOCD模式。 | `0` |
+其中，`mode`的值表示SOCD的工作模式：
+*   0: 后覆盖 - 后按下的按键会覆盖先按下的按键
+*   1: 前优先 - 先按下的按键优先
+*   2: 后优先 - 后按下的按键优先
+*   3: 中性 - 两个按键都按下时都不生效
 
 ### 使用示例
 ```js
-async function setSocdHigherKey(row, col, row2, col2, socdMode, delay, kcs) {
+async function setSocdHigherKey(row, col, row2, col2, mode, delay, kcs) {
   try {
+    // mode表示SOCD的工作模式：0=后覆盖，1=前优先，2=后优先，3=中性
     const params = {
       row,
       col,
       row2,
       col2,
-      mode: 'SOCD',
-      socdMode,
+      mode,
       delay,
       kcs
     };
@@ -537,25 +541,9 @@ async function setSocdHigherKey(row, col, row2, col2, socdMode, delay, kcs) {
 // 示例：设置位置为 (3, 6) 和 (3, 7) 的按键的SOCD配置
 // const exampleKcs = [16, 18];
 // const exampleDelay = 0;  // 0ms
-// const exampleSocdMode = 0;  // 后覆盖模式
-// setSocdHigherKey(3, 6, 3, 7, exampleSocdMode, exampleDelay, exampleKcs);
+// const exampleMode = 2;  // SOCD工作模式：2=后优先
+// setSocdHigherKey(3, 6, 3, 7, exampleMode, exampleDelay, exampleKcs);
 ```
-
-### 注意事项
-
-::: tip
-*   `row` 和 `col` 表示第一个按键的位置，`row2` 和 `col2` 表示第二个按键的位置。
-*   `mode` 必须设置为 'SOCD'。
-*   `kcs` 数组必须包含2个键值。
-*   `delay` 表示延迟时间，单位为ms。
-*   `socdMode` 表示SOCD的工作模式：
-    *   0: 后覆盖 - 后按下的按键会覆盖先按下的按键
-    *   1: 前优先 - 先按下的按键优先
-    *   2: 后优先 - 后按下的按键优先
-    *   3: 中性 - 两个按键都按下时都不生效
-*   返回的 `mode` 值固定为6，表示SOCD类型。
-*   返回值是一个数组，包含两个对象的配置信息，分别对应两个按键的设置。
-:::
 
 ## 设置RS高级键
 ServiceKeyboard.setHigherKeyRS()
