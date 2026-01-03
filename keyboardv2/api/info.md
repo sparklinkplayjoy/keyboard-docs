@@ -1202,4 +1202,129 @@ ServiceKeyboard.GFSRestore()
 
 **类型:** `Promise<void>`
 
-**描述:** 返回一个 `
+**描述:** 返回一个 `Promise`，操作成功完成时解析，无特定返回值。如果操作失败，`Promise` 会拒绝并返回一个错误。
+
+### 使用示例
+
+```js
+async function restoreFactorySettings() {
+  try {
+    console.log('正在尝试恢复出厂设置...');
+    await ServiceKeyboard.GFSRestore();
+    console.log('恢复出厂设置成功。');
+    // 此时设备可能已断开连接，需要重新扫描或等待设备重新连接
+  } catch (error) {
+    console.error('恢复出厂设置失败:', error);
+  }
+}
+
+// restoreFactorySettings();
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 恢复出厂设置会清除所有用户自定义的配置，请谨慎操作。
+:::
+
+## 获取系统类型
+
+ServiceKeyboard.getSystemType()
+
+**简要描述:**
+获取当前键盘设置的系统类型（Windows或Mac）。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<{ key: string, value: number }>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为包含系统类型信息的对象。
+* **解析对象结构:**
+
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `key`    | `string` | 系统类型名称，可能的值为 "WIN" 或 "MAC"。 | `"MAC"` |
+| `value`  | `number` | 系统类型对应的值，0 表示 Windows，1 表示 Mac。 | `1`     |
+
+---
+
+### 使用示例
+
+```js
+async function fetchSystemType() {
+  try {
+    const systemType = await ServiceKeyboard.getSystemType();
+    console.log('当前系统类型:', systemType);
+    // 示例输出: { "key": "MAC", "value": 1 }
+  } catch (error) {
+    console.error('获取系统类型失败:', error);
+  }
+}
+
+// fetchSystemType();
+```
+
+## 设置系统类型
+
+ServiceKeyboard.setSystemType(systemType)
+
+**简要描述:**
+设置键盘的系统类型（Windows或Mac）。
+
+---
+
+### 参数
+
+| 参数名称 | 类型     | 描述                     | 是否必需 | 默认值 |
+|----------|----------|--------------------------|----------|--------|
+| `systemType` | `string` | 要设置的系统类型，只能是 "WIN" 或 "MAC"。 | 是       | 无     |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<void>`
+* **描述:** 返回一个 `Promise`，操作成功完成时解析，无特定返回值。如果操作失败，`Promise` 会拒绝并返回一个错误。
+
+---
+
+### 使用示例
+
+```js
+async function setSystemType(systemType) {
+  try {
+    // systemType 只能是 "WIN" 或 "MAC"
+    await ServiceKeyboard.setSystemType(systemType);
+    console.log(`已成功设置系统类型为: ${systemType}`);
+  } catch (error) {
+    console.error('设置系统类型失败:', error);
+  }
+}
+
+// 设置为 Windows 系统
+// setSystemType("WIN");
+
+// 设置为 Mac 系统
+// setSystemType("MAC");
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 参数 `systemType` 只能是 "WIN" 或 "MAC"。
+* 切换系统类型后，键盘的某些功能可能会有所不同，例如按键映射、修饰键布局等。
+* 建议在设置系统类型后，验证键盘的功能是否正常工作。
+:::
