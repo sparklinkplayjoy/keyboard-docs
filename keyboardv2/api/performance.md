@@ -944,3 +944,132 @@ getAxisListData();
 * **轴体库的具体接口请联系我们获取。**
 * 导入轴体库前，请确保数据格式正确。
 :::
+
+---
+
+## 获取防自显开关状态
+
+ServiceKeyboard.getShakeOptimizationSwitch()
+
+**简要描述:**
+获取设备的防自显开关状态，用于控制键盘的震动优化功能。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<IShakeOptimizationResponse>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为包含防自显开关状态的响应对象。
+* **解析对象结构 (`IShakeOptimizationResponse`):**
+
+| 字段名称 | 类型     | 描述                     | 示例值  |
+|----------|----------|--------------------------|---------|
+| `enabled` | `boolean` | 防自显开关状态，true表示开启，false表示关闭。 | `false` |
+| `status` | `number` | 操作状态码，0表示成功。   | `0`     |
+
+**返回值示例:**
+
+```js
+{
+  "enabled": false,
+  "status": 0
+}
+```
+
+---
+
+### 使用示例
+
+```typescript
+async function getShakeOptimizationStatus() {
+  try {
+    const result = await ServiceKeyboard.getShakeOptimizationSwitch();
+    const { enabled, status } = result;
+    console.log('防自显开关状态:', enabled ? '开启' : '关闭');
+    console.log('操作状态码:', status);
+    return enabled;
+  } catch (error) {
+    console.error('获取防自显开关状态失败:', error);
+    return false;
+  }
+}
+
+// 获取防自显开关状态
+getShakeOptimizationStatus();
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 防自显功能用于优化键盘的震动响应，防止误触发。
+* 开关状态将影响键盘的整体震动性能。
+:::
+
+---
+
+## 设置防自显开关状态
+
+ServiceKeyboard.setShakeOptimizationSwitch()
+
+**简要描述:**
+设置设备的防自显开关状态，用于控制键盘的震动优化功能。
+
+---
+
+### 参数
+
+| 参数名称 | 类型     | 描述                                                                 | 是否必需 | 默认值 |
+|----------|----------|----------------------------------------------------------------------|----------|--------|
+| `enabled` | `number` | 防自显开关状态值，1表示开启，0表示关闭。                                | 是       | 无     |
+
+**参数说明:**
+* `1`: 开启防自显功能
+* `0`: 关闭防自显功能
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<void>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 在设置成功后解析，无返回值。
+
+---
+
+### 使用示例
+
+```typescript
+async function setShakeOptimizationStatus(enabled: boolean) {
+  try {
+    await ServiceKeyboard.setShakeOptimizationSwitch(enabled ? 1 : 0);
+    console.log('防自显开关状态已设置为:', enabled ? '开启' : '关闭');
+  } catch (error) {
+    console.error('设置防自显开关状态失败:', error);
+  }
+}
+
+// 示例：开启防自显功能
+setShakeOptimizationStatus(true);
+
+// 示例：关闭防自显功能
+setShakeOptimizationStatus(false);
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 防自显功能用于优化键盘的震动响应，防止误触发。
+* 设置后立即生效，无需额外操作。
+* 建议根据实际使用场景调整此设置以获得最佳体验。
+:::
