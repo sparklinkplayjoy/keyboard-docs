@@ -967,3 +967,137 @@ getSpecialLighting();
 主要用于读取空格键位置可控灯珠的数量。
 
 ::::
+
+---
+
+## 设置直驱灯光配置
+
+ServiceKeyboard.setLightingDirectDrive()
+
+**简要描述:**
+设置指定区域的直驱灯光配置，通过直接驱动方式控制灯光效果。
+
+---
+
+### 参数
+
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| `params` | `object` | 是 | 描述设置区域和直驱灯光配置的对象 |
+| `params.area` | `string` | 是 | 灯光区域，可选值：`Keyboard`, `Decorate1`, `Decorate2`, `Decorate3`, `Decorate4`, `Decorate5` |
+| `params.protocol` | `string` | 是 | 协议类型，固定为 `DirectDrive` |
+| `params.data` | `Array<Array<ICustomLightingInfo>>` | 是 | 灯光配置二维数组，大小应与尺寸参数匹配 |
+| `{ rows, cols }` | `object` | 否 | 灯光矩阵尺寸配置，默认值为 `{ rows: 6, cols: 21 }` |
+| `rows` | `number` | 否 | 灯光矩阵行数 |
+| `cols` | `number` | 否 | 灯光矩阵列数 |
+
+**灯光信息结构 (`ICustomLightingInfo`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `R` | `number` | 红色分量值 (0-255) | `255` |
+| `G` | `number` | 绿色分量值 (0-255) | `0` |
+| `B` | `number` | 蓝色分量值 (0-255) | `0` |
+| `isCustom` | `boolean` | 是否为自定义颜色 | `true` |
+
+**参数示例:**
+
+```js
+// 默认尺寸 (6×21)
+{
+  "area": "Keyboard",
+  "protocol": "DirectDrive",
+  "data": [
+    [
+      { "R": 255, "G": 0, "B": 0, "isCustom": true },
+      { "R": 0, "G": 255, "B": 0, "isCustom": true },
+      // ... 共21个元素
+    ],
+    // ... 共6行
+  ]
+}
+
+```
+
+---
+
+### 返回值
+
+此方法没有返回值。
+
+---
+
+### 使用示例
+
+```typescript
+async function setLightingDirectDrive() {
+  try {
+    // 创建6×21的灯光配置数组（使用默认尺寸）
+    const colorArray = Array(6).fill(0).map(() => 
+      Array(21).fill(0).map(() => ({
+        R: Math.floor(Math.random() * 256),
+        G: Math.floor(Math.random() * 256),
+        B: Math.floor(Math.random() * 256),
+        isCustom: true
+      }))
+    );
+    
+    // 设置直驱灯光配置（使用默认尺寸）
+    await ServiceKeyboard.setLightingDirectDrive({
+      area: "Keyboard",
+      protocol: "DirectDrive",
+      data: colorArray
+    });
+    
+    console.log('直驱灯光配置已设置（默认尺寸）');
+  } catch (error) {
+    console.error('设置直驱灯光配置失败:', error);
+  }
+}
+
+// 使用自定义尺寸
+async function setLightingDirectDriveWithCustomSize() {
+  try {
+    const rows = 3;
+    const cols = 10;
+    
+    // 创建自定义尺寸的灯光配置数组
+    const colorArray = Array(rows).fill(0).map(() => 
+      Array(cols).fill(0).map(() => ({
+        R: Math.floor(Math.random() * 256),
+        G: Math.floor(Math.random() * 256),
+        B: Math.floor(Math.random() * 256),
+        isCustom: true
+      }))
+    );
+    
+    // 设置直驱灯光配置（使用自定义尺寸）
+    await ServiceKeyboard.setLightingDirectDrive({
+      area: "Keyboard",
+      protocol: "DirectDrive",
+      data: colorArray
+    }, { rows, cols });
+    
+    console.log('直驱灯光配置已设置（自定义尺寸）');
+  } catch (error) {
+    console.error('设置直驱灯光配置失败:', error);
+  }
+}
+
+setLightingDirectDrive();
+setLightingDirectDriveWithCustomSize();
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 直驱灯光配置通过直接驱动方式控制灯光，可实现更精细的灯光效果。
+* `area` 参数支持的取值为：`Keyboard`, `Decorate1`, `Decorate2`, `Decorate3`, `Decorate4`, `Decorate5`。
+* `data` 参数必须是一个二维数组，其大小应与第二个参数中指定的 `rows` 和 `cols` 匹配。
+* 第二个参数为可选参数，默认值为 `{ rows: 6, cols: 21 }`。
+* 此接口适用于需要精确控制每个灯位颜色的场景。
+
+:::
