@@ -487,7 +487,7 @@ async function fetchRateOfReturnList() {
 ServiceKeyboard.getRateOfReturn()
 
 **简要描述:**
-获取设备当前使用的回报率索引。
+获取设备当前使用的回报率。
 
 ---
 
@@ -499,8 +499,16 @@ ServiceKeyboard.getRateOfReturn()
 
 ### 返回值
 
-* **总体类型:** `Promise<{ value: number }>`
-* **描述:** 返回当前回报率对应的索引。
+* **总体类型:** `Promise<{ key: string }>`
+* **描述:** 返回当前回报率的值，格式为 "R8KHz" 这样的字符串。
+
+**返回值示例:**
+
+```js
+{
+  "key": "R8KHz"
+}
+```
 
 ---
 
@@ -509,8 +517,8 @@ ServiceKeyboard.getRateOfReturn()
 ```js
 async function fetchCurrentRateOfReturn() {
   // 需协议版本 >= v1.0.7.0
-  const { value } = await ServiceKeyboard.getRateOfReturn();
-  return value;
+  const { key } = await ServiceKeyboard.getRateOfReturn();
+  return key;
 }
 ```
 
@@ -521,7 +529,7 @@ async function fetchCurrentRateOfReturn() {
 :::: tip
 
 * 需要设备协议版本至少为 `v1.0.7.0`。
-* 可结合 `getRateOfReturnList()` 将索引映射到实际显示名称。
+* 返回值格式为 "R8KHz" 这样的字符串，表示当前使用的回报率。
 ::::
 
 ## 设置回报率
@@ -537,7 +545,7 @@ ServiceKeyboard.setRateOfReturn(value)
 
 | 参数名称 | 类型     | 描述                                 | 是否必需 | 默认值 |
 |----------|----------|--------------------------------------|----------|--------|
-| `value`  | `string` | 目标回报率索引（来自列表的 value 字段）。 | 是       | 无     |
+| `value`  | `string` | 目标回报率值，格式为 "R8KHz" 这样的字符串。 | 是       | 无     |
 
 ---
 
@@ -556,7 +564,8 @@ async function updateRateOfReturn(value) {
   await ServiceKeyboard.setRateOfReturn(value);
 }
 
-updateRateOfReturn('R1KHz')
+// 示例：设置为 8KHz 回报率
+updateRateOfReturn('R8KHz')
 
 ```
 
@@ -567,6 +576,7 @@ updateRateOfReturn('R1KHz')
 :::: tip
 
 * 需要设备协议版本至少为 `v1.0.7.0`。
+* 参数格式为 "R8KHz" 这样的字符串，与 `getRateOfReturnList()` 返回的列表项格式一致。
 * 建议在设置后再次调用 `getRateOfReturn()` 校验结果，或根据需要刷新 UI。
 ::::
 
