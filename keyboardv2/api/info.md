@@ -620,6 +620,261 @@ async function fetchRtPrecision() {
 }
 ```
 
+## 获取设备功能规格
+
+ServiceKeyboard.getDeviceFunction()
+
+**简要描述:**
+获取设备的功能规格信息，包括连接模式等。协议版本 1.1.6.0 及以上可用。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<IDeviceFunction>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为包含设备功能规格信息的对象。
+* **解析对象结构 (`IDeviceFunction`):**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `connectionMode` | `object` | 连接模式信息 | - |
+| `connectionMode.usb3` | `boolean` | 是否为 USB 3.0 设备，true 表示支持 USB 3.0 | `true` |
+
+**返回值示例:**
+
+```js
+{
+  "connectionMode": {
+    "usb3": true
+  }
+}
+```
+
+---
+
+### 使用示例
+
+```js
+async function fetchDeviceFunction() {
+  // 需协议版本 >= v1.1.6.0
+  const functionInfo = await ServiceKeyboard.getDeviceFunction();
+  console.log('设备功能规格:', functionInfo);
+  
+  // 判断是否为 USB 3.0 设备
+  const isUSBDevice = functionInfo?.connectionMode && functionInfo?.connectionMode.usb3;
+  console.log('是否为 USB 3.0 设备:', isUSBDevice);
+  
+  return functionInfo;
+}
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 需要设备协议版本至少为 `v1.1.6.0`。
+* 当 `connectionMode.usb3` 为 `true` 时，表示该设备为 USB 3.0 设备，可以开启回报率 16k/32k 功能。
+* USB 3.0 设备相比 USB 2.0 设备支持更高的回报率，可实现更低的输入延迟。
+* 建议根据此接口的返回值判断是否显示高回报率选项（16k/32k）。
+
+:::
+
+## 获取USB模式状态
+
+ServiceKeyboard.getUSBModeStatus()
+
+**简要描述:**
+获取 USB 模式状态信息，包括当前模式和驱动状态。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<{ mode: number; driverStatus: number }>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为包含 USB 模式状态信息的对象。
+* **解析对象结构:**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `mode` | `number` | USB 运行态模式 | `2` |
+| `driverStatus` | `number` | 驱动状态，0 表示未安装 16/32K 驱动，1 表示已安装 16/32K 驱动 | `1` |
+
+**返回值示例:**
+
+```js
+{
+  "mode": 2,
+  "driverStatus": 1
+}
+```
+
+**mode 值说明:**
+
+| 值 | 描述 |
+|-----|------|
+| 0 | USB 2.0 |
+| 1 | USB 3.0 8K |
+| 2 | USB 3.0 16K |
+| 3 | USB 3.0 32K |
+
+---
+
+### 使用示例
+
+```js
+async function fetchUSBModeStatus() {
+  const res = await ServiceKeyboard.getUSBModeStatus();
+  console.log('USB模式状态:', res);
+  console.log('当前模式:', res.mode);
+  console.log('驱动状态:', res.driverStatus === 1 ? '已安装16/32K驱动' : '未安装16/32K驱动');
+  return res;
+}
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 此接口用于获取当前的 USB 模式状态和驱动安装状态。
+* `driverStatus` 表示是否已安装 16/32K 回报率所需的驱动。
+* 可结合 `getDeviceFunction()` 接口判断设备是否支持 USB 3.0。
+
+:::
+
+## 获取USB模式存储值
+
+ServiceKeyboard.getUSBModeStored()
+
+**简要描述:**
+获取 USB 模式存储值，即用户设置的 USB 模式。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<{ mode: number }>`
+* **描述:** 返回一个 `Promise`，该 `Promise` 解析为包含 USB 模式存储值的对象。
+* **解析对象结构:**
+
+| 字段名称 | 类型 | 描述 | 示例值 |
+|---------|------|------|--------|
+| `mode` | `number` | USB 模式存储值 | `2` |
+
+**返回值示例:**
+
+```js
+{
+  "mode": 2
+}
+```
+
+**mode 值说明:**
+
+| 值 | 描述 |
+|-----|------|
+| 0 | USB 2.0 |
+| 1 | USB 3.0 8K |
+| 2 | USB 3.0 16K |
+| 3 | USB 3.0 32K |
+
+---
+
+### 使用示例
+
+```js
+async function fetchUSBModeStored() {
+  const res = await ServiceKeyboard.getUSBModeStored();
+  console.log('USB模式存储值:', res.mode);
+  return res;
+}
+```
+
+---
+
+## 设置USB模式
+
+ServiceKeyboard.setUSBMode(mode)
+
+**简要描述:**
+设置 USB 模式，用于切换不同的 USB 回报率模式。
+
+---
+
+### 参数
+
+| 参数名称 | 类型 | 必填 | 描述 |
+|---------|------|------|------|
+| `mode` | `string` | 是 | USB 模式，支持的值：`USB2_0`, `USB3_0_8K`, `USB3_0_16K`, `USB3_0_32K` |
+
+**mode 值说明:**
+
+| 值 | 描述 |
+|-----|------|
+| `USB2_0` | USB 2.0 模式 |
+| `USB3_0_8K` | USB 3.0 8K 回报率模式 |
+| `USB3_0_16K` | USB 3.0 16K 回报率模式 |
+| `USB3_0_32K` | USB 3.0 32K 回报率模式 |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<void>`
+* **描述:** 设置成功解析为 `void`，失败时抛出错误。
+
+---
+
+### 使用示例
+
+```js
+async function updateUSBMode(mode) {
+  // 设置为 USB 3.0 16K 模式
+  await ServiceKeyboard.setUSBMode('USB3_0_16K');
+  console.log('已设置USB模式:', mode);
+}
+
+// 示例：设置为 USB 3.0 32K 回报率
+updateUSBMode('USB3_0_32K');
+
+// 示例：设置为 USB 2.0 模式
+updateUSBMode('USB2_0');
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 需要设备支持 USB 3.0 才能使用 16K/32K 回报率模式。
+* 16K/32K 回报率模式需要安装对应的驱动，可通过 `getUSBModeStatus()` 接口查询驱动状态。
+* 切换 USB 模式后，建议调用 `getUSBModeStored()` 验证设置是否成功。
+* 高回报率模式（16K/32K）可实现更低的输入延迟，适合游戏等对响应速度要求较高的场景。
+
+:::
+
 ## 获取系统睡眠时间（分钟）
 
 ServiceKeyboard.getLightingSleepTime()
