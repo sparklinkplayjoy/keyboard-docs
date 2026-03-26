@@ -663,7 +663,7 @@ ServiceKeyboard.getDeviceFunction()
 ```js
 async function fetchDeviceFunction() {
   // 需协议版本 >= v1.1.6.0
-  const functionInfo = await ServiceKeyboard.getDeviceFunction();
+  const functionInfo = await ServiceKeyboard.getDeviceFeature();
   console.log('设备功能规格:', functionInfo);
   
   // 判断是否为 USB 3.0 设备
