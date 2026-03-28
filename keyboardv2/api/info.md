@@ -569,6 +569,43 @@ updateRateOfReturn('R8KHz')
 
 ```
 
+**完整回报率设置流程示例:**
+
+当需要设置 16K 或 32K 回报率时，需要同时调用 `setRateOfReturn` 和 `setUSBMode`：
+
+```js
+async function setHighReportRate() {
+  // 设置为 16K 回报率
+  // 需要同时调用两个接口
+  await ServiceKeyboard.setRateOfReturn('R8KHz');
+  await ServiceKeyboard.setUSBMode('USB3_0_16K');
+  console.log('已设置为 16K 回报率');
+}
+
+async function setHighReportRate32K() {
+  // 设置为 32K 回报率
+  // 需要同时调用两个接口
+  await ServiceKeyboard.setRateOfReturn('R8KHz');
+  await ServiceKeyboard.setUSBMode('USB3_0_32K');
+  console.log('已设置为 32K 回报率');
+}
+```
+
+当需要设置其他回报率（1K/2K/4K/8K）时，需要同时调用 `setRateOfReturn` 和 `setUSBMode('USB2_0')`：
+
+```js
+async function setNormalReportRate(rateValue) {
+  // 设置为普通回报率（如 1K/2K/4K/8K）
+  // 需要同时调用两个接口
+  await ServiceKeyboard.setRateOfReturn(rateValue);
+  await ServiceKeyboard.setUSBMode('USB2_0');
+  console.log('已设置为普通回报率:', rateValue);
+}
+
+// 示例：设置为 8K 回报率
+setNormalReportRate('R8KHz');
+```
+
 ---
 
 ### 注意事项
@@ -578,6 +615,9 @@ updateRateOfReturn('R8KHz')
 * 需要设备协议版本至少为 `v1.0.7.0`。
 * 参数格式为 "R8KHz" 这样的字符串，与 `getRateOfReturnList()` 返回的列表项格式一致。
 * 建议在设置后再次调用 `getRateOfReturn()` 校验结果，或根据需要刷新 UI。
+* **重要**: 当设置回报率为 16K/32K 时，除了调用 `setRateOfReturn('R8KHz')` 外，还需要调用 `setUSBMode('USB3_0_16K')` 或 `setUSBMode('USB3_0_32K')`。
+* **重要**: 当设置其他回报率（如 1K/2K/4K/8K）时，除了调用 `setRateOfReturn()` 外，还需要调用 `setUSBMode('USB2_0')`。
+* 完整的回报率设置流程请参考下方"设置回报率"章节的完整示例。
 ::::
 
 ## 获取 RT 精度
@@ -704,21 +744,29 @@ ServiceKeyboard.getUSBModeStatus()
 
 ### 返回值
 
-* **总体类型:** `Promise<{ mode: number; driverStatus: number }>`
+* **总体类型:** `Promise<{ mode: number; driverStatus: number; vid: number; pid: number; bootVid: number; bootPid: number }>`
 * **描述:** 返回一个 `Promise`，该 `Promise` 解析为包含 USB 模式状态信息的对象。
 * **解析对象结构:**
 
 | 字段名称 | 类型 | 描述 | 示例值 |
 |---------|------|------|--------|
 | `mode` | `number` | USB 运行态模式 | `2` |
-| `driverStatus` | `number` | 驱动状态，0 表示未安装 16/32K 驱动，1 表示已安装 16/32K 驱动 | `1` |
+| `driverStatus` | `number` | 驱动状态，详见下表 | `3` |
+| `vid` | `number` | 当前 USB 厂商 ID（十六进制），用于获取轴体和固件接口 | `7331` |
+| `pid` | `number` | 当前 USB 产品 ID（十六进制），用于获取轴体和固件接口 | `2049` |
+| `bootVid` | `number` | Boot 模式 USB 厂商 ID（十六进制） | `7331` |
+| `bootPid` | `number` | Boot 模式 USB 产品 ID（十六进制） | `2048` |
 
 **返回值示例:**
 
 ```js
 {
   "mode": 2,
-  "driverStatus": 1
+  "driverStatus": 3,
+  "vid": 7331,
+  "pid": 2049,
+  "bootVid": 7331,
+  "bootPid": 2048
 }
 ```
 
@@ -731,6 +779,15 @@ ServiceKeyboard.getUSBModeStatus()
 | 2 | USB 3.0 16K |
 | 3 | USB 3.0 32K |
 
+**driverStatus 值说明:**
+
+| 值 | 描述 |
+|-----|------|
+| 0 | 未安装未枚举成功16/32K驱动 |
+| 1 | 枚举USB成功 |
+| 2 | USB 3.0 驱动枚举成功（已安装驱动） |
+| 3 | USB 3.0 驱动枚举成功（已安装驱动），建议用此值判断设备是否安装驱动成功 |
+
 ---
 
 ### 使用示例
@@ -740,7 +797,21 @@ async function fetchUSBModeStatus() {
   const res = await ServiceKeyboard.getUSBModeStatus();
   console.log('USB模式状态:', res);
   console.log('当前模式:', res.mode);
-  console.log('驱动状态:', res.driverStatus === 1 ? '已安装16/32K驱动' : '未安装16/32K驱动');
+  // 判断驱动安装状态
+  if (res.driverStatus === 3) {
+    console.log('驱动状态: 已安装USB 3.0驱动');
+  } else if (res.driverStatus === 2) {
+    console.log('驱动状态: USB 3.0 驱动枚举成功');
+  } else if (res.driverStatus === 1) {
+    console.log('驱动状态: 枚举USB成功');
+  } else {
+    console.log('驱动状态: 未安装未枚举成功16/32K驱动');
+  }
+  // 使用 vid 和 pid 用于获取轴体和固件接口
+  console.log('当前 VID:', res.vid);
+  console.log('当前 PID:', res.pid);
+  console.log('Boot VID:', res.bootVid);
+  console.log('Boot PID:', res.bootPid);
   return res;
 }
 ```
@@ -752,8 +823,11 @@ async function fetchUSBModeStatus() {
 ::: tip
 
 * 此接口用于获取当前的 USB 模式状态和驱动安装状态。
-* `driverStatus` 表示是否已安装 16/32K 回报率所需的驱动。
+* `driverStatus` 建议使用值 `3` 判断设备是否安装驱动成功。
 * 可结合 `getDeviceFunction()` 接口判断设备是否支持 USB 3.0。
+* 16K/32K 回报率模式需要安装对应的驱动才能正常工作。
+* `vid` 和 `pid` 用于获取轴体列表和固件升级接口，这些值在切换 USB 模式后可能会变化。
+* `bootVid` 和 `bootPid` 用于 Boot 模式下的固件升级接口。
 
 :::
 
@@ -862,6 +936,43 @@ updateUSBMode('USB3_0_32K');
 updateUSBMode('USB2_0');
 ```
 
+**完整回报率设置流程示例:**
+
+当需要设置 16K 或 32K 回报率时，需要同时调用 `setRateOfReturn` 和 `setUSBMode`：
+
+```js
+async function setHighReportRate16K() {
+  // 设置为 16K 回报率
+  // 需要同时调用两个接口
+  await ServiceKeyboard.setRateOfReturn('R8KHz');
+  await ServiceKeyboard.setUSBMode('USB3_0_16K');
+  console.log('已设置为 16K 回报率');
+}
+
+async function setHighReportRate32K() {
+  // 设置为 32K 回报率
+  // 需要同时调用两个接口
+  await ServiceKeyboard.setRateOfReturn('R8KHz');
+  await ServiceKeyboard.setUSBMode('USB3_0_32K');
+  console.log('已设置为 32K 回报率');
+}
+```
+
+当需要设置其他回报率（1K/2K/4K/8K）时，需要同时调用 `setRateOfReturn` 和 `setUSBMode('USB2_0')`：
+
+```js
+async function setNormalReportRate(rateValue) {
+  // 设置为普通回报率（如 1K/2K/4K/8K）
+  // 需要同时调用两个接口
+  await ServiceKeyboard.setRateOfReturn(rateValue);
+  await ServiceKeyboard.setUSBMode('USB2_0');
+  console.log('已设置为普通回报率:', rateValue);
+}
+
+// 示例：设置为 8K 回报率
+setNormalReportRate('R8KHz');
+```
+
 ---
 
 ### 注意事项
@@ -872,6 +983,59 @@ updateUSBMode('USB2_0');
 * 16K/32K 回报率模式需要安装对应的驱动，可通过 `getUSBModeStatus()` 接口查询驱动状态。
 * 切换 USB 模式后，建议调用 `getUSBModeStored()` 验证设置是否成功。
 * 高回报率模式（16K/32K）可实现更低的输入延迟，适合游戏等对响应速度要求较高的场景。
+* **重要**: 完整的回报率设置需要同时调用 `setRateOfReturn` 和 `setUSBMode` 两个接口。
+* 当设置 16K/32K 回报率时，`setRateOfReturn` 需要传入 `'R8KHz'`，然后 `setUSBMode` 设置为 `USB3_0_16K` 或 `USB3_0_32K`。
+* 当设置其他回报率（1K/2K/4K/8K）时，`setRateOfReturn` 传入对应的回报率值，然后 `setUSBMode` 设置为 `USB2_0`。
+
+:::
+
+## 高回报率重置
+
+ServiceKeyboard.highPollingRateReset()
+
+**简要描述:**
+在 16K/32K 高回报率模式下，用于恢复出厂设置时重置设备。此接口会重置 USB 模式到默认状态。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<void>`
+* **描述:** 操作成功解析为 `void`，失败时抛出错误。
+
+---
+
+### 使用示例
+
+```js
+async function resetHighPollingRate() {
+  try {
+    await ServiceKeyboard.highPollingRateReset();
+    console.log('高回报率重置成功');
+  } catch (error) {
+    console.error('高回报率重置失败:', error);
+  }
+}
+
+// 在 16K/32K 高回报率模式下恢复出厂设置时调用
+resetHighPollingRate();
+```
+
+---
+
+### 注意事项
+
+::: tip
+
+* 此接口主要用于 16K/32K 高回报率模式下恢复出厂设置时的设备重置。
+* 调用此接口后，USB 模式会被重置为默认状态。
+* 建议在恢复出厂设置流程中调用此接口，以确保设备状态正确。
 
 :::
 
