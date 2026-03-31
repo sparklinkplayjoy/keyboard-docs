@@ -537,7 +537,7 @@ async function fetchCurrentRateOfReturn() {
 ServiceKeyboard.setRateOfReturn(value)
 
 **简要描述:**
-设置设备回报率。
+设置 USB 2.0 设备的回报率。此接口仅适用于 USB 2.0 设备，无需配合 `setUSBMode` 使用。
 
 ---
 
@@ -560,65 +560,48 @@ ServiceKeyboard.setRateOfReturn(value)
 
 ```js
 async function updateRateOfReturn(value) {
-  // 需协议版本 >= v1.0.7.0
+  // 仅适用于 USB 2.0 设备
   await ServiceKeyboard.setRateOfReturn(value);
 }
 
 // 示例：设置为 8KHz 回报率
-updateRateOfReturn('R8KHz')
+updateRateOfReturn('R8KHz');
 
+// 示例：设置为 1KHz 回报率
+updateRateOfReturn('R1KHz');
 ```
 
 **完整回报率设置流程示例:**
 
-当需要设置 16K 或 32K 回报率时，需要同时调用 `setRateOfReturn` 和 `setUSBMode`：
+对于 USB 2.0 设备，只需要调用 `setRateOfReturn` 即可设置回报率：
 
 ```js
-async function setHighReportRate() {
-  // 设置为 16K 回报率
-  // 需要同时调用两个接口
-  await ServiceKeyboard.setRateOfReturn('R8KHz');
-  await ServiceKeyboard.setUSBMode('USB3_0_16K');
-  console.log('已设置为 16K 回报率');
-}
-
-async function setHighReportRate32K() {
-  // 设置为 32K 回报率
-  // 需要同时调用两个接口
-  await ServiceKeyboard.setRateOfReturn('R8KHz');
-  await ServiceKeyboard.setUSBMode('USB3_0_32K');
-  console.log('已设置为 32K 回报率');
-}
-```
-
-当需要设置其他回报率（1K/2K/4K/8K）时，需要同时调用 `setRateOfReturn` 和 `setUSBMode('USB2_0')`：
-
-```js
-async function setNormalReportRate(rateValue) {
-  // 设置为普通回报率（如 1K/2K/4K/8K）
-  // 需要同时调用两个接口
+async function setUSBDongleReportRate(rateValue) {
+  // USB 2.0 设备：只需调用 setRateOfReturn
   await ServiceKeyboard.setRateOfReturn(rateValue);
-  await ServiceKeyboard.setUSBMode('USB2_0');
-  console.log('已设置为普通回报率:', rateValue);
+  console.log('已设置为回报率:', rateValue);
 }
 
 // 示例：设置为 8K 回报率
-setNormalReportRate('R8KHz');
+setUSBDongleReportRate('R8KHz');
+
+// 示例：设置为 1K 回报率
+setUSBDongleReportRate('R1KHz');
 ```
 
 ---
 
 ### 注意事项
 
-:::: tip
+::: tip
 
+* **重要**: 此接口仅适用于 USB 2.0 设备。
+* USB 3.0 设备请使用 `setUSBMode` 接口设置回报率。
 * 需要设备协议版本至少为 `v1.0.7.0`。
 * 参数格式为 "R8KHz" 这样的字符串，与 `getRateOfReturnList()` 返回的列表项格式一致。
 * 建议在设置后再次调用 `getRateOfReturn()` 校验结果，或根据需要刷新 UI。
-* **重要**: 当设置回报率为 16K/32K 时，除了调用 `setRateOfReturn('R8KHz')` 外，还需要调用 `setUSBMode('USB3_0_16K')` 或 `setUSBMode('USB3_0_32K')`。
-* **重要**: 当设置其他回报率（如 1K/2K/4K/8K）时，除了调用 `setRateOfReturn()` 外，还需要调用 `setUSBMode('USB2_0')`。
-* 完整的回报率设置流程请参考下方"设置回报率"章节的完整示例。
-::::
+
+:::
 
 ## 获取 RT 精度
 
@@ -848,21 +831,35 @@ ServiceKeyboard.getUSBModeStored()
 
 ### 返回值
 
-* **总体类型:** `Promise<{ mode: number }>`
+* **总体类型:** `Promise<{ mode: number; pollingRate: string }>`
 * **描述:** 返回一个 `Promise`，该 `Promise` 解析为包含 USB 模式存储值的对象。
 * **解析对象结构:**
 
 | 字段名称 | 类型 | 描述 | 示例值 |
 |---------|------|------|--------|
 | `mode` | `number` | USB 模式存储值 | `2` |
+| `pollingRate` | `string` | 当前回报率 | `"R8KHz"` |
 
 **返回值示例:**
 
 ```js
 {
-  "mode": 2
+  "mode": 2,
+  "pollingRate": "R8KHz"
 }
 ```
+
+**pollingRate 值说明:**
+
+| 值 | 描述 |
+|-----|------|
+| `R8KHz` | 8K 回报率 |
+| `R4KHz` | 4K 回报率 |
+| `R2KHz` | 2K 回报率 |
+| `R1KHz` | 1K 回报率 |
+| `R500Hz` | 500Hz 回报率 |
+| `R250Hz` | 250Hz 回报率 |
+| `R125Hz` | 125Hz 回报率 |
 
 **mode 值说明:**
 
@@ -889,7 +886,7 @@ async function fetchUSBModeStored() {
 
 ## 设置USB模式
 
-ServiceKeyboard.setUSBMode(mode)
+ServiceKeyboard.setUSBMode(mode, pollingRate?)
 
 **简要描述:**
 设置 USB 模式，用于切换不同的 USB 回报率模式。
@@ -901,6 +898,7 @@ ServiceKeyboard.setUSBMode(mode)
 | 参数名称 | 类型 | 必填 | 描述 |
 |---------|------|------|------|
 | `mode` | `string` | 是 | USB 模式，支持的值：`USB2_0`, `USB3_0_8K`, `USB3_0_16K`, `USB3_0_32K` |
+| `pollingRate` | `string` | 否 | 回报率，仅在 USB 2.0 模式下使用。支持的值为：`R8KHz`, `R4KHz`, `R2KHz`, `R1KHz`, `R500Hz`, `R250Hz`, `R125Hz` |
 
 **mode 值说明:**
 
@@ -910,6 +908,18 @@ ServiceKeyboard.setUSBMode(mode)
 | `USB3_0_8K` | USB 3.0 8K 回报率模式 |
 | `USB3_0_16K` | USB 3.0 16K 回报率模式 |
 | `USB3_0_32K` | USB 3.0 32K 回报率模式 |
+
+**pollingRate 值说明:**
+
+| 值 | 描述 |
+|-----|------|
+| `R8KHz` | 8K 回报率 |
+| `R4KHz` | 4K 回报率 |
+| `R2KHz` | 2K 回报率 |
+| `R1KHz` | 1K 回报率 |
+| `R500Hz` | 500Hz 回报率 |
+| `R250Hz` | 250Hz 回报率 |
+| `R125Hz` | 125Hz 回报率 |
 
 ---
 
@@ -923,54 +933,53 @@ ServiceKeyboard.setUSBMode(mode)
 ### 使用示例
 
 ```js
-async function updateUSBMode(mode) {
-  // 设置为 USB 3.0 16K 模式
-  await ServiceKeyboard.setUSBMode('USB3_0_16K');
+async function updateUSBMode(mode, pollingRate) {
+  // 设置 USB 模式
+  await ServiceKeyboard.setUSBMode(mode, pollingRate);
   console.log('已设置USB模式:', mode);
 }
 
-// 示例：设置为 USB 3.0 32K 回报率
+// 示例：USB 3.0 设备设置为 16K 回报率（无需调用 setRateOfReturn）
+updateUSBMode('USB3_0_16K');
+
+// 示例：USB 3.0 设备设置为 32K 回报率（无需调用 setRateOfReturn）
 updateUSBMode('USB3_0_32K');
 
-// 示例：设置为 USB 2.0 模式
-updateUSBMode('USB2_0');
+// 示例：USB 2.0 设备设置为 1K 回报率（需要传入 pollingRate 参数，无需调用 setRateOfReturn）
+updateUSBMode('USB2_0', 'R1KHz');
+
+// 示例：USB 2.0 设备设置为 8K 回报率（需要传入 pollingRate 参数，无需调用 setRateOfReturn）
+updateUSBMode('USB2_0', 'R8KHz');
 ```
 
-**完整回报率设置流程示例:**
+**USB 3.0 设备回报率设置示例:**
 
-当需要设置 16K 或 32K 回报率时，需要同时调用 `setRateOfReturn` 和 `setUSBMode`：
+对于 USB 3.0 设备，只需要调用 `setUSBMode` 即可设置回报率，无需调用 `setRateOfReturn`：
 
 ```js
-async function setHighReportRate16K() {
-  // 设置为 16K 回报率
-  // 需要同时调用两个接口
-  await ServiceKeyboard.setRateOfReturn('R8KHz');
+async function setUSB3ReportRate() {
+  // USB 3.0 设备：只需调用 setUSBMode
   await ServiceKeyboard.setUSBMode('USB3_0_16K');
-  console.log('已设置为 16K 回报率');
-}
-
-async function setHighReportRate32K() {
-  // 设置为 32K 回报率
-  // 需要同时调用两个接口
-  await ServiceKeyboard.setRateOfReturn('R8KHz');
-  await ServiceKeyboard.setUSBMode('USB3_0_32K');
-  console.log('已设置为 32K 回报率');
+  console.log('已设置为 USB 3.0 16K 回报率');
 }
 ```
 
-当需要设置其他回报率（1K/2K/4K/8K）时，需要同时调用 `setRateOfReturn` 和 `setUSBMode('USB2_0')`：
+**USB 2.0 设备回报率设置示例:**
+
+对于 USB 2.0 设备，需要调用 `setUSBMode` 并传入 `pollingRate` 参数，无需调用 `setRateOfReturn`：
 
 ```js
-async function setNormalReportRate(rateValue) {
-  // 设置为普通回报率（如 1K/2K/4K/8K）
-  // 需要同时调用两个接口
-  await ServiceKeyboard.setRateOfReturn(rateValue);
-  await ServiceKeyboard.setUSBMode('USB2_0');
-  console.log('已设置为普通回报率:', rateValue);
+async function setUSB2ReportRate(rateValue) {
+  // USB 2.0 设备：调用 setUSBMode 并传入 pollingRate
+  await ServiceKeyboard.setUSBMode('USB2_0', rateValue);
+  console.log('已设置为 USB 2.0 回报率:', rateValue);
 }
 
 // 示例：设置为 8K 回报率
-setNormalReportRate('R8KHz');
+setUSB2ReportRate('R8KHz');
+
+// 示例：设置为 1K 回报率
+setUSB2ReportRate('R1KHz');
 ```
 
 ---
@@ -979,13 +988,11 @@ setNormalReportRate('R8KHz');
 
 ::: tip
 
-* 需要设备支持 USB 3.0 才能使用 16K/32K 回报率模式。
-* 16K/32K 回报率模式需要安装对应的驱动，可通过 `getUSBModeStatus()` 接口查询驱动状态。
+* **USB 3.0 设备**: 只需要调用 `setUSBMode` 设置模式即可，无需调用 `setRateOfReturn`。
+* **USB 2.0 设备**: 只需要调用 `setUSBMode` 并传入 `pollingRate` 参数，无需调用 `setRateOfReturn`。
+* 16K/32K 回报率模式需要设备支持 USB 3.0，可通过 `getUSBModeStatus()` 接口查询驱动状态。
 * 切换 USB 模式后，建议调用 `getUSBModeStored()` 验证设置是否成功。
 * 高回报率模式（16K/32K）可实现更低的输入延迟，适合游戏等对响应速度要求较高的场景。
-* **重要**: 完整的回报率设置需要同时调用 `setRateOfReturn` 和 `setUSBMode` 两个接口。
-* 当设置 16K/32K 回报率时，`setRateOfReturn` 需要传入 `'R8KHz'`，然后 `setUSBMode` 设置为 `USB3_0_16K` 或 `USB3_0_32K`。
-* 当设置其他回报率（1K/2K/4K/8K）时，`setRateOfReturn` 传入对应的回报率值，然后 `setUSBMode` 设置为 `USB2_0`。
 
 :::
 
