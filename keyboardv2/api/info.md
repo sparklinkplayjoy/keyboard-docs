@@ -704,9 +704,9 @@ async function fetchDeviceFunction() {
 ::: tip
 
 * 需要设备协议版本至少为 `v1.1.6.0`。
-* 当 `connectionMode.usb3` 为 `true` 时，表示该设备为 USB 3.0 设备，可以开启回报率 16k/32k 功能。
+* 当 `connectionMode.usb3` 为 `true` 时，表示该设备为 USB 3.0 设备，可以开启 USB 3.0 高回报率模式。
 * USB 3.0 设备相比 USB 2.0 设备支持更高的回报率，可实现更低的输入延迟。
-* 建议根据此接口的返回值判断是否显示高回报率选项（16k/32k）。
+* 建议根据此接口的返回值判断是否显示 USB 3.0 模式选项。
 
 :::
 
@@ -733,7 +733,7 @@ ServiceKeyboard.getUSBModeStatus()
 
 | 字段名称 | 类型 | 描述 | 示例值 |
 |---------|------|------|--------|
-| `mode` | `number` | USB 运行态模式 | `2` |
+| `mode` | `number` | USB 运行态模式 | `1` |
 | `driverStatus` | `number` | 驱动状态，详见下表 | `3` |
 | `vid` | `number` | 当前 USB 厂商 ID（十六进制），用于获取轴体和固件接口 | `7331` |
 | `pid` | `number` | 当前 USB 产品 ID（十六进制），用于获取轴体和固件接口 | `2049` |
@@ -744,7 +744,7 @@ ServiceKeyboard.getUSBModeStatus()
 
 ```js
 {
-  "mode": 2,
+  "mode": 1,
   "driverStatus": 3,
   "vid": 7331,
   "pid": 2049,
@@ -757,16 +757,14 @@ ServiceKeyboard.getUSBModeStatus()
 
 | 值 | 描述 |
 |-----|------|
-| 0 | USB 2.0 |
-| 1 | USB 3.0 8K |
-| 2 | USB 3.0 16K |
-| 3 | USB 3.0 32K |
+| 0 | USB 2.0 模式 |
+| 1 | USB 3.0 模式 |
 
 **driverStatus 值说明:**
 
 | 值 | 描述 |
 |-----|------|
-| 0 | 未安装未枚举成功16/32K驱动 |
+| 0 | 未安装未枚举成功 USB 3.0 驱动 |
 | 1 | 枚举USB成功 |
 | 2 | USB 3.0 驱动枚举成功（已安装驱动） |
 | 3 | USB 3.0 驱动枚举成功（已安装驱动），建议用此值判断设备是否安装驱动成功 |
@@ -788,7 +786,7 @@ async function fetchUSBModeStatus() {
   } else if (res.driverStatus === 1) {
     console.log('驱动状态: 枚举USB成功');
   } else {
-    console.log('驱动状态: 未安装未枚举成功16/32K驱动');
+    console.log('驱动状态: 未安装未枚举成功 USB 3.0 驱动');
   }
   // 使用 vid 和 pid 用于获取轴体和固件接口
   console.log('当前 VID:', res.vid);
@@ -808,7 +806,7 @@ async function fetchUSBModeStatus() {
 * 此接口用于获取当前的 USB 模式状态和驱动安装状态。
 * `driverStatus` 建议使用值 `3` 判断设备是否安装驱动成功。
 * 可结合 `getDeviceFunction()` 接口判断设备是否支持 USB 3.0。
-* 16K/32K 回报率模式需要安装对应的驱动才能正常工作。
+* USB 3.0 模式需要安装对应的驱动才能正常工作。
 * `vid` 和 `pid` 用于获取轴体列表和固件升级接口，这些值在切换 USB 模式后可能会变化。
 * `bootVid` 和 `bootPid` 用于 Boot 模式下的固件升级接口。
 
@@ -878,6 +876,7 @@ ServiceKeyboard.getUSBModeStored()
 async function fetchUSBModeStored() {
   const res = await ServiceKeyboard.getUSBModeStored();
   console.log('USB模式存储值:', res.mode);
+  console.log('当前回报率:', res.pollingRate);
   return res;
 }
 ```
@@ -898,7 +897,7 @@ ServiceKeyboard.setUSBMode(mode, pollingRate?)
 | 参数名称 | 类型 | 必填 | 描述 |
 |---------|------|------|------|
 | `mode` | `string` | 是 | USB 模式，支持的值：`USB2_0`, `USB3_0_8K`, `USB3_0_16K`, `USB3_0_32K` |
-| `pollingRate` | `string` | 否 | 回报率，仅在 USB 2.0 模式下使用。支持的值为：`R8KHz`, `R4KHz`, `R2KHz`, `R1KHz`, `R500Hz`, `R250Hz`, `R125Hz` |
+| `pollingRate` | `string` | 否 | 回报率，支持的值为：`R8KHz`, `R4KHz`, `R2KHz`, `R1KHz`, `R500Hz`, `R250Hz`, `R125Hz` |
 
 **mode 值说明:**
 
@@ -954,13 +953,19 @@ updateUSBMode('USB2_0', 'R8KHz');
 
 **USB 3.0 设备回报率设置示例:**
 
-对于 USB 3.0 设备，只需要调用 `setUSBMode` 即可设置回报率，无需调用 `setRateOfReturn`：
+对于 USB 3.0 设备，只需要调用 `setUSBMode` 设置对应的 USB 3.0 模式即可，无需调用 `setRateOfReturn`：
 
 ```js
-async function setUSB3ReportRate() {
-  // USB 3.0 设备：只需调用 setUSBMode
+async function setUSB3ReportRate16K() {
+  // USB 3.0 设备：设置为 16K 回报率
   await ServiceKeyboard.setUSBMode('USB3_0_16K');
   console.log('已设置为 USB 3.0 16K 回报率');
+}
+
+async function setUSB3ReportRate32K() {
+  // USB 3.0 设备：设置为 32K 回报率
+  await ServiceKeyboard.setUSBMode('USB3_0_32K');
+  console.log('已设置为 USB 3.0 32K 回报率');
 }
 ```
 
@@ -988,11 +993,11 @@ setUSB2ReportRate('R1KHz');
 
 ::: tip
 
-* **USB 3.0 设备**: 只需要调用 `setUSBMode` 设置模式即可，无需调用 `setRateOfReturn`。
-* **USB 2.0 设备**: 只需要调用 `setUSBMode` 并传入 `pollingRate` 参数，无需调用 `setRateOfReturn`。
-* 16K/32K 回报率模式需要设备支持 USB 3.0，可通过 `getUSBModeStatus()` 接口查询驱动状态。
+* **USB 3.0 设备**: 只需要调用 `setUSBMode` 设置对应的 USB 3.0 模式（如 `USB3_0_16K`、`USB3_0_32K`）即可，无需调用 `setRateOfReturn`。
+* **USB 2.0 设备**: 只需要调用 `setUSBMode('USB2_0', pollingRate)` 并传入 `pollingRate` 参数，无需调用 `setRateOfReturn`。
+* USB 3.0 高回报率模式需要设备支持 USB 3.0，可通过 `getUSBModeStatus()` 接口查询驱动状态。
 * 切换 USB 模式后，建议调用 `getUSBModeStored()` 验证设置是否成功。
-* 高回报率模式（16K/32K）可实现更低的输入延迟，适合游戏等对响应速度要求较高的场景。
+* USB 3.0 高回报率模式（16K/32K）可实现更低的输入延迟，适合游戏等对响应速度要求较高的场景。
 
 :::
 
@@ -1001,7 +1006,7 @@ setUSB2ReportRate('R1KHz');
 ServiceKeyboard.highPollingRateReset()
 
 **简要描述:**
-在 16K/32K 高回报率模式下，用于恢复出厂设置时重置设备。此接口会重置 USB 模式到默认状态。
+在 USB 3.0 高回报率模式下，用于恢复出厂设置时重置设备。此接口会重置 USB 模式到默认状态。
 
 ---
 
@@ -1030,7 +1035,7 @@ async function resetHighPollingRate() {
   }
 }
 
-// 在 16K/32K 高回报率模式下恢复出厂设置时调用
+// 在 USB 3.0 高回报率模式下恢复出厂设置时调用
 resetHighPollingRate();
 ```
 
@@ -1040,7 +1045,7 @@ resetHighPollingRate();
 
 ::: tip
 
-* 此接口主要用于 16K/32K 高回报率模式下恢复出厂设置时的设备重置。
+* 此接口主要用于 USB 3.0 高回报率模式下恢复出厂设置时的设备重置。
 * 调用此接口后，USB 模式会被重置为默认状态。
 * 建议在恢复出厂设置流程中调用此接口，以确保设备状态正确。
 
