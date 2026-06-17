@@ -1,4 +1,4 @@
-﻿export default {
+export default {
   '/keyboard/': [
     {
       text: '键盘sdk',
