@@ -4,15 +4,26 @@
 
 模块作用：读取设备识别信息、协议版本和设备能力。调用入口为 `client.device`。
 
-## `client.device.getProtocolVersion()`
+## 读取当前设备协议版本
 
-作用：读取当前设备协议版本。
+client.device.getProtocolVersion()
 
-传参：无。
+**简要描述:**
+读取当前设备协议版本。
 
-返回值：`Promise<ProtocolVersion>`。
+---
 
-返回字段：
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<ProtocolVersion>`
+
+**返回字段:**
 
 | 字段              | 类型     | 说明                                  |
 | ----------------- | -------- | ------------------------------------- |
@@ -22,28 +33,43 @@
 | `softwareVersion` | `number` | 软件版本。                            |
 | `protocolVersion` | `string` | 拼接后的版本字符串，例如 `V1.0.0.1`。 |
 
-调用方式：
+---
+
+### 使用示例
+
+**调用方式:**
 
 ```ts
 const version = await client.device.getProtocolVersion();
 ```
 
-调用示例：
+**调用示例:**
 
 ```ts
 const version = await client.device.getProtocolVersion();
 console.log(version.protocolVersion);
 ```
 
-## `client.device.getDevicesInfo()`
+## 读取设备基础信息
 
-作用：读取设备基础信息。
+client.device.getDevicesInfo()
 
-传参：无。
+**简要描述:**
+读取设备基础信息。
 
-返回值：`Promise<DeviceInfo>`。
+---
 
-返回字段：
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<DeviceInfo>`
+
+**返回字段:**
 
 | 字段         | 类型     | 说明                            |
 | ------------ | -------- | ------------------------------- |
@@ -55,28 +81,43 @@ console.log(version.protocolVersion);
 | `sn`         | `string` | 序列号。                        |
 | `timestamp`  | `string` | 时间戳字符串。                  |
 
-调用方式：
+---
+
+### 使用示例
+
+**调用方式:**
 
 ```ts
 const info = await client.device.getDevicesInfo();
 ```
 
-调用示例：
+**调用示例:**
 
 ```ts
 const info = await client.device.getDevicesInfo();
 console.log(info.boardId, info.appVersion, info.runMode);
 ```
 
-## `client.device.getDeviceAbility()`
+## 读取设备能力信息
 
-作用：读取设备能力信息。
+client.device.getDeviceAbility()
 
-传参：无。
+**简要描述:**
+读取设备能力信息。
 
-返回值：`Promise<DeviceAbility>`。
+---
 
-返回字段：
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<DeviceAbility>`
+
+**返回字段:**
 
 | 字段                | 类型     | 说明                            |
 | ------------------- | -------- | ------------------------------- |
@@ -85,13 +126,17 @@ console.log(info.boardId, info.appVersion, info.runMode);
 | `baseFunctions`     | `number` | 基础功能位。                    |
 | `extendedFunctions` | `string` | 扩展功能描述。                  |
 
-调用方式：
+---
+
+### 使用示例
+
+**调用方式:**
 
 ```ts
 const ability = await client.device.getDeviceAbility();
 ```
 
-调用示例：
+**调用示例:**
 
 ```ts
 const ability = await client.device.getDeviceAbility();

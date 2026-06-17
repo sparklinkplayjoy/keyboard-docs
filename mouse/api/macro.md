@@ -4,13 +4,18 @@
 
 模块作用：读取和写入宏模式、宏动作数据。调用入口为 `client.macro`。
 
-## `client.macro.getMacroMode(param)`
+## 读取指定宏的模式配置
 
-作用：读取指定宏的模式配置。
+client.macro.getMacroMode(param)
 
-传参：
+**简要描述:**
+读取指定宏的模式配置。
 
-| 参数            | 类型      | 必填 | 说明           |
+---
+
+### 参数
+
+| 参数            | 类型      | 是否必需 | 说明           |
 | --------------- | --------- | ---- | -------------- |
 | `param.macroId` | `number`  | 是   | 宏 ID。        |
 | `param.mode`    | `number`  | 否   | 读取时不需要。 |
@@ -18,9 +23,13 @@
 | `param.repNum`  | `number`  | 否   | 读取时不需要。 |
 | `param.valid`   | `boolean` | 否   | 读取时不需要。 |
 
-返回值：`Promise<IMacroMode>`。
+---
 
-返回字段：
+### 返回值
+
+* **总体类型:** `Promise<IMacroMode>`
+
+**返回字段:**
 
 | 字段      | 类型      | 说明         |
 | --------- | --------- | ------------ |
@@ -30,13 +39,17 @@
 | `repNum`  | `number`  | 重复次数。   |
 | `mode`    | `number`  | 宏模式。     |
 
-调用方式：
+---
+
+### 使用示例
+
+**调用方式:**
 
 ```ts
 const mode = await client.macro.getMacroMode({ macroId });
 ```
 
-调用示例：
+**调用示例:**
 
 ```ts
 const mode = await client.macro.getMacroMode({
@@ -45,13 +58,18 @@ const mode = await client.macro.getMacroMode({
 console.log(mode.valid, mode.actNum, mode.repNum);
 ```
 
-## `client.macro.setMacroMode(param)`
+## 写入指定宏的模式配置
 
-作用：写入指定宏的模式配置。
+client.macro.setMacroMode(param)
 
-传参：
+**简要描述:**
+写入指定宏的模式配置。
 
-| 参数            | 类型      | 必填 | 说明         |
+---
+
+### 参数
+
+| 参数            | 类型      | 是否必需 | 说明         |
 | --------------- | --------- | ---- | ------------ |
 | `param.macroId` | `number`  | 是   | 宏 ID。      |
 | `param.valid`   | `boolean` | 是   | 宏是否有效。 |
@@ -59,15 +77,24 @@ console.log(mode.valid, mode.actNum, mode.repNum);
 | `param.repNum`  | `number`  | 是   | 重复次数。   |
 | `param.mode`    | `number`  | 是   | 宏模式。     |
 
-返回值：`Promise<IMacroMode>`，返回设备确认后的宏模式配置。
+---
 
-调用方式：
+### 返回值
+
+* **总体类型:** `Promise<IMacroMode>`
+* **描述:** 返回设备确认后的宏模式配置。
+
+---
+
+### 使用示例
+
+**调用方式:**
 
 ```ts
 const result = await client.macro.setMacroMode(param);
 ```
 
-调用示例：
+**调用示例:**
 
 ```ts
 await client.macro.setMacroMode({
@@ -79,21 +106,30 @@ await client.macro.setMacroMode({
 });
 ```
 
-## `client.macro.getMacroData(param)`
+## 读取指定宏从某个偏移开始的动作数据
 
-作用：读取指定宏从某个偏移开始的动作数据。
+client.macro.getMacroData(param)
 
-传参：
+**简要描述:**
+读取指定宏从某个偏移开始的动作数据。
 
-| 参数            | 类型            | 必填 | 说明           |
+---
+
+### 参数
+
+| 参数            | 类型            | 是否必需 | 说明           |
 | --------------- | --------------- | ---- | -------------- |
 | `param.macroId` | `number`        | 是   | 宏 ID。        |
 | `param.offset`  | `number`        | 是   | 读取偏移。     |
 | `param.actions` | `MacroAction[]` | 否   | 读取时不需要。 |
 
-返回值：`Promise<IMacroData>`。
+---
 
-返回字段：
+### 返回值
+
+* **总体类型:** `Promise<IMacroData>`
+
+**返回字段:**
 
 | 字段      | 类型            | 说明       |
 | --------- | --------------- | ---------- |
@@ -109,13 +145,17 @@ await client.macro.setMacroMode({
 | `delay`   | `number` | 延迟，最大值为 `0x7fff`。    |
 | `keyCode` | `number` | keycode，最大值为 `0xffff`。 |
 
-调用方式：
+---
+
+### 使用示例
+
+**调用方式:**
 
 ```ts
 const data = await client.macro.getMacroData({ macroId, offset });
 ```
 
-调用示例：
+**调用示例:**
 
 ```ts
 const data = await client.macro.getMacroData({
@@ -125,27 +165,41 @@ const data = await client.macro.getMacroData({
 console.log(data.actions);
 ```
 
-## `client.macro.setMacroData(param)`
+## 写入指定宏从某个偏移开始的动作数据
 
-作用：写入指定宏从某个偏移开始的动作数据。
+client.macro.setMacroData(param)
 
-传参：
+**简要描述:**
+写入指定宏从某个偏移开始的动作数据。
 
-| 参数            | 类型            | 必填 | 说明                                |
+---
+
+### 参数
+
+| 参数            | 类型            | 是否必需 | 说明                                |
 | --------------- | --------------- | ---- | ----------------------------------- |
 | `param.macroId` | `number`        | 是   | 宏 ID。                             |
 | `param.offset`  | `number`        | 是   | 写入偏移。                          |
 | `param.actions` | `MacroAction[]` | 是   | 动作列表。每个动作会编码为 4 字节。 |
 
-返回值：`Promise<IMacroData>`，返回设备确认后的宏动作数据。
+---
 
-调用方式：
+### 返回值
+
+* **总体类型:** `Promise<IMacroData>`
+* **描述:** 返回设备确认后的宏动作数据。
+
+---
+
+### 使用示例
+
+**调用方式:**
 
 ```ts
 const result = await client.macro.setMacroData(param);
 ```
 
-调用示例：
+**调用示例:**
 
 ```ts
 await client.macro.setMacroData({

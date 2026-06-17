@@ -4,15 +4,26 @@
 
 模块作用：读取和写入鼠标按键映射。调用入口为 `client.keyRemapping`。
 
-## `client.keyRemapping.queryButtons()`
+## 读取当前按键映射
 
-作用：读取当前按键映射。
+client.keyRemapping.queryButtons()
 
-传参：无。
+**简要描述:**
+读取当前按键映射。
 
-返回值：`Promise<KeyRemappingResult>`。
+---
 
-返回字段：
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<KeyRemappingResult>`
+
+**返回字段:**
 
 | 字段             | 类型     | 说明                   |
 | ---------------- | -------- | ---------------------- |
@@ -25,26 +36,35 @@
 | `scrollBackward` | `number` | 滚轮后向映射 keycode。 |
 | `diyKey`         | `number` | 自定义键映射 keycode。 |
 
-调用方式：
+---
+
+### 使用示例
+
+**调用方式:**
 
 ```ts
 const buttons = await client.keyRemapping.queryButtons();
 ```
 
-调用示例：
+**调用示例:**
 
 ```ts
 const buttons = await client.keyRemapping.queryButtons();
 console.log(buttons.leftKey, buttons.rightKey);
 ```
 
-## `client.keyRemapping.setButtons(param)`
+## 写入鼠标按键映射
 
-作用：写入鼠标按键映射。
+client.keyRemapping.setButtons(param)
 
-传参：
+**简要描述:**
+写入鼠标按键映射。
 
-| 参数                   | 类型     | 必填 | 说明                   |
+---
+
+### 参数
+
+| 参数                   | 类型     | 是否必需 | 说明                   |
 | ---------------------- | -------- | ---- | ---------------------- |
 | `param.leftKey`        | `number` | 是   | 左键映射 keycode。     |
 | `param.rightKey`       | `number` | 是   | 右键映射 keycode。     |
@@ -55,15 +75,24 @@ console.log(buttons.leftKey, buttons.rightKey);
 | `param.scrollBackward` | `number` | 是   | 滚轮后向映射 keycode。 |
 | `param.diyKey`         | `number` | 是   | 自定义键映射 keycode。 |
 
-返回值：`Promise<KeyRemappingResult>`，返回设备确认后的按键映射。
+---
 
-调用方式：
+### 返回值
+
+* **总体类型:** `Promise<KeyRemappingResult>`
+* **描述:** 返回设备确认后的按键映射。
+
+---
+
+### 使用示例
+
+**调用方式:**
 
 ```ts
 const result = await client.keyRemapping.setButtons(param);
 ```
 
-调用示例：
+**调用示例:**
 
 ```ts
 const buttons = await client.keyRemapping.queryButtons();

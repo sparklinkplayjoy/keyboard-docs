@@ -969,6 +969,20 @@ export const keyboardMap = {
     hex16: '0x1815',
     typeof: 'system',
   },
+  6173: {
+    name: '撤销',
+    type: '系统',
+    comm: '撤销',
+    hex16: '0x181d',
+    typeof: 'system',
+  },
+  6169: {
+    name: '粘贴',
+    type: '系统',
+    comm: '粘贴',
+    hex16: '0x1819',
+    typeof: 'system',
+  },
   17460: {
     name: 'MCON',
     type: '系统',
@@ -2061,6 +2075,7 @@ export const keyboardMap = {
     hex16: '0xCC01',
     typeof: 'game',
   },
+  // Z  GP_ZFR 顺时针，GP_ZRR 逆时针
 };
 
 ```
