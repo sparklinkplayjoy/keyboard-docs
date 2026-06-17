@@ -1,4 +1,4 @@
-export default {
+﻿export default {
   '/keyboard/': [
     {
       text: '键盘sdk',
@@ -41,6 +41,29 @@ export default {
           ],
         },
         { text: '键值表', link: '/keyboardv2/keyboard' },
+      ],
+    },
+  ],
+  '/mouse/': [
+    {
+      text: '鼠标sdk',
+      items: [
+        { text: '开始', link: '/mouse/' },
+        {
+          text: 'API',
+          link: '/mouse/api/info',
+          items: [
+            { text: '基础的设备信息', link: '/mouse/api/info' },
+            { text: '全局设置', link: '/mouse/api/globalSetting' },
+            { text: '性能', link: '/mouse/api/performance' },
+            { text: '按键映射', link: '/mouse/api/key' },
+            { text: '宏', link: '/mouse/api/macro' },
+            { text: '固件升级', link: '/mouse/api/upload' },
+            // { text: '运行时与协议内部模块', link: '/mouse/api/runtime' },
+            // { text: '工具模块', link: '/mouse/api/utils' },
+          ],
+        },
+        { text: '键值表', link: '/mouse/keyboard' },
       ],
     },
   ],
