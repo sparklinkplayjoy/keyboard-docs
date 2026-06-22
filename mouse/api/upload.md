@@ -1,7 +1,5 @@
 # 固件升级
 
-源码位置：`src/modules/upload/*`
-
 模块作用：固件升级链路相关命令。调用入口为 `client.upload`。
 
 推荐链路：

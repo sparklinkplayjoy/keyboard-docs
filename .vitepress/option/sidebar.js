@@ -56,7 +56,7 @@ export default {
             { text: '基础的设备信息', link: '/mouse/api/info' },
             { text: '全局设置', link: '/mouse/api/globalSetting' },
             { text: '性能', link: '/mouse/api/performance' },
-            { text: '按键映射', link: '/mouse/api/key' },
+            { text: '按键映射', link: '/mouse/api/keyRemapping' },
             { text: '宏', link: '/mouse/api/macro' },
             { text: '固件升级', link: '/mouse/api/upload' },
             // { text: '运行时与协议内部模块', link: '/mouse/api/runtime' },

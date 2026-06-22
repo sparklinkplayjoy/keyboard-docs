@@ -1,7 +1,5 @@
 # 按键映射
 
-源码位置：`src/modules/key-remapping/*`
-
 模块作用：读取和写入鼠标按键映射。调用入口为 `client.keyRemapping`。
 
 ## 读取当前按键映射

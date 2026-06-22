@@ -1,7 +1,5 @@
 # 全局设置
 
-源码位置：`src/modules/global-setting/*`
-
 模块作用：读取和写入鼠标全局配置。调用入口为 `client.globalSetting`。
 
 ## 恢复出厂设置
