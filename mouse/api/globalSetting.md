@@ -881,6 +881,53 @@ const battery = await client.globalSetting.getBattery();
 console.log(battery.batteryPercentage);
 ```
 
+## 读取当前充电状态
+
+client.globalSetting.getChargingStatus()
+
+**简要描述:**
+读取当前充电状态。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<GlobalFeatureChargingStatusParam>`
+
+**返回字段:**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `chargingStatus` | `number` | 当前充电状态，`0` 表示未充电，`1` 表示充电中。 |
+
+---
+
+### 使用示例
+
+**调用方式:**
+
+```ts
+const status = await client.globalSetting.getChargingStatus();
+```
+
+**调用示例:**
+
+```ts
+const status = await client.globalSetting.getChargingStatus();
+console.log(status.chargingStatus);
+```
+
+---
+
+### 注意事项
+
+协议功能：`GlobalFeature.ChargingStatus = 0x16`，读写位为 `Read`。
+
 ## 读取指定键位的马达震动强度档位
 
 client.globalSetting.getMotorVibrationStrength(key)
@@ -1322,3 +1369,103 @@ const ok = await client.globalSetting.setRadioFrequencyMode(1);
 ### 注意事项
 
 协议功能：`GlobalFeature.RadioFrequencyModeSetting = 0x12`，读写位为 `Write`。
+
+## 读取省电模式
+
+client.globalSetting.getPowerSavingMode()
+
+**简要描述:**
+读取省电模式和超级省电模式。
+
+---
+
+### 参数
+
+此方法不需要参数。
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<GlobalFeaturePowerSavingModeParam>`
+
+**返回字段:**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `powerSavingMode` | `number` | 省电模式，`0` 表示关闭，`1` 表示开启。 |
+| `superPowerSavingMode` | `number` | 超级省电模式，`0` 表示关闭，`1` 表示开启。 |
+
+---
+
+### 使用示例
+
+**调用方式:**
+
+```ts
+const powerSaving = await client.globalSetting.getPowerSavingMode();
+```
+
+**调用示例:**
+
+```ts
+const powerSaving = await client.globalSetting.getPowerSavingMode();
+console.log(powerSaving.powerSavingMode, powerSaving.superPowerSavingMode);
+```
+
+---
+
+### 注意事项
+
+协议功能：`GlobalFeature.PowerSavingModeSetting = 0x15`，读写位为 `Read`。
+
+## 设置省电模式
+
+client.globalSetting.setPowerSavingMode(param)
+
+**简要描述:**
+设置省电模式和超级省电模式。
+
+
+🪧省电模式和超级省电模式为互斥。
+
+---
+
+### 参数
+
+| 参数 | 类型 | 是否必需 | 说明 |
+| --- | --- | --- | --- |
+| `param.powerSavingMode` | `number` | 是 | 省电模式，`0` 表示关闭，`1` 表示开启。 |
+| `param.superPowerSavingMode` | `number` | 是 | 超级省电模式，`0` 表示关闭，`1` 表示开启。 |
+
+---
+
+### 返回值
+
+* **总体类型:** `Promise<number>`
+* **描述:** 设备返回的状态码，`0` 表示成功。
+
+---
+
+### 使用示例
+
+**调用方式:**
+
+```ts
+const status = await client.globalSetting.setPowerSavingMode(param);
+```
+
+**调用示例:**
+
+```ts
+const status = await client.globalSetting.setPowerSavingMode({
+  powerSavingMode: 1,
+  superPowerSavingMode: 0,
+});
+console.log(status);
+```
+
+---
+
+### 注意事项
+
+协议功能：`GlobalFeature.PowerSavingModeSetting = 0x15`，读写位为 `Write`。
