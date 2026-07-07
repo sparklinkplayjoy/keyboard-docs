@@ -38,6 +38,7 @@ export default {
             { text: '高级键', link: '/keyboardv2/api/higherKey' },
             { text: '宏', link: '/keyboardv2/api/macro' },
             { text: '手柄', link: '/keyboardv2/api/handle' },
+            { text: '自定义命令', link: '/keyboardv2/api/custom' },
           ],
         },
         { text: '键值表', link: '/keyboardv2/keyboard' },
