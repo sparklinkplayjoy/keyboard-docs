@@ -708,68 +708,21 @@ ServiceKeyboard.calibrationEnd
 ### 使用示例 
 
 ```js
-async function finishCalibration() {
-  try {
-    // 确保设备已初始化且校准已开始
-    // await ServiceKeyboard.init(deviceId);
-    // await ServiceKeyboard.calibrationStart();
-    const calibrationResult = await ServiceKeyboard.calibrationEnd();
-    console.log('校准已结束:', calibrationResult);
-    // 根据 calibrationResult 进行后续操作或UI更新
-  } catch (error) {
-    console.error('结束校准失败:', error);
-  }
-}
+const result = await ServiceKeyboard.getRm6X21Travel()
 
-// finishCalibration();
+// result 返回值{ status: [] ,travels:[]}
+// status数组表示当前触发的状态，什么按键触发状态，一版02表示按下状态
+// travels数组表示按键触发的行程值
+
 ```
 
-
-## 获取键盘校准数据
-
-ServiceKeyboard.getRm6X21Calibration()
-
-**简要描述:**
-获取特定于 RM6X21 方案的键盘校准数据，包括校准随机值和对应的行程值。开启前需要`ServiceKeyboard.calibrationStart`,结束后需`ServiceKeyboard.calibrationEnd`
-
----
-
-### 参数 
-
-不需要参数
-
----
-
-### 返回值 
-
-*   **总体类型:** `Promise<{ calibrations: number[], travels: number[] }>`
-*   **描述:** 返回一个 `Promise`，该 `Promise` 解析为一个包含校准随机值和行程值数组的对象。
-*   **解析对象结构:**
-
-| 字段名称       | 类型        | 描述                               | 示例值 (可能)          |
-|----------------|-------------|------------------------------------|------------------------|
-| `calibrations` | `number[]`  | 一个包含校准过程中产生的随机值的数组。 | `[123, 456, 789]` (示例) |
-| `travels`      | `number[]`  | 一个数组，包含与校准值对应的按键行程值。 | `[15, 30, 55]` (示例)  |
-
----
-
-### 使用示例 
+## 键盘校准
 
 ```js
-async function fetchCalibrationData() {
-  try {
-    // 根据实际API需求，这里可能需要传递参数，例如 key 或 value
-    // const result = await ServiceKeyboard.getRm6X21Calibration(someKey, someValue);
-    const result = await ServiceKeyboard.getRm6X21Calibration(); // 假设无需参数
-    console.log('键盘校准数据:', result);
-    console.log('校准随机值:', result.calibrations);
-    console.log('对应行程值:', result.travels);
-  } catch (error) {
-    console.error('获取校准数据失败:', error);
-  }
-}
+const result = await ServiceKeyboard.getRm6X21Calibration()
 
-fetchCalibrationData();
+// result 返回值{ calibrations: [] ,travels:[]}
+// calibrations数组表示校准的随机值
+// travels数组表示按键触发的行程值
+
 ```
-
----
